@@ -160,8 +160,16 @@ run_step 29 "Validador de cobertura lógica avanzada MC/DC" "dietrich" \
     "dietrich analyze src/parser.c"
 
 # 30. RIPLEY
-run_step 30 "Diagnóstico global del entorno Ripley" "ripley" \
-    "ripley doctor"
+run_step 30 "Diagnóstico global del entorno Ripley y explicación de reglas pedagógicas" "ripley" \
+    "ripley doctor && ripley explain 0x1001h"
+
+# 31. DECKARD
+run_step 31 "Gestión de banco, estadísticas Bloom y grafo de dependencias en Deckard" "deckard" \
+    "deckard stats --help && deckard lint --help && deckard deps --help && deckard pack --help"
+
+# 32. DREDD
+run_step 32 "Orquestación de correcciones, detección de plagio y sandbox en Dredd" "dredd" \
+    "dredd --help && dredd plagiarism --help && dredd map --help"
 
 echo -e "\n${BLUE}================================================================================${NC}"
 echo -e "${CYAN}📊 RESUMEN FINAL DEL SMOKE TEST:${NC}"
