@@ -13,7 +13,8 @@ TARGET = $(BUILD_DIR)/app
         trace-recursion disasm-switch trace-memory diag-crash \
         test-sandbox mock-fault verify-acsl fuzz callgraph diff-canon \
         audit-abi lint-portability audit-headers audit-macros verify-tda \
-        gen-datasets test-mutation gen-docs run-sanitizers inspect-bin profile-perf doctor-all
+        gen-datasets test-mutation gen-docs run-sanitizers inspect-bin profile-perf \
+        explain-gcc inject-faults check-mcdc doctor-all
 
 all: build
 
@@ -138,6 +139,18 @@ inspect-bin:
 profile-perf: build
 	@echo "\n⚡ [FERRO] Perfilando rendimiento y hardware counters..."
 	ferro profile $(TARGET) --inputs "100,500"
+
+explain-gcc:
+	@echo "\n🗣️ [ESPER] Explicando diagnósticos y advertencias de GCC..."
+	esper explain "main.c:10: warning: unused variable 'x' [-Wunused-variable]"
+
+inject-faults: build
+	@echo "\n💉 [VASQUEZ] Inyectando fallos de memoria y disco vía LD_PRELOAD..."
+	vasquez inject $(TARGET) --faults "malloc:1,fopen:1"
+
+check-mcdc:
+	@echo "\n📊 [DIETRICH] Validando cobertura lógica avanzada MC/DC..."
+	dietrich analyze $(SRC_DIR)/parser.c
 
 doctor-all:
 	@echo "\n🩺 [DOCTOR] Verificando toolchain y dependencias..."
