@@ -56,7 +56,7 @@ run_step 3 "Auditoría de seguridad y funciones prohibidas" "kaneda" \
     "! kaneda audit src/security_sample.c"
 
 # 4. SPUNKMEYER
-run_step 4 "Detección de antipatrones pedagógicos C" "spunkmeyer" \
+run_step 4 "Detección de antipatrones didácticos C" "spunkmeyer" \
     "! spunkmeyer detect src/security_sample.c"
 
 # 5. BRETT
@@ -103,8 +103,52 @@ run_step 14 "Callgraph estático y detección de código muerto" "giger" \
 run_step 15 "Diffing semántico de AST contra solución canónica" "weyl" \
     "weyl diff src/data_structures.c canon/data_structures_canon.c"
 
-# 16. RIPLEY
-run_step 16 "Diagnóstico global del entorno Ripley" "ripley" \
+# 16. PARKER
+run_step 16 "Auditoría de ABI y visibilidad de símbolos" "parker" \
+    "parker audit src/data_structures.h"
+
+# 17. CROWE
+run_step 17 "Linter de portabilidad multi-arquitectura y endianness" "crowe" \
+    "crowe lint src/data_structures.c"
+
+# 18. WIERZBOWSKI
+run_step 18 "Auditoría de dependencias circulares y Makefiles" "wierzbowski" \
+    "wierzbowski audit ."
+
+# 19. ZHORA
+run_step 19 "Linter de seguridad en macros del preprocesador" "zhora" \
+    "zhora audit src/"
+
+# 20. MOTOKO
+run_step 20 "Verificación de encapsulamiento estricto de TDAs" "motoko" \
+    "motoko verify src/data_structures.h --client src/main.c --impl src/data_structures.c"
+
+# 21. TYRELL
+run_step 21 "Generación sintética y determinista de datasets de prueba" "tyrell" \
+    "tyrell generate -n 3 -o build/tyrell_tests"
+
+# 22. VASSILI
+run_step 22 "Mutation testing sobre código C y evaluación de tests" "vassili" \
+    "vassili mutate src/fuzz_target.c --tests-dir testcases --min-score 0"
+
+# 23. CORBEL
+run_step 23 "Generación automática de documentación de APIs en Markdown" "corbel" \
+    "corbel doc src/data_structures.h -f markdown -o build/API.md"
+
+# 24. TETSUO
+run_step 24 "Traducción y diagnóstico de sanitizers (ASan/UBSan)" "tetsuo" \
+    "tetsuo run build/app"
+
+# 25. KANE
+run_step 25 "Depuración visual de archivos binarios y mapeo a structs" "kane" \
+    "python3 -c \"import struct; open('build/sample.bin', 'wb').write(struct.pack('<if', 42, 9.5))\" && kane inspect build/sample.bin -s 'int id, float nota'"
+
+# 26. FERRO
+run_step 26 "Perfilado de rendimiento algorítmico y ciclos CPU" "ferro" \
+    "ferro profile build/app --inputs '100,500'"
+
+# 27. RIPLEY
+run_step 27 "Diagnóstico global del entorno Ripley" "ripley" \
     "ripley doctor"
 
 echo -e "\n${BLUE}================================================================================${NC}"
@@ -114,7 +158,7 @@ echo -e "   • Pasos Fallidos: ${RED}${TOTAL_FAILED}${NC}"
 echo -e "${BLUE}================================================================================${NC}"
 
 if [ "$TOTAL_FAILED" -eq 0 ]; then
-    echo -e "${GREEN}🎉 TODAS LAS HERRAMIENTAS SUPERARON EL SMOKE TEST EXITOSAMENTE.${NC}\n"
+    echo -e "${GREEN}🎉 TODAS LAS HERRAMIENTAS SUPERARON EL SMOKE TEST EXITOSAMENTE (${TOTAL_PASSED}/${TOTAL_PASSED}).${NC}\n"
     exit 0
 else
     echo -e "${RED}❌ ALGUNOS PASOS DEL SMOKE TEST FALLARON.${NC}\n"
