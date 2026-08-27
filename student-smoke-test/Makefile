@@ -124,7 +124,8 @@ test-mutation:
 	vassili mutate $(SRC_DIR)/fuzz_target.c --tests-dir testcases --min-score 0
 
 gen-docs:
-	@echo "\n📚 [CORBEL] Generando documentación de APIs..."
+	@echo "\n📚 [CORBEL] Scaffolding de comentarios y generación de documentación de APIs..."
+	corbel scaffold $(SRC_DIR)/data_structures.h -o $(BUILD_DIR)/scaffolded.h
 	corbel doc $(SRC_DIR)/data_structures.h -f markdown -o $(BUILD_DIR)/API.md
 
 run-sanitizers: build

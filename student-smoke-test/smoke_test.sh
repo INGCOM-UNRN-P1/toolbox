@@ -132,8 +132,8 @@ run_step 22 "Mutation testing sobre código C y evaluación de tests" "vassili" 
     "vassili mutate src/fuzz_target.c --tests-dir testcases --min-score 0"
 
 # 23. CORBEL
-run_step 23 "Generación automática de documentación de APIs en Markdown" "corbel" \
-    "corbel doc src/data_structures.h -f markdown -o build/API.md"
+run_step 23 "Scaffolding de placeholders Doxygen y generación de documentación de APIs" "corbel" \
+    "corbel scaffold src/data_structures.h -o build/scaffolded.h && corbel doc src/data_structures.h -f markdown -o build/API.md"
 
 # 24. TETSUO
 run_step 24 "Traducción y diagnóstico de sanitizers (ASan/UBSan)" "tetsuo" \
