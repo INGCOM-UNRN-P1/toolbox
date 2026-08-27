@@ -1,0 +1,89 @@
+# Student Smoke Test Suite
+
+Proyecto integral de demostración y suite de **Smoke Test** que ejercita todas las herramientas del ecosistema de C desde la perspectiva del estudiante.
+
+---
+
+## 🛠️ Herramientas Demostradas
+
+| # | Herramienta | Rol / Funcionalidad Ejercitada | Archivos Involucrados |
+|---|---|---|---|
+| 1 | **DAEDALUS** | Compilación estricta y traducción pedagógica de errores a español. | `src/main.c`, `src/data_structures.c`, `src/parser.c` |
+| 2 | **GAFF** | Linter de estilo y convenciones de cátedra C (snake_case, typedefs, guardas). | `src/data_structures.c`, `src/parser.c` |
+| 3 | **KANEDA** | Auditoría estática de seguridad, funciones prohibidas (`gets`, `sprintf`, `scanf %s`) y syscalls. | `src/security_sample.c` |
+| 4 | **SPUNKMEYER** | Detector de antipatrones didácticos C (`malloc` cast, `NULL` check antes de `free`, `== true`). | `src/security_sample.c` |
+| 5 | **BRETT** | Auditoría de padding/alineación en structs de 64 bits y generación de layout optimizado. | `src/data_structures.h` |
+| 6 | **SEBASTIAN** | Análisis de funciones recursivas, detección de caso base, árbol de llamadas y consumo de stack. | `src/data_structures.c` (`calcular_factorial`) |
+| 7 | **RACHEL** | Desensamblado de sentencias `switch`, verificación de Jump Tables $O(1)$ vs comparaciones binarias/secuenciales. | `src/data_structures.c` (`procesar_comando`) |
+| 8 | **BISHOP** | Visualizador de memoria Stack Frames, variables locales, bloques Heap y relaciones de punteros en runtime. | `src/main.c`, `src/data_structures.c` |
+| 9 | **HAL** | Asistente forense de crash dumps (diagnóstico automático de `SIGSEGV`, `SIGFPE`, `SIGABRT` y variables culpables). | `scripts/test_crash_hal.sh` |
+| 10 | **NOSTROMO** | Runner de casos de prueba (`.in`/`.out`) en Sandbox aislado (Bubblewrap / namespaces de Linux). | `testcases/01_basic.*`, `testcases/02_cmd3.*` |
+| 11 | **HOLDEN** | Generador de mocks con wrapper de linker (`-Wl,--wrap=...`) e inyección de fallos (`malloc`, `fopen`, `rand`). | `scripts/test_mock_holden.sh` |
+| 12 | **CALLAHAN** | Extracción y verificación formal de contratos ACSL (`/*@ requires ... ensures ... */`) con Frama-C WP. | `src/data_structures.h`, `src/parser.h` |
+| 13 | **DRAKE** | Fuzzer pedagógico guiado por límites (`INT_MAX`, `INT_MIN`, offsets extremos, mutaciones de buffer). | `src/main.c`, `src/parser.c` |
+| 14 | **GIGER** | Generación de Call Graphs estáticos, detección de funciones huérfanas (dead code) y ciclos de llamadas. | `src/unused_sample.c` |
+| 15 | **WEYL** | Diffing semántico y estructural de AST contra la solución canónica de referencia. | `src/data_structures.c` vs `canon/data_structures_canon.c` |
+| 16 | **RIPLEY** | Orquestador del pipeline del cliente estudiante y diagnóstico del entorno de evaluación. | `ripley.yaml` |
+
+---
+
+## 📂 Estructura del Proyecto
+
+```
+student-smoke-test/
+├── Makefile                     # Targets modulares por herramienta y suite global
+├── smoke_test.sh                # Script orquestador del Smoke Test automatizado
+├── ripley.yaml                  # Manifiesto de configuración de pipeline
+├── src/
+│   ├── main.c                   # Programa principal integrador
+│   ├── data_structures.h        # Structs con padding para Brett y contratos ACSL
+│   ├── data_structures.c        # Implementación con recursión (Sebastian), switch (Rachel), Heap (Bishop)
+│   ├── parser.h                 # Declaraciones de parsing seguro
+│   ├── parser.c                 # Parser robusto resistente a fuzzing (Drake)
+│   ├── security_sample.c        # Muestra con antipatrones (Spunkmeyer, Kaneda, Gaff)
+│   └── unused_sample.c          # Muestra con código muerto para Giger
+├── canon/
+│   └── data_structures_canon.c  # Referencia canónica para Weyl
+├── testcases/
+│   ├── 01_basic.in / .out       # Caso de prueba básico
+│   └── 02_cmd3.in / .out        # Caso de prueba de comando
+└── scripts/
+    ├── test_all_tools.sh        # Ejecución secuencial de todas las CLIs
+    ├── test_crash_hal.sh        # Generación de fallas y diagnósticos forenses con Hal
+    └── test_mock_holden.sh      # Generación de wrapper de malloc con inyección de fallos
+```
+
+---
+
+## 🚀 Modos de Ejecución
+
+### 1. Smoke Test Automatizado Completo
+
+```bash
+# Vía script Bash
+./smoke_test.sh
+
+# O vía Makefile
+make smoke
+```
+
+### 2. Ejecución Individual de Cada Herramienta
+
+```bash
+make build               # Compila con Daedalus
+make check-style         # Audita estilo con Gaff
+make check-security      # Audita seguridad con Kaneda
+make check-antipatterns  # Detecta antipatrones con Spunkmeyer
+make audit-padding       # Audita y optimiza structs con Brett
+make trace-recursion     # Traza árbol de llamadas con Sebastian
+make disasm-switch       # Analiza Jump Tables O(1) con Rachel
+make trace-memory        # Visualiza Stack y Heap con Bishop
+make diag-crash          # Diagnostica crashes con Hal
+make test-sandbox        # Evalúa en Sandbox con Nostromo
+make mock-fault          # Inyecta fallos de malloc con Holden
+make verify-acsl         # Extrae contratos ACSL con Callahan
+make fuzz                # Ejecuta fuzzer con Drake
+make callgraph           # Genera grafo de llamadas con Giger
+make diff-canon          # Compara AST con Weyl
+make doctor-all          # Diagnostica estado de todas las herramientas
+```

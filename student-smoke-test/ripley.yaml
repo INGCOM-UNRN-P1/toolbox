@@ -1,0 +1,30 @@
+# Configuración del Pipeline de Verificación del Estudiante (RIPLEY)
+version: "1.0"
+project_name: "student-smoke-test"
+
+compiler:
+  flags: ["-Wall", "-Wextra", "-Werror", "-pedantic", "-std=c11", "-g"]
+  sources:
+    - "src/main.c"
+    - "src/data_structures.c"
+    - "src/parser.c"
+
+checks:
+  style:
+    enabled: true
+    tool: "gaff"
+  security:
+    enabled: true
+    tool: "kaneda"
+  antipatterns:
+    enabled: true
+    tool: "spunkmeyer"
+  padding:
+    enabled: true
+    tool: "brett"
+  sandbox:
+    enabled: true
+    tool: "nostromo"
+    testcases_dir: "testcases"
+
+solution_path: "canon/data_structures_canon.c"
