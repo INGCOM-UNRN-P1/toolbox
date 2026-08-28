@@ -168,8 +168,8 @@ run_step 31 "Gestión de banco, estadísticas Bloom y grafo de dependencias en D
     "deckard stats --help && deckard lint --help && deckard deps --help && deckard pack --help"
 
 # 32. DREDD
-run_step 32 "Orquestación de correcciones, inicialización de workspace, detección de plagio y sandbox en Dredd" "dredd" \
-    "dredd --help && dredd init --help && dredd plagiarism --help && dredd map --help"
+run_step 32 "Orquestación de correcciones, gestión de configuración y políticas de chequeo en Dredd" "dredd" \
+    "dredd --help && dredd init --help && dredd config --help && dredd plagiarism --help && dredd map --help"
 
 echo -e "\n${BLUE}================================================================================${NC}"
 echo -e "${CYAN}📊 RESUMEN FINAL DEL SMOKE TEST:${NC}"
