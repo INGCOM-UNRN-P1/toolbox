@@ -9,7 +9,8 @@ int calcular_factorial(int n) {
     return n * calcular_factorial(n - 1);
 }
 
-/* Switch con casos secuenciales densos (compilable como Jump Table O(1) analizada por RACHEL) */
+/* Switch con casos secuenciales densos
+ * (compilable como Jump Table O(1) analizada por RACHEL) */
 int procesar_comando(int comando) {
     int resultado = 0;
     switch (comando) {
