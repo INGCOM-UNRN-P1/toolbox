@@ -48,8 +48,8 @@ run_step 1 "Compilación pedagógica y traducción de advertencias" "daedalus" \
     "daedalus compile src/main.c src/data_structures.c src/parser.c -o build/app"
 
 # 2. GAFF
-run_step 2 "Linting estático de convenciones y estilo cátedra" "gaff" \
-    "gaff check src/data_structures.c src/parser.c"
+run_step 2 "Linting estático, catálogo y verificación exhaustiva de reglas cátedra (0xXXXXh)" "gaff" \
+    "gaff check src/data_structures.c src/parser.c && bash scripts/test_gaff_rules.sh"
 
 # 3. KANEDA
 run_step 3 "Auditoría de seguridad y funciones prohibidas" "kaneda" \
@@ -113,7 +113,7 @@ run_step 17 "Linter de portabilidad multi-arquitectura y endianness" "crowe" \
 
 # 18. WIERZBOWSKI
 run_step 18 "Auditoría de dependencias circulares y Makefiles" "wierzbowski" \
-    "wierzbowski audit ."
+    "wierzbowski audit src/"
 
 # 19. ZHORA
 run_step 19 "Linter de seguridad en macros del preprocesador" "zhora" \
