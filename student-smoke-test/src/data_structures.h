@@ -40,4 +40,19 @@ t_nodo *crear_nodo(int valor);
 t_nodo *crear_lista(int cantidad);
 void liberar_lista(t_nodo *cabeza);
 
+#define CMD_OP_1 1
+#define CMD_OP_2 2
+#define CMD_OP_3 3
+#define CMD_OP_4 4
+#define CMD_OP_5 5
+#define CMD_OP_6 6
+
+#define CMD_RESP_1 100
+#define CMD_RESP_2 200
+#define CMD_RESP_3 300
+#define CMD_RESP_4 400
+#define CMD_RESP_5 500
+#define CMD_RESP_6 600
+#define FACTOR_VALOR 10
+
 #endif /* DATA_STRUCTURES_H */

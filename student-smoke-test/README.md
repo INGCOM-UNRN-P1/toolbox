@@ -53,9 +53,21 @@ student-smoke-test/
 ├── testcases/
 │   ├── 01_basic.in / .out       # Caso de prueba básico
 │   └── 02_cmd3.in / .out        # Caso de prueba de comando
+├── failing_cases/               # Batería de archivos con fallos deliberados para validación negativa
+│   ├── fail_syntax_daedalus.c   # Errores sintácticos y de tipos para Daedalus
+│   ├── fail_style_gaff.c        # Violaciones severas de estilo y formato para Gaff
+│   ├── fail_security_kaneda.c   # Funciones prohibidas y vulnerabilidades para Kaneda y Ripley
+│   ├── fail_antipatterns_spunkmeyer.c # Antipatrones C para Spunkmeyer
+│   ├── fail_padding_brett.c     # Padding ineficiente de memoria para Brett
+│   ├── fail_recursion_sebastian.c # Recursión descontrolada para Sebastian
+│   ├── fail_deadcode_giger.c    # Funciones huérfanas y código muerto para Giger
+│   ├── fail_fuzz_drake.c        # Vulnerabilidad de desbordamiento en INT_MAX para Drake
+│   ├── fail_contracts_callahan.c # Contratos contradictorios para Callahan
+│   └── fail_guide_overload.yaml # Sobrecarga de carga horaria semanal para Deckard
 └── scripts/
     ├── test_all_tools.sh        # Ejecución secuencial de todas las CLIs
     ├── test_crash_hal.sh        # Diagnóstico forense con Hal sobre archivos explícitos
+    ├── test_failing_cases.sh    # Batería exhaustiva de detección y rechazo de fallos
     └── test_mock_holden.sh      # Vinculación del mock con holden_app.c
 ```
 

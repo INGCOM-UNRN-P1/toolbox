@@ -164,12 +164,52 @@ run_step 30 "Diagnóstico global del entorno Ripley y explicación de reglas ped
     "ripley doctor && ripley explain 0x1001h"
 
 # 31. DECKARD
-run_step 31 "Gestión de banco, estadísticas Bloom y grafo de dependencias en Deckard" "deckard" \
-    "deckard stats --help && deckard lint --help && deckard deps --help && deckard pack --help"
+run_step 31 "Gestión de banco, estadísticas Bloom, doctor y browser en Deckard" "deckard" \
+    "deckard doctor && deckard stats --help && deckard browse --help && deckard export-classroom --help"
 
 # 32. DREDD
-run_step 32 "Orquestación de correcciones, gestión de configuración y políticas de chequeo en Dredd" "dredd" \
-    "dredd --help && dredd init --help && dredd config --help && dredd plagiarism --help && dredd map --help"
+run_step 32 "Orquestación de correcciones, doctor y caché en Dredd" "dredd" \
+    "dredd doctor && dredd init --help && dredd rerun --help && dredd eval --help"
+
+# 33. RIPLEY QoL (SARIF y Badges SVG)
+run_step 33 "Exportación SARIF y generación de Badges SVG pedagógicos en Ripley" "ripley" \
+    "ripley check --format=sarif src/parser.c > /dev/null && ripley badge src/parser.c -o /tmp/smoke_badge.svg"
+
+# 34. DAEDALUS QoL (Doctor, Preprocess y Explain-Opt)
+run_step 34 "Diagnóstico de toolchain y explicador de optimizaciones en Daedalus" "daedalus" \
+    "daedalus doctor && daedalus explain-opt O2 > /dev/null && daedalus preprocess src/main.c -o /tmp/smoke_main.i"
+
+# 35. GAFF QoL (Doctor y Exportación de Guía de Estilo)
+run_step 35 "Diagnóstico del entorno y exportación de manual de estilo Markdown en Gaff" "gaff" \
+    "gaff doctor && gaff export-rules -o /tmp/smoke_rules.md"
+
+# 36. HAL QoL (Doctor y Generación de Reproductor Autónomo)
+run_step 36 "Diagnóstico forense y generación de script reproductor autónomo en HAL" "hal" \
+    "hal doctor && hal generate-reproducer src/main.c -o /tmp/smoke_reproducer.sh"
+
+# 37. SPUNKMEYER QoL (Doctor y Catálogo de Antipatrones)
+run_step 37 "Diagnóstico de parser Tree-Sitter y catálogo de vicios en Spunkmeyer" "spunkmeyer" \
+    "spunkmeyer doctor && spunkmeyer catalog > /dev/null"
+
+# 38. WEYL QoL (Doctor, Diff Side-by-Side y Seguimiento Evolutivo)
+run_step 38 "Diagnóstico de diffing semántico y visualización lado a lado en Weyl" "weyl" \
+    "weyl doctor && weyl diff src/parser.c src/parser.c --side-by-side > /dev/null"
+
+# 39. DECKARD QoL Extendido (Notebooks, Carga Horaria, Variantes y Auditoría)
+run_step 39 "Exportación de Jupyter Notebooks C, calibración de carga y variantes en Deckard" "deckard" \
+    "deckard export-notebook --help > /dev/null && deckard check-load --help > /dev/null && deckard variant --help > /dev/null && deckard audit-guide --help > /dev/null"
+
+# 40. RIPLEY QoL Extendido (LSP, Watcher, Autofix y Conformidad de Estilo)
+run_step 40 "Servidor LSP, auto-corrección interactiva, histórico y conformidad de estilo en Ripley" "ripley" \
+    "ripley lsp --help > /dev/null && ripley style-check src/main.c && ripley history . > /dev/null"
+
+# 41. DREDD QoL Extendido (SIU Guaraní, Dashboard, Auditoría Git y Plagio Histórico)
+run_step 41 "Exportación a SIU Guaraní, Dashboard web, auditoría Git y plagio histórico en Dredd" "dredd" \
+    "dredd export-guarani --help > /dev/null && dredd dashboard --help > /dev/null && dredd audit-git . > /dev/null"
+
+# 42. BATERÍA EXHAUSTIVA DE FALLOS DELIBERADOS
+run_step 42 "Detección y rechazo de archivos con fallos, vulnerabilidades y antipatrones deliberados" "ecosistema" \
+    "bash scripts/test_failing_cases.sh"
 
 echo -e "\n${BLUE}================================================================================${NC}"
 echo -e "${CYAN}📊 RESUMEN FINAL DEL SMOKE TEST:${NC}"
@@ -184,3 +224,4 @@ else
     echo -e "${RED}❌ ALGUNOS PASOS DEL SMOKE TEST FALLARON.${NC}\n"
     exit 1
 fi
+

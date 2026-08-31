@@ -18,23 +18,23 @@ int procesar_comando(int comando)
     int resultado = 0;
     switch (comando)
     {
-        case 1:
-            resultado = 100;
+        case CMD_OP_1:
+            resultado = CMD_RESP_1;
             break;
-        case 2:
-            resultado = 200;
+        case CMD_OP_2:
+            resultado = CMD_RESP_2;
             break;
-        case 3:
-            resultado = 300;
+        case CMD_OP_3:
+            resultado = CMD_RESP_3;
             break;
-        case 4:
-            resultado = 400;
+        case CMD_OP_4:
+            resultado = CMD_RESP_4;
             break;
-        case 5:
-            resultado = 500;
+        case CMD_OP_5:
+            resultado = CMD_RESP_5;
             break;
-        case 6:
-            resultado = 600;
+        case CMD_OP_6:
+            resultado = CMD_RESP_6;
             break;
         default:
             resultado = -1;
@@ -61,7 +61,7 @@ t_nodo *crear_lista(int cantidad)
     t_nodo *cabeza = NULL;
     for (int i = 0; i < cantidad; i++)
     {
-        t_nodo *nuevo = crear_nodo(i * 10);
+        t_nodo *nuevo = crear_nodo(i * FACTOR_VALOR);
         if (nuevo != NULL)
         {
             nuevo->siguiente = cabeza;
