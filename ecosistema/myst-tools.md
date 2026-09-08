@@ -1,0 +1,179 @@
+# myst-tools
+
+Herramientas unificadas para automatizar, formatear e indexar material didáctico MyST Markdown
+
+## 🎯 Propósito y Alcance
+
+`myst-tools` forma parte del ecosistema de herramientas de la cátedra de Programación 1. Provee mecanismos especializados para análisis, diagnóstico o evaluación pedagógica en C.
+
+## 💻 Instalación y Requisitos
+
+La herramienta se distribuye como un paquete estándar gestionado con `uv`:
+
+```bash
+uv tool install --editable /home/mrtin/dev/tools/myst-tools
+```
+
+## 🚀 Guía de Uso
+
+### Invocación básica
+
+```bash
+myst-tools --help
+```
+
+### Salida de ayuda y comandos disponibles
+
+```text
+Usage: myst-tools [OPTIONS] COMMAND [ARGS]...                                  
+                                                                                
+ Herramientas unificadas para automatizar, formatear e indexar material         
+ didáctico MyST Markdown.                                                       
+                                                                                
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --force               -f        Fuerza la ejecución saliéndose de la         │
+│                                 verificación de la existencia de 'myst.yml'. │
+│ --install-completion            Install completion for the current shell.    │
+│ --show-completion               Show completion for the current shell, to    │
+│                                 copy it or customize the installation.       │
+│ --help                          Show this message and exit.                  │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────╮
+│ add-anchors  Agrega etiquetas/anclas de MyST a los encabezados de archivos   │
+│              Markdown.                                                       │
+│ gen-apunte   Genera el índice detallado para el apunte de cátedra.           │
+│ gen-guides   Genera el índice para las guías de trabajos prácticos.          │
+│ gen-rules    Genera el índice de las reglas de estilo de programación.       │
+│ fix-anchors  Detecta y corrige anclas MyST duplicadas.                       │
+│ fmt          Formatea archivos MyST Markdown (longitud de línea, fences y    │
+│              comentarios).                                                   │
+╰──────────────────────────────────────────────────────────────────────────────╯
+```
+
+## ⚙️ Configuración y Opciones
+
+`myst-tools` puede configurarse mediante parámetros de línea de comandos, variables de entorno o archivos de configuración locales del proyecto.
+
+### Parámetros principales
+
+* `--help`: Muestra la ayuda interactiva y las opciones disponibles.
+* `--version`: Muestra la versión actual instalada de `myst-tools`.
+
+## 📖 Documentación y Detalles Técnicos
+
+# MyST Tools
+
+Herramientas unificadas para automatizar y gestionar el material didáctico escrito en formato MyST Markdown para la cátedra de Programación II.
+
+Este proyecto está gestionado con [uv](https://github.com/astral-sh/uv).
+
+> [!IMPORTANT]
+> **Requisito de ejecución:** Las herramientas del CLI deben ser ejecutadas desde un directorio que contenga el archivo de configuración `mystm.yml` (es decir, la raíz del proyecto de documentación MyST). Si el archivo no está presente, el comando fallará con un error.
+
+
+## Instalación
+
+Podés instalar estas herramientas como una herramienta global en tu sistema usando `uv tool`:
+
+```bash
+# Desde el directorio raíz del proyecto
+uv tool install .
+```
+
+Una vez instalada, vas a tener disponible el comando `myst-tools` globalmente en tu terminal.
+
+Si preferís ejecutarlo sin instalarlo globalmente:
+
+```bash
+uv run myst-tools [comando] [argumentos]
+```
+
+## Uso General
+
+```bash
+myst-tools [OPCIONES_GLOBALES] [COMANDO] [ARGUMENTOS]
+```
+
+### Opciones Globales:
+* **`-f, --force`**: Fuerza la ejecución del comando seleccionado ignorando la verificación de la existencia de `myst.yml` en el directorio actual.
+
+## Comandos Disponibles
+
+El comando unificado `myst-tools` provee los siguientes subcomandos:
+
+### 1. `add-anchors`
+Agrega etiquetas/anclas de MyST (`(slug)=`) de manera automática antes de cada encabezado (`#`, `##`, `###`) en los archivos Markdown del apunte. Esto facilita las referencias cruzadas estables.
+
+```bash
+myst-tools add-anchors [APUNTE_DIR]
+```
+* **`APUNTE_DIR`** (opcional): Directorio que contiene los archivos Markdown del apunte. Por defecto es `./apunte`.
+
+### 2. `gen-apunte`
+Genera un índice detallado (`indice.md`) agrupado por archivo y con enlaces internos a encabezados de nivel 1, 2 y 3.
+
+```bash
+myst-tools gen-apunte [APUNTE_DIR]
+```
+* **`APUNTE_DIR`** (opcional): Directorio del apunte. Por defecto es `./apunte`.
+
+### 3. `gen-guides`
+Genera el índice de guías de trabajos prácticos (`indice.md`) leyendo el título del frontmatter o el primer encabezado `#` de cada guía.
+
+```bash
+myst-tools gen-guides [GUIAS_DIR]
+```
+* **`GUIAS_DIR`** (opcional): Directorio que contiene las guías. Por defecto es `./guias`.
+
+### 4. `gen-rules`
+Genera el índice de reglas de estilo de programación (`indice.md`) recopilando todas las referencias de tipo `(regla-xxx)=` y sus respectivos títulos.
+
+```bash
+myst-tools gen-rules [REGLAS_DIR]
+```
+* **`REGLAS_DIR`** (opcional): Directorio que contiene las reglas de estilo. Por defecto es `./reglas`.
+
+### 5. `fix-anchors`
+Detecta y corrige anclas MyST duplicadas en los archivos Markdown del proyecto. Renombra las definiciones duplicadas anteponiendo el nombre del archivo y actualiza todas las referencias correspondientes.
+
+```bash
+myst-tools fix-anchors [DIR] [OPCIONES]
+```
+* **`DIR`** (opcional): Directorio raíz a escanear. Por defecto es el directorio actual `.`.
+* **Opciones**:
+  * `--dry-run`: Muestra los cambios planificados sin modificar ningún archivo.
+  * `--report`: Solo lista las anclas duplicadas detectadas y finaliza.
+
+### 6. `fmt`
+Formatea archivos MyST Markdown aplicando un límite de 80 caracteres de ancho de línea para la prosa (sin modificar bloques de código) y normalizando el anidamiento y cierre de directivas (guardas).
+
+```bash
+myst-tools fmt [ARCHIVOS/DIR...] [OPCIONES]
+```
+* **`ARCHIVOS/DIR`** (opcional): Archivos o directorios a formatear (acepta múltiples). Si no se especifica y la entrada es interactiva, formatea todos los archivos `.md` del proyecto de forma recursiva. Si la entrada no es interactiva, lee desde la entrada estándar (stdin). Usar `-` para forzar la lectura desde stdin.
+* **Opciones**:
+  * `--check`: Verifica si los archivos necesitan formato (retorna código 1 si requieren cambios).
+  * `--stdout`: Imprime el resultado en la salida estándar en vez de modificar los archivos in-place.
+  * `--width N`: Especifica un ancho de línea personalizado (por defecto 80).
+
+## Desarrollo
+
+Si querés modificar las herramientas o agregar nuevas funcionalidades, podés ejecutar el CLI en modo desarrollo:
+
+```bash
+uv run myst-tools --help
+```
+
+El backend de construcción utilizado es `hatchling`.
+
+
+
+## 📊 Formatos de Salida
+
+`myst-tools` soporta diversos formatos de reporte:
+* **Terminal interactiva / Rich:** Salida con colores, tablas y diagnósticos en español rioplatense.
+* **Markdown / MyST:** Reportes legibles estructurados para integración en informes de corrección.
+* **JSON:** Salida estructurada serializable para integración en pipelines automáticos.
+
+---
+*Cátedra de Programación 1 · UNRN Sede Andina*
