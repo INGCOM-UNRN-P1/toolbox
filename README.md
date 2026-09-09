@@ -1,15 +1,15 @@
-# P1 Tools — Ecosistema de Herramientas Pedagógicas de C
-## Cátedra de Programación 1 — Universidad Nacional de Río Negro
+# Toolbox — Ecosistema de herramientas pedagógicas de C
+## Programación 1 — UNRN Andina
 
 Bienvenido al repositorio central de documentación, gestión global y manuales operativos del ecosistema de herramientas pedagógicas de **Programación 1**.
 
-Este repositorio centraliza:
-* La documentación técnica y funcional de todas las herramientas de la cátedra ([`./ecosistema/`](ecosistema/index.md)).
-* Los scripts de automatización para clonación, instalación y auditoría de salud del toolchain ([`./scripts/`](scripts/)).
+Este repositorio contiene:
+* La documentación técnica y funcional de todas las herramientas creadas por la cátedra ([`./ecosistema/`](ecosistema/index.md)).
+* Los scripts de automatización para clonación, instalación y auditoría de salud del toolbox ([`./scripts/`](scripts/)).
 * Las definiciones de skills pedagógicas para agentes de inteligencia artificial ([`./skills/`](skills/)).
 * Las directivas y estándares arquitectónicos obligatorios para la incorporación de nuevas herramientas ([`LINEAMIENTOS.md`](LINEAMIENTOS.md)).
-* El manual operativo completo para estudiantes ([`MANUAL_ESTUDIANTE.md`](MANUAL_ESTUDIANTE.md)).
-* El manual operativo integral para el equipo docente ([`MANUAL_DOCENTE.md`](MANUAL_DOCENTE.md)).
+* El manual de uso para estudiantes ([`MANUAL_ESTUDIANTE.md`](MANUAL_ESTUDIANTE.md)).
+* El manual para el equipo docente ([`MANUAL_DOCENTE.md`](MANUAL_DOCENTE.md)).
 
 ---
 
@@ -100,7 +100,9 @@ Podés poner a punto toda la estación de trabajo y el ecosistema completo en cu
 
 ---
 
-## 🤝 Integración de Nuevas Herramientas
+## Integración de Nuevas Herramientas
 
 Para agregar una nueva herramienta al ecosistema, consultá la guía paso a paso en [**`LINEAMIENTOS.md`**](LINEAMIENTOS.md).
 El procedimiento incluye la creación del paquete con `typer` + `rich`, la implementación obligatoria de `<herramienta> doctor`, la redacción del manual en `ecosistema/<herramienta>.md`, la creación de la skill en `skills/<herramienta>/SKILL.md` y su registro en `scripts/clone_repos.sh`.
+
+Y por otro lado, ¡se aceptan contribuciones!
