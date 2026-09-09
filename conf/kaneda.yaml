@@ -1,0 +1,3 @@
+enabled: true
+ban_dangerous_calls: true
+ban_fork_bombs: true

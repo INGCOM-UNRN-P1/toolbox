@@ -1,0 +1,128 @@
+version: "1.0"
+workspace:
+  name: "Cátedra Programación 1 — Revisión Estricta Máxima"
+  zips_dir: "zips"
+  submissions_dir: "entregas"
+  guias_dir: "guias"
+  plantillas_dir: "plantillas"
+  default_org: "INGCOM-UNRN-P1"
+  default_mode: "auto"
+
+# ============================================================================
+# POLÍTICAS DE VERIFICACIÓN CON MÁXIMA RIGUROSIDAD PEDAGÓGICA Y ESTÁTICA
+# ============================================================================
+checks:
+  # 1. Compilador Daedalus / Esper (C11 con advertencias bloqueantes y sanitizers)
+  daedalus:
+    compiler: "esper"
+    flags: "-Wall -Wextra -Werror -pedantic -std=c11 -Wconversion -Wshadow -Wstrict-prototypes -Wmissing-prototypes -Wpointer-arith -Wcast-align -Wwrite-strings -fsanitize=address,undefined"
+    treat_warnings_as_errors: true
+
+  # 2. Ripley: Linter pedagógico exhaustivo de reglas P1 / AST
+  ripley:
+    enabled: true
+    strict: true
+    rules:
+      - "all"
+    disabled_rules: []
+    max_function_lines: 40
+    max_line_length: 80
+
+  # 3. Kaneda: Auditoría de seguridad y syscalls prohibidas
+  kaneda:
+    enabled: true
+    ban_dangerous_calls: true          # Prohíbe system, exec*, popen, ptrace, sockets
+    ban_fork_bombs: true               # Prohíbe fork, clone, lazos de procesos
+    ban_buffer_overflow_functions: true # Prohíbe gets, strcpy, sprintf, scanf sin ancho
+
+  # 4. Spunkmeyer: Detección exhaustiva de antipatrones didácticos
+  spunkmeyer:
+    enabled: true
+    ban_feof_loop: true                # Prohíbe while(!feof(fp))
+    ban_gets: true                     # Prohíbe uso de gets()
+    ban_redundant_null_free: true      # Prohíbe if (p != NULL) free(p)
+    ban_dangling_stack_return: true    # Prohíbe retornar punteros a variables locales
+    ban_redundant_boolean_comparison: true # Prohíbe if (flag == true)
+    ban_malloc_size_type: true         # Exige sizeof(*ptr) en lugar de sizeof(tipo)
+
+  # 5. Gaff: Estilo arquitectónico y convenciones de código C
+  gaff:
+    enabled: true
+    enforce_snake_case: true           # Nombres de variables y funciones en snake_case
+    enforce_header_guards: true        # Guardas de inclusión #ifndef en headers
+    ban_tab_indentation: true          # Prohíbe tabs (exige 4 espacios)
+    enforce_variable_length: true      # Longitud descriptiva de identificadores (0x0001h)
+
+  # 6. Brett: Auditoría de alineación de memoria y padding en Structs
+  brett:
+    enabled: true
+    audit_struct_padding: true
+    max_wasted_padding_bytes: 0        # 0 bytes de padding desperdiciado tolerado
+
+  # 7. Bishop: Trazabilidad e inspección de Stack/Heap
+  bishop:
+    enabled: true
+    detect_unfreed_allocations: true   # Bloquea entregas con fugas de memoria
+
+  # 8. Drake: Fuzzing guiado y verificación de límites numéricos
+  drake:
+    enabled: true
+    fuzz_boundary_limits: true         # Evalúa INT_MAX, INT_MIN, buffers límite
+
+  # 9. Sandbox de Aislamiento y Recursos
+  sandbox:
+    max_memory_mb: 32                  # Límite estricto de 32 MB RAM
+    timeout_seconds: 3.0               # Límite de 3 segundos por testcase
+    fail_on_memory_leak: true          # Valgrind/ASan: 0 leaks permitidos
+    fail_on_sanitizer: true            # UndefinedBehaviorSanitizer bloqueante
+
+  # 10. Detección de Similitud y Plagio (Winnowing)
+  plagiarism:
+    threshold: 0.55                    # Umbral estricto de similitud Winnowing
+    strip_boilerplate: true            # Descuenta código esqueleto provisto por cátedra
+
+# ============================================================================
+# MAPEO DECLARATIVO DE ENTREGAS
+# ============================================================================
+mapeos:
+  - zip_pattern: "*entrega*1*.zip"
+    entrega: "entrega_1"
+    guia: "guias/entrega_1/guia.yaml"
+    titulo: "Práctica 1 - Sintaxis, Variables y Control"
+    mode: "archivos_individuales"
+    checks:
+      ripley:
+        strict: true
+      sandbox:
+        max_memory_mb: 32
+
+  - zip_pattern: "*entrega*2*.zip"
+    entrega: "entrega_2"
+    guia: "guias/entrega_2/guia.yaml"
+    titulo: "Práctica 2 - Funciones y Punteros"
+    mode: "archivos_individuales"
+    checks:
+      ripley:
+        strict: true
+      bishop:
+        detect_unfreed_allocations: true
+
+  - zip_pattern: "*entrega*3*.zip"
+    entrega: "entrega_3"
+    guia: "guias/entrega_3/guia.yaml"
+    titulo: "Práctica 3 - Arrays, Strings y Structs"
+    mode: "archivos_individuales"
+    checks:
+      brett:
+        audit_struct_padding: true
+        max_wasted_padding_bytes: 0
+
+  - zip_pattern: "*entrega*4*.zip"
+    entrega: "entrega_4"
+    guia: "guias/entrega_4/guia.yaml"
+    titulo: "Práctica 4 - TDAs, Librerías y Proyectos Modulares"
+    mode: "makefile"
+    checks:
+      sandbox:
+        max_memory_mb: 64
+        fail_on_memory_leak: true

@@ -1,0 +1,2 @@
+max_memory_mb: 64
+timeout_seconds: 5.0
