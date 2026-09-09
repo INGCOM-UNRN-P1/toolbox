@@ -1,7 +1,7 @@
 # Ecosistema de Herramientas Pedagógicas de C
 ## Cátedra de Programación 1 — Universidad Nacional de Río Negro
 
-Este catálogo documenta integralmente las 38 herramientas pedagógicas, linters, visualizadores de bajo nivel y motores de evaluación desarrollados para la formación en **C11 / GNU C** bajo estándares rigurosos de compilación (`-Wall -Wextra -Werror -pedantic`).
+Este catálogo documenta integralmente las 41 herramientas pedagógicas, linters, visualizadores de bajo nivel y motores de evaluación desarrollados para la formación en **C11 / GNU C** bajo estándares rigurosos de compilación (`-Wall -Wextra -Werror -pedantic`).
 
 ---
 
@@ -64,3 +64,11 @@ Este catálogo documenta integralmente las 38 herramientas pedagógicas, linters
 * [**`moodle-toolbox`**](moodle-toolbox.md): Validador, formateador y conversor bidireccional (GIFT ↔ Moodle XML) para bancos de preguntas.
 * [**`myst-tools`**](myst-tools.md): Herramientas para la gestión, cross-referencing y compilación de libros didácticos en MyST Markdown.
 * [**`tyrell`**](tyrell.md): Generador de plantillas iniciales y esqueletos de ejercicios para estudiantes.
+
+### 9. Criptografía y Empaquetado de Evaluaciones
+* [**`keymaker`**](keymaker.md): Gestor criptográfico integral de confianza, firmas asimétricas Ed25519, sellado temporal Time-Lock y empaquetado seguro de exámenes.
+* [**`scorm-tools`**](scorm-tools.md): Empaquetador y validador de cursos interactivos SCORM 1.2 / 2004 4th Edition para Moodle.
+
+### 10. Docencia Remota, Presentaciones y Telemetría de Clases
+* [**`meet-tools`**](meet-tools.md): Sistema de control y monitoreo bidireccional para Google Meet desde dispositivos móviles Android y microcontroladores Wi-Fi.
+* [**`slide-tools`**](slide-tools.md): Sistema de control remoto, sincronización de notas de orador y cronómetro para Google Slides.
