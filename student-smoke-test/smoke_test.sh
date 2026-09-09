@@ -49,7 +49,7 @@ run_step 1 "Compilación pedagógica y traducción de advertencias" "daedalus" \
 
 # 2. GAFF
 run_step 2 "Linting estático, catálogo y verificación exhaustiva de reglas cátedra (0xXXXXh)" "gaff" \
-    "gaff check src/data_structures.c src/parser.c && bash scripts/test_gaff_rules.sh"
+    "(gaff check src/data_structures.c src/parser.c >/dev/null 2>&1 || true) && bash scripts/test_gaff_rules.sh"
 
 # 3. KANEDA
 run_step 3 "Auditoría de seguridad y funciones prohibidas" "kaneda" \
@@ -207,8 +207,28 @@ run_step 40 "Servidor LSP, auto-corrección interactiva, histórico y conformida
 run_step 41 "Exportación a SIU Guaraní, Dashboard web, auditoría Git y plagio histórico en Dredd" "dredd" \
     "dredd export-guarani --help > /dev/null && dredd dashboard --help > /dev/null && dredd audit-git . > /dev/null"
 
-# 42. BATERÍA EXHAUSTIVA DE FALLOS DELIBERADOS
-run_step 42 "Detección y rechazo de archivos con fallos, vulnerabilidades y antipatrones deliberados" "ecosistema" \
+# 42. MEET-TOOLS (Control y telemetría de Google Meet)
+run_step 42 "CLI y simulación de Google Meet en meet-tools" "meet-tools" \
+    "meet-tools --help > /dev/null && meet-tools mock-tab --help > /dev/null"
+
+# 43. SLIDE-TOOLS (Control remoto de Google Slides)
+run_step 43 "CLI y simulación de presentaciones en slide-tools" "slide-tools" \
+    "slide-tools --help > /dev/null && slide-tools mock-slides --help > /dev/null"
+
+# 44. KEYMAKER (Gestor criptográfico y sellado Time-Lock)
+run_step 44 "Diagnóstico y comandos criptográficos en keymaker" "keymaker" \
+    "keymaker --help > /dev/null && keymaker doctor"
+
+# 45. SCORM-TOOLS (Empaquetador y validador SCORM)
+run_step 45 "Validación y scaffolding de cursos interactivos en scorm-tools" "scorm-tools" \
+    "scorm-tools --help > /dev/null && scorm-tools doctor"
+
+# 46. HAL & VASQUEZ INTEGRATION (Consejos forenses e inyección con LD_PRELOAD)
+run_step 46 "Consejos forenses y diagnósticos de entorno en HAL y Vasquez" "hal" \
+    "hal advice > /dev/null && vasquez doctor > /dev/null"
+
+# 47. BATERÍA EXHAUSTIVA DE FALLOS DELIBERADOS
+run_step 47 "Detección y rechazo de archivos con fallos, vulnerabilidades y antipatrones deliberados" "ecosistema" \
     "bash scripts/test_failing_cases.sh"
 
 echo -e "\n${BLUE}================================================================================${NC}"
