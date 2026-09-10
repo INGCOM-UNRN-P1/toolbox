@@ -153,6 +153,27 @@ check-mcdc:
 	@echo "\n📊 [DIETRICH] Validando cobertura lógica avanzada MC/DC..."
 	dietrich analyze $(SRC_DIR)/parser.c
 
+check-alucard:
+	@echo "\n📄 [ALUCARD] Verificando sintetizador de exámenes Typst..."
+	alucard --help > /dev/null
+
+check-idkfa:
+	@echo "\n🎮 [IDKFA] Verificando generador procedural Moodle XML..."
+	idkfa --help > /dev/null
+
+check-moodle:
+	@echo "\n📦 [MOODLE-TOOLBOX] Verificando conversor y validador GIFT/XML..."
+	moodle-toolbox --help > /dev/null
+
+check-myst:
+	@echo "\n📖 [MYST-TOOLS] Verificando gestor de apuntes MyST Markdown..."
+	myst-tools --help > /dev/null
+
+test-libtest:
+	@echo "\n🧪 [LIB_TEST] Compilando y ejecutando suite pedagógica con Daedalus..."
+	daedalus compile --flags "-Iinclude" $(SRC_DIR)/p1_test.c $(SRC_DIR)/test_lib_test.c -o $(BUILD_DIR)/test_lib_test
+	$(BUILD_DIR)/test_lib_test --md-report $(BUILD_DIR)/lib_test_report.md
+
 doctor-all:
 	@echo "\n🩺 [DOCTOR] Verificando toolchain y dependencias..."
 	daedalus doctor
@@ -172,7 +193,8 @@ help:
 	@echo ""
 	@echo "Comandos disponibles:"
 	@echo "  make build               - Compila el proyecto con Daedalus"
-	@echo "  make smoke               - Ejecuta el smoke test completo automatizado (27 pasos)"
+	@echo "  make smoke               - Ejecuta el smoke test completo automatizado (52 pasos)"
+	@echo "  make test-libtest        - lib_test: ejecución de suite con aserciones de memoria y reporte Markdown"
 	@echo "  make check-style         - Gaff: linter y convenciones de estilo"
 	@echo "  make check-security      - Kaneda: auditoría de seguridad"
 	@echo "  make check-antipatterns  - Spunkmeyer: antipatrones didácticos"
@@ -198,5 +220,9 @@ help:
 	@echo "  make run-sanitizers      - Tetsuo: explicador pedagógico de sanitizers"
 	@echo "  make inspect-bin         - Kane: depuración visual de archivos binarios"
 	@echo "  make profile-perf        - Ferro: perfilador de rendimiento y ciclos"
+	@echo "  make check-alucard       - AlucarD: sintetizador de exámenes Typst"
+	@echo "  make check-idkfa         - IDKFA: generador de preguntas Moodle XML"
+	@echo "  make check-moodle        - Moodle-toolbox: herramientas de preguntas GIFT/XML"
+	@echo "  make check-myst          - MyST-tools: gestor de apuntes y guías MyST"
 	@echo "  make doctor-all          - Diagnóstico de todas las herramientas"
 	@echo "  make clean               - Limpia binarios generados"

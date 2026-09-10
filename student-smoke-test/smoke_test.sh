@@ -231,6 +231,26 @@ run_step 46 "Consejos forenses y diagnósticos de entorno en HAL y Vasquez" "hal
 run_step 47 "Detección y rechazo de archivos con fallos, vulnerabilidades y antipatrones deliberados" "ecosistema" \
     "bash scripts/test_failing_cases.sh"
 
+# 48. ALUCARD (Sintetizador tipográfico de exámenes en Typst)
+run_step 48 "Sintetizador de exámenes impresos, plantillas Typst y validación OMR en alucard" "alucard" \
+    "alucard --help > /dev/null"
+
+# 49. IDKFA (Generador procedural de preguntas Moodle XML con GCC)
+run_step 49 "Generación procedural de preguntas con tracing GCC en idkfa" "idkfa" \
+    "idkfa --help > /dev/null && idkfa languagetool --help > /dev/null"
+
+# 50. MOODLE-TOOLBOX (Conversor y validador GIFT / Moodle XML)
+run_step 50 "Conversor de formatos, formateo GIFT y mantenimiento en moodle-toolbox" "moodle-toolbox" \
+    "moodle-toolbox --help > /dev/null && moodle-toolbox validate --help > /dev/null"
+
+# 51. MYST-TOOLS (Gestor de material didáctico MyST Markdown)
+run_step 51 "Formateo, indexado y anclas de apuntes en myst-tools" "myst-tools" \
+    "myst-tools --help > /dev/null && myst-tools fmt --help > /dev/null"
+
+# 52. LIB_TEST (Framework pedagógico de testing C y mejoras QoL)
+run_step 52 "Aserciones de memoria sin fugas, mocks stdio, archivos temporales y reporte Markdown en lib_test" "lib_test" \
+    "daedalus compile --flags '-Iinclude' src/p1_test.c src/test_lib_test.c -o build/test_lib_test && build/test_lib_test --md-report build/lib_test_report.md && test -f build/lib_test_report.md"
+
 echo -e "\n${BLUE}================================================================================${NC}"
 echo -e "${CYAN}📊 RESUMEN FINAL DEL SMOKE TEST:${NC}"
 echo -e "   • Pasos Exitosos: ${GREEN}${TOTAL_PASSED}${NC}"

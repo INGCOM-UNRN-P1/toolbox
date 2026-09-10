@@ -24,6 +24,11 @@ Proyecto integral de demostración y suite de **Smoke Test** que ejercita todas 
 | 14 | **GIGER** | Generación de Call Graphs estáticos, detección de funciones huérfanas (dead code) y ciclos de llamadas. | `src/unused_sample.c` |
 | 15 | **WEYL** | Diffing semántico y estructural de AST contra la solución canónica de referencia. | `src/data_structures.c` vs `canon/data_structures_canon.c` |
 | 16 | **RIPLEY** | Orquestador del pipeline del cliente estudiante y diagnóstico del entorno de evaluación. | `ripley.yaml` |
+| 17 | **ALUCARD** | Sintetizador de exámenes impresos, plantillas Typst y validación OMR. | CLI `alucard` |
+| 18 | **IDKFA** | Generador procedural de preguntas Moodle XML y tracing con GCC. | CLI `idkfa` |
+| 19 | **MOODLE-TOOLBOX** | Conversión bidireccional GIFT ↔ Moodle XML y validación de bancos de preguntas. | CLI `moodle-toolbox` |
+| 20 | **MYST-TOOLS** | Formateo, corrección de anclas e indexado de apuntes MyST Markdown. | CLI `myst-tools` |
+| 21 | **LIB_TEST** | Framework de testing pedagógico C: contadores de memoria sin fugas, mocks stdio, archivos temporales y reporte Markdown. | `src/test_lib_test.c`, `include/p1_test.h` |
 
 ---
 
@@ -103,5 +108,10 @@ make verify-acsl         # Extrae contratos ACSL con Callahan
 make fuzz                # Ejecuta fuzzer con Drake
 make callgraph           # Genera grafo de llamadas con Giger
 make diff-canon          # Compara AST con Weyl
+make test-libtest        # Ejecuta suite didáctica lib_test con reporte Markdown
+make check-alucard       # Verifica CLI de AlucarD
+make check-idkfa         # Verifica CLI de IDKFA
+make check-moodle        # Verifica CLI de Moodle-toolbox
+make check-myst          # Verifica CLI de MyST-tools
 make doctor-all          # Diagnóstico de todas las herramientas
 ```
