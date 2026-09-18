@@ -88,8 +88,11 @@ run_step 11 "Generación de mock de malloc e inyección de fallos" "holden" \
     "bash scripts/test_mock_holden.sh"
 
 # 12. CALLAHAN
+# NOTA: frama-c es un prover OPCIONAL (ver 'callahan doctor'). Sin él, 'callahan verify'
+# sale con código 1 aunque los contratos ACSL se hayan extraído correctamente, así que
+# solo se lo trata como fallo real cuando frama_c_disponible=true y ok=false.
 run_step 12 "Extracción y verificación de contratos ACSL" "callahan" \
-    "callahan extract src/data_structures.h && callahan verify src/data_structures.h"
+    "callahan extract src/data_structures.h && bash scripts/test_callahan_verify.sh"
 
 # 13. DRAKE
 run_step 13 "Fuzzing guiado por límites y valores extremos" "drake" \
@@ -129,7 +132,7 @@ run_step 21 "Generación sintética y determinista de datasets de prueba" "tyrel
 
 # 22. VASSILI
 run_step 22 "Mutation testing sobre código C y evaluación de tests" "vassili" \
-    "vassili mutate src/fuzz_target.c --tests-dir testcases --min-score 0"
+    "vassili mutate src/fuzz_target.c --tests-dir testcases_fuzz --min-score 0"
 
 # 23. CORBEL
 run_step 23 "Scaffolding de placeholders Doxygen y generación de documentación de APIs" "corbel" \
@@ -250,6 +253,10 @@ run_step 51 "Formateo, indexado y anclas de apuntes en myst-tools" "myst-tools" 
 # 52. LIB_TEST (Framework pedagógico de testing C y mejoras QoL)
 run_step 52 "Aserciones de memoria sin fugas, mocks stdio, archivos temporales y reporte Markdown en lib_test" "lib_test" \
     "daedalus compile --flags '-Iinclude' src/p1_test.c src/test_lib_test.c -o build/test_lib_test && build/test_lib_test --md-report build/lib_test_report.md && test -f build/lib_test_report.md"
+
+# 53. KITCHEN SINK (robustez de daedalus/gaff/ripley ante clases y situaciones de archivo límite)
+run_step 53 "Kitchen-sink de sintaxis: archivos y situaciones de archivo límite no deben crashear ni colgar el pipeline" "ecosistema" \
+    "bash scripts/test_kitchen_sink.sh"
 
 echo -e "\n${BLUE}================================================================================${NC}"
 echo -e "${CYAN}📊 RESUMEN FINAL DEL SMOKE TEST:${NC}"

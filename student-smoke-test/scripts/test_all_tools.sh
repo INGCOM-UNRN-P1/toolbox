@@ -69,7 +69,7 @@ bash scripts/test_mock_holden.sh
 echo ""
 echo "▶ 12. [CALLAHAN] Extracción y verificación de contratos formales ACSL..."
 callahan extract src/data_structures.h
-callahan verify src/data_structures.h
+bash scripts/test_callahan_verify.sh
 
 echo ""
 echo "▶ 13. [DRAKE] Fuzzing guiado por límites y payloads extremos..."
@@ -109,7 +109,7 @@ tyrell generate -n 3 -o build/tyrell_tests
 
 echo ""
 echo "▶ 22. [VASSILI] Mutation testing sobre código C..."
-vassili mutate src/fuzz_target.c --tests-dir testcases --min-score 0
+vassili mutate src/fuzz_target.c --tests-dir testcases_fuzz --min-score 0
 
 echo ""
 echo "▶ 23. [CORBEL] Scaffolding de comentarios Doxygen y API Markdown..."

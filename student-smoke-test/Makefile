@@ -14,7 +14,7 @@ TARGET = $(BUILD_DIR)/app
         test-sandbox mock-fault verify-acsl fuzz callgraph diff-canon \
         audit-abi lint-portability audit-headers audit-macros verify-tda \
         gen-datasets test-mutation gen-docs run-sanitizers inspect-bin profile-perf \
-        explain-gcc inject-faults check-mcdc doctor-all
+        explain-gcc inject-faults check-mcdc doctor-all kitchen-sink
 
 all: build
 
@@ -80,7 +80,7 @@ mock-fault:
 verify-acsl:
 	@echo "\n📐 [CALLAHAN] Extrayendo y verificando contratos ACSL..."
 	callahan extract $(SRC_DIR)/data_structures.h
-	callahan verify $(SRC_DIR)/data_structures.h
+	@bash scripts/test_callahan_verify.sh
 
 fuzz:
 	@echo "\n💥 [DRAKE] Ejecutando fuzzing guiado por límites..."
@@ -121,7 +121,7 @@ gen-datasets:
 
 test-mutation:
 	@echo "\n🧬 [VASSILI] Evaluando efectividad de tests con Mutation Testing..."
-	vassili mutate $(SRC_DIR)/fuzz_target.c --tests-dir testcases --min-score 0
+	vassili mutate $(SRC_DIR)/fuzz_target.c --tests-dir testcases_fuzz --min-score 0
 
 gen-docs:
 	@echo "\n📚 [CORBEL] Scaffolding de comentarios y generación de documentación de APIs..."
@@ -181,6 +181,10 @@ doctor-all:
 	nostromo doctor
 	ripley doctor
 
+kitchen-sink:
+	@echo "\n🍳 [KITCHEN SINK] Verificando robustez ante clases y situaciones de archivo límite..."
+	@bash scripts/test_kitchen_sink.sh
+
 # ==============================================================================
 # Suite Completa de Smoke Test
 # ==============================================================================
@@ -193,7 +197,7 @@ help:
 	@echo ""
 	@echo "Comandos disponibles:"
 	@echo "  make build               - Compila el proyecto con Daedalus"
-	@echo "  make smoke               - Ejecuta el smoke test completo automatizado (52 pasos)"
+	@echo "  make smoke               - Ejecuta el smoke test completo automatizado (53 pasos)"
 	@echo "  make test-libtest        - lib_test: ejecución de suite con aserciones de memoria y reporte Markdown"
 	@echo "  make check-style         - Gaff: linter y convenciones de estilo"
 	@echo "  make check-security      - Kaneda: auditoría de seguridad"
@@ -225,4 +229,5 @@ help:
 	@echo "  make check-moodle        - Moodle-toolbox: herramientas de preguntas GIFT/XML"
 	@echo "  make check-myst          - MyST-tools: gestor de apuntes y guías MyST"
 	@echo "  make doctor-all          - Diagnóstico de todas las herramientas"
+	@echo "  make kitchen-sink        - Robustez ante clases/situaciones de archivo límite (sin crashes/cuelgues)"
 	@echo "  make clean               - Limpia binarios generados"

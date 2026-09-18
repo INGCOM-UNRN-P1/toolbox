@@ -29,6 +29,7 @@ Proyecto integral de demostración y suite de **Smoke Test** que ejercita todas 
 | 19 | **MOODLE-TOOLBOX** | Conversión bidireccional GIFT ↔ Moodle XML y validación de bancos de preguntas. | CLI `moodle-toolbox` |
 | 20 | **MYST-TOOLS** | Formateo, corrección de anclas e indexado de apuntes MyST Markdown. | CLI `myst-tools` |
 | 21 | **LIB_TEST** | Framework de testing pedagógico C: contadores de memoria sin fugas, mocks stdio, archivos temporales y reporte Markdown. | `src/test_lib_test.c`, `include/p1_test.h` |
+| 22 | **KITCHEN SINK** | Robustez de Daedalus/Gaff/Ripley ante clases y situaciones de archivo límite (vacíos, BOM, CRLF, encoding no-UTF8, byte nulo, binario, trigrafos/dígrafos, anidamiento profundo, permisos, symlinks) — no busca corrección, busca que nada crashee ni cuelgue. | `kitchen_sink/`, `scripts/test_kitchen_sink.sh` |
 
 ---
 
@@ -55,9 +56,14 @@ student-smoke-test/
 │       └── holden_app.c         # Aplicación explícita consumidora de fopen para Holden
 ├── canon/
 │   └── data_structures_canon.c  # Referencia canónica para Weyl
-├── testcases/
+├── testcases/                   # Casos del programa principal (build/app)
 │   ├── 01_basic.in / .out       # Caso de prueba básico
 │   └── 02_cmd3.in / .out        # Caso de prueba de comando
+├── testcases_fuzz/              # Casos de fuzz_target.c (Vassili exige que la suite
+│   │                            # apruebe sobre el original antes de puntuar mutantes)
+│   ├── 01_en_rango.in / .out    # Valor dentro del rango aceptado
+│   ├── 02_fuera_de_rango.in / .out # Valor fuera de rango
+│   └── 03_cero.in / .out        # Borde inferior
 ├── failing_cases/               # Batería de archivos con fallos deliberados para validación negativa
 │   ├── fail_syntax_daedalus.c   # Errores sintácticos y de tipos para Daedalus
 │   ├── fail_style_gaff.c        # Violaciones severas de estilo y formato para Gaff
@@ -69,10 +75,37 @@ student-smoke-test/
 │   ├── fail_fuzz_drake.c        # Vulnerabilidad de desbordamiento en INT_MAX para Drake
 │   ├── fail_contracts_callahan.c # Contratos contradictorios para Callahan
 │   └── fail_guide_overload.yaml # Sobrecarga de carga horaria semanal para Deckard
+├── kitchen_sink/                # Clases y situaciones de archivo límite (sin heredocs; todos explícitos)
+│   ├── ks_01_vacio.c             # Archivo de 0 bytes
+│   ├── ks_02_solo_whitespace.c   # Solo espacios/tabs/saltos de línea
+│   ├── ks_03_solo_comentario.c   # Ninguna declaración ni función real
+│   ├── ks_04_comentario_bloque_sin_cerrar.c # /* sin cerrar (EOF dentro de comentario)
+│   ├── ks_05_bom_utf8.c          # BOM UTF-8 al inicio del archivo
+│   ├── ks_06_crlf.c              # Finales de línea CRLF
+│   ├── ks_07_mixed_eol.c         # Finales de línea LF/CRLF mezclados
+│   ├── ks_08_sin_newline_final.c # Sin \n final en EOF
+│   ├── ks_09_linea_extremadamente_larga.c # Una sola línea de ~4000 caracteres
+│   ├── ks_10_anidamiento_profundo.c # 300 niveles de `if` anidados
+│   ├── ks_11_trigrafos.c         # Trigrafos ??( ??) ??< ??> ??= (C89/99, retirados en C23)
+│   ├── ks_12_literales_metacaracteres.c # Comillas/barras/regex-especiales en literales
+│   ├── ks_13_macro_multilinea.c  # #define con continuación de línea (backslash-newline)
+│   ├── ks_14_estilo_kr.c         # Definición de función estilo K&R pre-ANSI
+│   ├── ks_15_comentario_con_codigo_falso.c # Directivas/código falso dentro de comentarios
+│   ├── ks_16_digrafos.c          # Dígrafos <: :> <% %> %:
+│   ├── ks_17_latin1_no_utf8.c    # Codificado en Latin-1, inválido como UTF-8
+│   ├── ks_18_identificador_extenso.c # Identificador de >500 caracteres
+│   ├── ks_19_byte_nulo_embebido.c # Byte NUL literal embebido en el archivo
+│   ├── ks_20_binario_con_extension_c.c # Bytes binarios aleatorios con extensión .c
+│   ├── ks_21_dead_code_if_0.c    # #if 0 con sintaxis inválida adentro (código muerto)
+│   ├── "ks_22 archivo con espacios y ñ.c" # El nombre de archivo es el caso límite
+│   └── ks_23_extension_incorrecta.txt # Código C real con extensión .txt
 └── scripts/
     ├── test_all_tools.sh        # Ejecución secuencial de todas las CLIs
+    ├── test_callahan_verify.sh  # Tolera 'verify' sin Frama-C (prover opcional, ver doctor)
     ├── test_crash_hal.sh        # Diagnóstico forense con Hal sobre archivos explícitos
     ├── test_failing_cases.sh    # Batería exhaustiva de detección y rechazo de fallos
+    ├── test_kitchen_sink.sh     # Robustez ante clases y situaciones de archivo límite
+    ├── test_gaff_rules.sh       # Verificación exhaustiva de códigos de regla de Gaff
     └── test_mock_holden.sh      # Vinculación del mock con holden_app.c
 ```
 
@@ -114,4 +147,5 @@ make check-idkfa         # Verifica CLI de IDKFA
 make check-moodle        # Verifica CLI de Moodle-toolbox
 make check-myst          # Verifica CLI de MyST-tools
 make doctor-all          # Diagnóstico de todas las herramientas
+make kitchen-sink        # Robustez ante clases/situaciones de archivo límite (sin crashes/cuelgues)
 ```

@@ -1,0 +1,15 @@
+#include <stdio.h>
+
+/*
+ * Código C real pero guardado con extensión .txt en vez de .c/.h.
+ * Verifica que las herramientas que despachan comportamiento por
+ * extensión de archivo fallen con un mensaje claro (o directamente
+ * ignoren el archivo) en vez de asumir que es C válido, o de asumir
+ * que es texto plano y tratarlo como si no tuviera sintaxis.
+ */
+int
+main(void)
+{
+    printf("codigo C valido con extension .txt\n");
+    return 0;
+}
