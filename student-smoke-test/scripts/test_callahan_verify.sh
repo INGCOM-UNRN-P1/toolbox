@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # frama-c es un prover OPCIONAL para Callahan (ver 'callahan doctor'). Sin él,
-# 'callahan verify' informa 'UNVERIFIED' y sale con código 1 aunque los contratos
+# 'callahan verify' informa 'UNVERIFIED' y sale con código 2 (no se pudo verificar; 1 es un contrato rechazado) aunque los contratos
 # ACSL se hayan extraído correctamente. Este script solo falla ante un rechazo
 # real de Frama-C (frama_c_disponible=true y ok=false), no ante su ausencia.
 
