@@ -9,6 +9,12 @@ __pycache__/
 *.out
 *.exe
 
+# ...pero las salidas esperadas de los casos de prueba NO son binarios `a.out`:
+# sin esta excepción, agregar un caso nuevo pierde su .out en silencio y la
+# suite queda comparando contra nada.
+!student-smoke-test/testcases/*.out
+!student-smoke-test/testcases_fuzz/*.out
+
 # Virtual environments
 .venv/
 venv/

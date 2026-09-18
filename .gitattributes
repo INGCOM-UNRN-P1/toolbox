@@ -1,0 +1,11 @@
+# Las fixtures del kitchen sink valen por sus bytes exactos: hay casos de CRLF,
+# de finales de línea mezclados, de codificación Latin-1, de byte nulo embebido
+# y de contenido binario con extensión .c. Si git normaliza los finales de
+# línea al hacer checkout o commit, esos archivos dejan de probar lo que dicen
+# probar (y lo hacen en silencio: el test sigue pasando, sobre otro contenido).
+student-smoke-test/kitchen_sink/** -text
+
+# Los casos .in/.out se comparan carácter por carácter contra la salida real
+# del programa, así que tampoco deben sufrir conversión de finales de línea.
+student-smoke-test/testcases/** -text
+student-smoke-test/testcases_fuzz/** -text
