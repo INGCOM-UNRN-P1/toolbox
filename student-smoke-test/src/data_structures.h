@@ -28,7 +28,7 @@ typedef struct s_nodo
 
 /*@
   @ requires n >= 0 && n <= 12;
-  @ ensures esult >= 1;
+  @ ensures \result >= 1;
   @*/
 int calcular_factorial(int n);
 
