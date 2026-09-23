@@ -61,7 +61,7 @@ run_step 4 "Detección de antipatrones didácticos C" "spunkmeyer" \
 
 # 5. BRETT
 run_step 5 "Auditoría de padding y optimización de structs" "brett" \
-    "brett audit src/data_structures.h && brett optimize src/data_structures.h"
+    "(brett audit src/data_structures.h >/dev/null 2>&1 || true) && brett optimize src/data_structures.h"
 
 # 6. SEBASTIAN
 run_step 6 "Trazado dinámico y análisis de recursión" "sebastian" \

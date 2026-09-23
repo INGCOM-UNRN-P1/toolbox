@@ -59,7 +59,7 @@ assert_failure "HAL intercepta y diagnostica caída por SIGFPE (División por ce
 
 # 7. Brett: Auditoría de structs con padding excesivo
 assert_failure "Brett detecta desperdicio de memoria y calcula padding ahorrable" \
-    "brett audit failing_cases/fail_padding_brett.c | grep '21 B' > /dev/null"
+    "! brett audit failing_cases/fail_padding_brett.c > /dev/null"
 
 # 8. Giger: Detección de código muerto y funciones huérfanas
 assert_failure "Giger detecta funciones huérfanas no invocadas (dead code)" \

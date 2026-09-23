@@ -42,8 +42,7 @@ typedef struct s_nodo
 
 /*@
   @ requires n >= 0 && n <= 12;
-  @ ensures 
-esult >= 1;
+  @ ensures \result >= 1;
   @*/
 /**
  * @brief [Descripción breve de la función calcular_factorial]
