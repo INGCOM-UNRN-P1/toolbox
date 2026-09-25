@@ -1,0 +1,113 @@
+# Integración de punta a punta del ecosistema (N-ECO-03).
+#
+# Corre en un runner limpio, instala todas las herramientas DESDE GIT (como lo
+# haría un estudiante o un docente, sin el monorepo local) y ejecuta:
+#   - la coherencia del manifiesto ecosistema.toml con los repositorios;
+#   - los chequeos de documentación (instalación por nombre, comandos citados);
+#   - los dos smoke tests estudiantiles con oráculos;
+#   - el doctor de cada herramienta (informativo);
+#   - el fuzz de subcomandos (informativo hasta cerrar N-ECO-05).
+#
+# Además de cada push, corre todos los lunes: así los arreglos ya cerrados en
+# el ledger de la revisión se vuelven a verificar periódicamente.
+name: Ecosistema E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  manifiesto-y-documentacion:
+    name: Manifiesto y documentación
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Validar ecosistema.toml
+        run: python3 scripts/ecosistema.py listar --formato json > /dev/null
+
+      - name: Clonar los repositorios del manifiesto
+        run: bash scripts/clone_repos.sh --target "$RUNNER_TEMP/ecosistema"
+
+      - name: Coherencia del manifiesto con los repositorios
+        run: python3 scripts/ecosistema.py verificar --raiz "$RUNNER_TEMP/ecosistema"
+
+      - name: Instrucciones de instalación solo desde git
+        run: python3 scripts/verificar_docs_instalacion.py --raiz "$RUNNER_TEMP/ecosistema"
+
+  smoke-desde-git:
+    name: Instalación desde git y smoke tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Dependencias del sistema
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc gdb valgrind bubblewrap make
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Instalar todas las herramientas activas desde git
+        run: |
+          python3 scripts/ecosistema.py instalar
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Doctor de cada herramienta (informativo)
+        continue-on-error: true
+        run: bash scripts/health_check.sh
+
+      - name: Smoke test estudiantil con oráculos (test_all_tools.sh)
+        working-directory: student-smoke-test
+        run: bash scripts/test_all_tools.sh
+
+      - name: Smoke test integral (smoke_test.sh)
+        working-directory: student-smoke-test
+        run: bash smoke_test.sh
+
+      - name: Comandos citados en skills y manuales
+        run: python3 scripts/verificar_comandos_docs.py
+
+  fuzz-subcomandos:
+    name: Fuzz de subcomandos (informativo)
+    runs-on: ubuntu-24.04
+    # Informativo hasta cerrar N-ECO-05 (tracebacks ante entradas inválidas).
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Dependencias del sistema
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc gdb valgrind bubblewrap make
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Instalar todas las herramientas activas desde git
+        run: |
+          python3 scripts/ecosistema.py instalar
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Fuzz de subcomandos
+        run: python3 scripts/fuzz_subcomandos.py --salida fuzz.json
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: fuzz-subcomandos
+          path: fuzz.json

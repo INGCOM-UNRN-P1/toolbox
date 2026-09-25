@@ -7,7 +7,7 @@ install_tools.sh, health_check.sh y el CI de integración.
 
 Uso:
     ecosistema.py listar [--perfil P]... [--tipo T]... [--estado E]... [--formato F]
-    ecosistema.py instalar [--perfil P]... [--editable RAIZ] [--simular]
+    ecosistema.py instalar [--perfil P]... [--editable RAIZ | --local RAIZ] [--simular]
     ecosistema.py sistema [--perfil P]...
     ecosistema.py verificar [--raiz DIR]
 
@@ -148,6 +148,11 @@ def cmd_instalar(args, repos: list[Repo]) -> int:
     for repo in seleccion:
         if args.editable:
             comando = ["uv", "tool", "install", "--editable", repo.requisito_editable(Path(args.editable))]
+        elif args.local:
+            # Instalación no editable desde el clon local: el paquete queda en
+            # site-packages, como lo instalaría cualquiera desde git. Sirve para
+            # detectar dependencias no declaradas (imports de carpetas hermanas).
+            comando = ["uv", "tool", "install", repo.requisito_editable(Path(args.local))]
         else:
             comando = ["uv", "tool", "install", repo.requisito_git()]
         print("$ " + " ".join(f'"{c}"' if " " in c else c for c in comando), flush=True)
@@ -247,7 +252,9 @@ def main(argv: list[str]) -> int:
 
     p_instalar = sub.add_parser("instalar")
     p_instalar.add_argument("--perfil", action="append")
-    p_instalar.add_argument("--editable", metavar="RAIZ", help="instala en modo editable desde RAIZ/<carpeta>")
+    modo = p_instalar.add_mutually_exclusive_group()
+    modo.add_argument("--editable", metavar="RAIZ", help="instala en modo editable desde RAIZ/<carpeta>")
+    modo.add_argument("--local", metavar="RAIZ", help="instala (no editable) desde el clon local RAIZ/<carpeta>")
     p_instalar.add_argument("--simular", action="store_true")
 
     p_sistema = sub.add_parser("sistema")

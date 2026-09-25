@@ -9,10 +9,11 @@ desde su repositorio (``uv tool install git+https://github.com/…`` o
 ``uv tool install "paquete[extra] @ git+https://…"``).
 
 Uso:
-    verificar_docs_instalacion.py [RUTA ...]
+    verificar_docs_instalacion.py [--raiz DIR] [RUTA ...]
 
 Cada RUTA puede ser un archivo o un directorio (se recorre recursivamente). Sin
-argumentos revisa los repositorios hermanos de p1-tools (``../..``).
+rutas revisa los repositorios de la raíz. La raíz (por defecto la carpeta que
+contiene a p1-tools) es de donde se leen los nombres propios (pyproject.toml).
 Sale con 0 si no hay instrucciones inseguras y con 1 si encuentra alguna.
 """
 
@@ -84,6 +85,9 @@ def revisar(rutas: list[Path], nombres: set[str]) -> list[str]:
 
 def main(argv: list[str]) -> int:
     raiz = Path(__file__).resolve().parents[2]
+    if argv[:1] == ["--raiz"] and len(argv) >= 2:
+        raiz = Path(argv[1]).resolve()
+        argv = argv[2:]
     directorios = [Path(a).resolve() for a in argv] or sorted(p for p in raiz.iterdir() if p.is_dir())
     hallazgos = revisar(directorios, nombres_propios(raiz))
     for h in hallazgos:
