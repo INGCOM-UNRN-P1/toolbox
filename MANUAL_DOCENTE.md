@@ -78,11 +78,11 @@ ejercicios:
 
 **Comandos clave de `deckard`:**
 ```bash
-# Validar la coherencia sintáctica de una guía
-deckard validate guias/practica_2/guia.yaml
+# Auditar la completitud y calidad técnica de los ejercicios de una guía
+deckard audit-guide guias/practica_2/guia.yaml
 
 # Calibrar la sobrecarga horaria del estudiante
-deckard check-load guias/practica_2/guia.yaml --max-hours 6.0
+deckard check-load guias/practica_2/guia.yaml --max-horas 6.0
 
 # Empaquetar la guía y sus casos de prueba en un paquete portable .ripkg
 deckard pack guias/practica_2/ -o dist/practica_2.ripkg
@@ -97,11 +97,12 @@ deckard pack guias/practica_2/ -o dist/practica_2.ripkg
 
 **Comandos clave de `idkfa`:**
 ```bash
-# Generar 50 variantes únicas de un problema de tracing de punteros
-idkfa generate templates/punteros_trace.c.j2 -n 50 --out-dir examenes/parcial1/
+# Generar 50 variantes únicas de un problema de tracing de punteros y
+# exportarlas directamente como banco Moodle XML en la categoría indicada
+idkfa -t templates/punteros_trace.c -n 50 -c "Parcial 1/Tracing Punteros" -o banco_parcial1.xml
 
-# Exportar las variantes directamente a un banco de preguntas Moodle XML
-idkfa export-moodle examenes/parcial1/ --category "Parcial 1/Tracing Punteros" -o banco_parcial1.xml
+# Solo generar el código C de las variantes (sin XML) para revisarlas antes
+idkfa -t templates/punteros_trace.c -n 50 --generate-only
 ```
 
 ### 3.2 Maquetación Tipográfica de Exámenes con `alucarD`
@@ -109,15 +110,15 @@ Para evaluaciones presenciales en papel, `alucarD` toma el banco de preguntas y 
 
 **Comandos clave de `alucarD`:**
 ```bash
-# Generar examen impreso con 4 temas barajados y hoja OMR
-alucard build-exam parcial1.yaml --temas 4 --omr --out-dir impresiones/
+# Generar examen impreso en PDF con 4 temas barajados y hoja OMR
+alucard -d parcial1.yaml -n 4 -f pdf --omr -o impresiones/
 ```
 
 ### 3.3 Gestión de Bancos con `moodle-toolbox`
 Permite convertir preguntas escritas en formato GIFT a XML de Moodle y viceversa, además de auditar categorías vacías o preguntas con errores de puntuación:
 ```bash
 # Convertir archivo de preguntas GIFT a Moodle XML
-moodle-toolbox convert banco.gift -o banco.xml
+moodle-toolbox convert gift-to-xml banco.gift --output banco.xml
 
 # Validar integridad sintáctica del XML de Moodle
 moodle-toolbox validate banco.xml
@@ -151,7 +152,7 @@ Para prácticas gestionadas con repositorios Git:
 dredd github clone TP0 TP0-Enehuen https://github.com/INGCOM-UNRN-P1/p1-2026-tp0-2026-enehuen
 
 # Reparar o abrir el Pull Request de corrección si el estudiante no lo creó
-dredd github pr-fix TP0 TP0-Enehuen
+dredd github pr-fix TP0 TP0-Enehuen https://github.com/INGCOM-UNRN-P1/p1-2026-tp0-2026-enehuen
 ```
 * **Aislamiento de Git**: El repositorio del alumno se aloja en el subdirectorio `repo/`, manteniendo el árbol Git puro e intacto.
 * **Archivos de informe desacoplados**: Los informes de corrección y carpetas de auditoría se ubican en la carpeta del estudiante sin ensuciar el repositorio Git clonado.
@@ -173,8 +174,8 @@ dredd eval TP0 --all
 # Limitar a modo simulación (las primeras 3 entregas)
 dredd eval TP0 --all --dry-run
 
-# Re-evaluar únicamente las entregas previamente desaprobadas o con fallos
-dredd eval TP0 --all --failed-only
+# Re-evaluar desde cero, descartando los resultados previos
+dredd eval TP0 --all --force
 
 # Especificar un directorio de plantillas de cátedra (_baseline) para ignorar ejercicios no tocados
 dredd eval TP0 --all --baseline ./_baseline
@@ -204,8 +205,8 @@ Para cada estudiante y commit evaluado se generan:
 # Analizar plagio con un umbral de sospecha del 60%
 dredd plagiarism TP0 --threshold 0.60
 
-# Exportar la matriz visual de similitud
-dredd plagiarism TP0 --threshold 0.60 --matrix
+# Exportar el reporte HTML con la matriz de similitud y el diff lado a lado
+dredd plagiarism TP0 --threshold 0.60 --html similitud_TP0.html
 ```
 
 ---
@@ -234,6 +235,6 @@ Este comando produce tres artefactos listos para el cierre:
 ### 7.3 Preparación de Coloquios Orales
 Para defensas de trabajos prácticos o exámenes orales:
 ```bash
-dredd oral-guide TP0 TP0-Enehuen
+dredd oral-guide TP0/TP0-Enehuen/repo --alumno "Enehuen" --ejercicio TP0 -o coloquio_enehuen.md
 ```
 Genera un guion de preguntas personalizadas para el docente, basadas en las construcciones dudosas, funciones complejas o advertencias encontradas en el código de ese estudiante en particular.
