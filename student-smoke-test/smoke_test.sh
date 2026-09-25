@@ -49,7 +49,7 @@ run_step 1 "Compilación pedagógica y traducción de advertencias" "daedalus" \
 
 # 2. GAFF
 run_step 2 "Linting estático, catálogo y verificación exhaustiva de reglas cátedra (0xXXXXh)" "gaff" \
-    "(gaff check src/data_structures.c src/parser.c >/dev/null 2>&1 || true) && bash scripts/test_gaff_rules.sh"
+    "salida=\$(NO_COLOR=1 gaff check src/data_structures.c src/parser.c 2>&1); ! grep -qE '0x000Eh|0x000Fh|0x2011h' <<<\"\$salida\" && bash scripts/test_gaff_rules.sh"
 
 # 3. KANEDA
 run_step 3 "Auditoría de seguridad y funciones prohibidas" "kaneda" \
@@ -139,8 +139,11 @@ run_step 23 "Scaffolding de placeholders Doxygen y generación de documentación
     "corbel scaffold src/data_structures.h -o build/scaffolded.h && corbel doc src/data_structures.h -f markdown -o build/API.md"
 
 # 24. TETSUO
+# build/app se compila sin sanitizers: tetsuo debe negarse a declararlo limpio
+# (N-TETSUO-01). Si gcc puede enlazar ASan/UBSan, además se prueba una
+# versión instrumentada, que sí debe salir limpia.
 run_step 24 "Traducción y diagnóstico de sanitizers (ASan/UBSan)" "tetsuo" \
-    "tetsuo run build/app"
+    "salida=\$(NO_COLOR=1 tetsuo run build/app 2>&1); [[ \"\$salida\" == *'no está instrumentado'* ]] && { ! printf 'int main(void) { return 0; }\\n' | gcc -x c -fsanitize=address,undefined -o /dev/null - >/dev/null 2>&1 || { daedalus compile src/main.c src/data_structures.c src/parser.c --flags '-fsanitize=address,undefined' -o build/app_asan >/dev/null 2>&1 && tetsuo run build/app_asan; }; }"
 
 # 25. KANE
 run_step 25 "Depuración visual de archivos binarios y mapeo a structs" "kane" \
