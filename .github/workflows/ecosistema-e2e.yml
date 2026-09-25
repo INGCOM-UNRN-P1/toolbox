@@ -70,6 +70,9 @@ jobs:
         continue-on-error: true
         run: bash scripts/health_check.sh
 
+      - name: Contrato de línea de comandos (-h, --version/-v, doctor --json)
+        run: python3 scripts/verificar_contrato_cli.py
+
       - name: Smoke test estudiantil con oráculos (test_all_tools.sh)
         working-directory: student-smoke-test
         run: bash scripts/test_all_tools.sh
