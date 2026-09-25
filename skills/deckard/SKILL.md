@@ -10,7 +10,7 @@ description: Use when authoring, cataloging, verifying, or composing balanced pr
 
 ## Cuándo Usar
 - Para inspeccionar enunciados de ejercicios con selección de secciones (metadatos, solución, pistas, tests) (`deckard show`).
-- Para compilar ejercicios individuales o guías completas a documentos PDF estilizados (`deckard pdf`).
+- Para compilar ejercicios individuales o guías completas a documentos PDF estilizados (`deckard export <id> -t pdf`, `deckard guide pdf`).
 - Para listar, auditar, crear y gestionar guías de trabajos prácticos (`deckard guide`).
 - Para inicializar un nuevo banco de ejercicios de programación o crear nuevos ejercicios estructurados.
 - Para verificar soluciones modelo contra el motor de análisis estático y pruebas de Ripley (`deckard verify`).
@@ -190,7 +190,7 @@ deckard tag add "punteros-*" examen,parcial1
 deckard tag remove invertir-vector facil
 
 # Filtrar listados y auditorías por tag
-deckard list --tag punteros
+deckard bank list --tag punteros
 deckard audit --tag examen
 ```
 
@@ -209,7 +209,7 @@ deckard verify fuzz invertir-pares -n 8
 deckard verify fuzz "arreglos/*" --segundos 15
 deckard verify fuzz --all --log-fallos dist/fuzz_fallos.md
 
-# 3. Arnés de pruebas con inyección de malloc vía ripley harness (verify test-harness)
+# 3. Arnés de pruebas con inyección de fallos de malloc vía vasquez inject (verify test-harness)
 deckard verify test-harness invertir-pares spec.yaml
 ```
 

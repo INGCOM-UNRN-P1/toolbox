@@ -12,7 +12,7 @@ description: Use when orchestrating batch evaluations, automated grading, plagia
 - Para procesar paquetes ZIP masivos descargados de Moodle, normalizando archivos y rastreando re-entregas (`dredd moodle ingest`).
 - Para mapear archivos de estudiantes a casos de prueba automáticamente o de forma interactiva (`dredd map`).
 - Para ejecutar evaluaciones masivas o individuales sobre entregas de GitHub Classroom (`dredd eval`).
-- Para comentar informes de evaluación en Pull Requests de GitHub (`dredd comment`).
+- Para comentar informes de evaluación en Pull Requests de GitHub (`dredd github comment`).
 - Para detectar código duplicado o copias masivas mediante análisis de huellas Winnowing (`dredd plagiarism`).
 - Para exportar planillas de notas CSV de Moodle y reportes de feedback HTML/PDF (`dredd export`, `dredd export-report`).
 
@@ -42,10 +42,10 @@ dredd eval tp01 alvarez_juan
 dredd eval tp01 --all
 
 # Publicar el reporte Markdown generado como comentario en el PR del estudiante
-dredd comment tp01 alvarez_juan --open
+dredd github comment tp01 alvarez_juan --open
 
 # Reparar o abrir PR de corrección si el estudiante no lo hizo
-dredd pr-fix tp01 alvarez_juan
+dredd github pr-fix tp01 alvarez_juan https://github.com/INGCOM-UNRN-P1/tp01-alvarez_juan
 ```
 
 ### 3. Conversión de Reportes

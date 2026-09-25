@@ -71,7 +71,7 @@ Usage: deckard [OPTIONS] COMMAND [ARGS]...
 │            especificado.                                                     │
 │ bank       Inspección del banco de ejercicios.                               │
 │ verify     Verificación pedagógica (ripley check), fuzzing (dredd) y arnés   │
-│            de pruebas (ripley harness).                                      │
+│            de pruebas (vasquez inject).                                      │
 │ tag        Gestión y consulta de etiquetas (tags) en el banco.               │
 │ export     Exportación multiformato (PDF, Markdown, HTML) y gestión de       │
 │            plantillas.                                                       │
@@ -176,7 +176,7 @@ deckard export guias/parcial1.yaml --type=pdf,md -o dist/
 * `deckard verify [id]`: Verificación de reglas pedagógicas y compilación con `ripley check`. Admite comodines, `--all`, barra de progreso interactiva y generación de reporte de fallos (`--log-fallos`).
   > Los ejercicios que fallan se marcan automáticamente como no-verificados (`verificado: false`).
 * `deckard verify fuzz [id]`: Fuzzing y endurecimiento de testcases con `dredd fuzz-gen` y libFuzzer.
-* `deckard verify test-harness <id> <spec>`: Arnés de pruebas con inyección de fallos de malloc vía `ripley harness`.
+* `deckard verify test-harness <id> <spec>`: Arnés de pruebas con inyección de fallos de malloc vía `vasquez inject`.
 
 ### 6. Empaquetado y Distribución
 * `deckard pack <objetivo>`: Empaqueta ejercicios/guías en archivos firmados `.ripkg` y genera starter repos para GitHub Classroom.

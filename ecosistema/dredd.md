@@ -112,18 +112,18 @@ dredd eval tp01 alvarez_juan
 dredd eval tp01 --all
 ```
 
-#### Publicación de Feedback en GitHub (`dredd comment`)
+#### Publicación de Feedback en GitHub (`dredd github comment`)
 Envía automáticamente el informe `${estudiante}.md` como comentario en el Pull Request abierto del estudiante utilizando GitHub CLI (`gh`):
 
 ```bash
-dredd comment tp01 alvarez_juan --open
+dredd github comment tp01 alvarez_juan --open
 ```
 
-#### Creación / Reparación de Pull Requests (`dredd pr-fix`)
+#### Creación / Reparación de Pull Requests (`dredd github pr-fix`)
 Reconstruye o abre el Pull Request de corrección en caso de que el estudiante no lo haya generado o haya alterado las ramas base:
 
 ```bash
-dredd pr-fix tp01 alvarez_juan
+dredd github pr-fix tp01 alvarez_juan https://github.com/INGCOM-UNRN-P1/tp01-alvarez_juan
 ```
 
 ---
