@@ -21,7 +21,7 @@ Podés poner a punto toda la estación de trabajo y el ecosistema completo en cu
 ```bash
 ./scripts/clone_repos.sh
 ```
-*Clona los 37 repositorios de la cátedra desde GitHub (`INGCOM-UNRN-P1`, `INGCOM-UNRN`) o los actualiza con fast-forward si ya existen.*
+*Clona los repositorios listados en [`ecosistema.toml`](ecosistema.toml) (herramientas, plantillas, librerías y documentación) o los actualiza con fast-forward si ya existen.*
 
 ### 2. Instalar las herramientas CLI en tu sistema
 ```bash
@@ -33,7 +33,7 @@ Podés poner a punto toda la estación de trabajo y el ecosistema completo en cu
 ```bash
 ./scripts/install_skills.sh
 ```
-*Despliega las 22 skills pedagógicas en las rutas estándar de Gemini (`~/.gemini/config/skills/`), Claude y agentes locales.*
+*Despliega las skills pedagógicas de [`skills/`](skills/) en las rutas estándar de Gemini (`~/.gemini/config/skills/`), Claude y agentes locales.*
 
 ### 4. Auditar la salud del entorno
 ```bash
@@ -103,6 +103,6 @@ Podés poner a punto toda la estación de trabajo y el ecosistema completo en cu
 ## Integración de Nuevas Herramientas
 
 Para agregar una nueva herramienta al ecosistema, consultá la guía paso a paso en [**`LINEAMIENTOS.md`**](LINEAMIENTOS.md).
-El procedimiento incluye la creación del paquete con `typer` + `rich`, la implementación obligatoria de `<herramienta> doctor`, la redacción del manual en `ecosistema/<herramienta>.md`, la creación de la skill en `skills/<herramienta>/SKILL.md` y su registro en `scripts/clone_repos.sh`.
+El procedimiento incluye la creación del paquete con `typer` + `rich`, la implementación obligatoria de `<herramienta> doctor`, la redacción del manual en `ecosistema/<herramienta>.md`, la creación de la skill en `skills/<herramienta>/SKILL.md` y su registro en [`ecosistema.toml`](ecosistema.toml) (de ahí lo toman los scripts de clonado, instalación y salud, y el CI; `python3 scripts/ecosistema.py verificar` controla que el manifiesto coincida con los repos).
 
 Y por otro lado, ¡se aceptan contribuciones!

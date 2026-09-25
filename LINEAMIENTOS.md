@@ -125,7 +125,7 @@ dredd doctor
 1. **Suite `pytest` Completa**: Todo el código debe tener pruebas automatizadas en el subdirectorio `tests/`.
 2. **Aislamiento**: Las pruebas de manipulación de archivos deben usar fixtures aisladas (`tmp_path`).
 3. **Negative Testing (Pruebas de Fallo Deliberado)**: Cada regla, linter o analizador debe incluir pruebas con fragmentos de código en C que contengan el fallo deliberado, comprobando que la herramienta lo detecte, emita el código de regla correspondiente y retorne un estado de fallo.
-4. **Validación del Smoke Test**: Antes de dar por integrada una herramienta, debe incluirse en la batería `scripts/health_check.sh` y verificarse contra el `student-smoke-test`.
+4. **Validación del Smoke Test**: Antes de dar por integrada una herramienta, debe figurar en `ecosistema.toml` (de ahí la toma `scripts/health_check.sh`) y verificarse contra el `student-smoke-test`.
 
 ---
 
@@ -146,7 +146,7 @@ Para incorporar una nueva herramienta (`mi-herramienta`) al ecosistema P1:
 4. **Crear la Skill Pedagógica**:
    Crear la carpeta `skills/mi-herramienta/SKILL.md` con las instrucciones específicas para que los agentes de IA (Gemini, Antigravity, Claude) sepan cuándo y cómo invocarla.
 5. **Registrar en los scripts de gestión global**:
-   - Agregar el repositorio a la lista `REPOSITORIOS` en `scripts/clone_repos.sh`.
-   - Agregar el binario a la lista de auditoría en `scripts/health_check.sh`.
+   - Agregar una entrada `[[repo]]` en `ecosistema.toml` (URL, tipo, paquete, ejecutables, perfiles, plugin de ripley, dependencias del sistema). `clone_repos.sh`, `install_tools.sh`, `health_check.sh` y el CI de integración la toman de ahí.
+   - Verificar la coherencia con `python3 scripts/ecosistema.py verificar`.
 6. **Actualizar el Catálogo**:
    Incorporar la herramienta al índice temático en `ecosistema/index.md` y en la tabla general de `README.md`.

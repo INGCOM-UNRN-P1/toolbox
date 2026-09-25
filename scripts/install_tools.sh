@@ -58,23 +58,35 @@ fi
 
 echo "==> Instalando herramientas desde: $ROOT_DIR"
 
+# Herramientas instalables según el manifiesto ecosistema.toml (N-P1TOOLS-02):
+# solo las de tipo cli activas (no bibliotecas como cast-tools-common), con
+# sus extras ("carpeta[extra1,extra2]").
+if ! mapfile -t HERRAMIENTAS < <(python3 "$SCRIPT_DIR/ecosistema.py" listar --tipo cli --estado activo --formato carpeta-extras); then
+    echo "[ERROR] No se pudo leer ecosistema.toml con scripts/ecosistema.py (requiere Python >= 3.11)." >&2
+    exit 1
+fi
+
 if [ "$USE_PIP" = true ]; then
     echo "==> Modo: uv pip install -e en entorno virtual..."
-    for dir in "$ROOT_DIR"/*/; do
-        if [ -f "$dir/pyproject.toml" ]; then
-            tool_name="$(basename "$dir")"
-            echo "  -> Instalando $tool_name..."
-            uv pip install -e "$dir"
+    for item in "${HERRAMIENTAS[@]}"; do
+        carpeta="${item%%[*}"
+        if [ ! -f "$ROOT_DIR/$carpeta/pyproject.toml" ]; then
+            echo "  [AVISO] $carpeta no está clonada en $ROOT_DIR (corré scripts/clone_repos.sh). Se omite."
+            continue
         fi
+        echo "  -> Instalando $carpeta..."
+        uv pip install -e "$ROOT_DIR/$item"
     done
 else
     echo "==> Modo: uv tool install --editable..."
-    for dir in "$ROOT_DIR"/*/; do
-        if [ -f "$dir/pyproject.toml" ]; then
-            tool_name="$(basename "$dir")"
-            echo "  -> Instalando $tool_name..."
-            uv tool install "$dir" --editable "$@" --force 2>/dev/null || uv tool install "$dir" --editable "$@"
+    for item in "${HERRAMIENTAS[@]}"; do
+        carpeta="${item%%[*}"
+        if [ ! -f "$ROOT_DIR/$carpeta/pyproject.toml" ]; then
+            echo "  [AVISO] $carpeta no está clonada en $ROOT_DIR (corré scripts/clone_repos.sh). Se omite."
+            continue
         fi
+        echo "  -> Instalando $carpeta..."
+        uv tool install "$ROOT_DIR/$item" --editable "$@" --force 2>/dev/null || uv tool install "$ROOT_DIR/$item" --editable "$@"
     done
 fi
 
@@ -83,32 +95,18 @@ echo "==> Configurando autocompletado en el shell..."
 
 completion_tools=()
 
-for dir in "$ROOT_DIR"/*/; do
-    if [ -f "$dir/pyproject.toml" ]; then
-        scripts="$(python3 -c '
-import tomllib, sys
-try:
-    with open(sys.argv[1], "rb") as f:
-        data = tomllib.load(f)
-    for s in data.get("project", {}).get("scripts", {}).keys():
-        print(s)
-except Exception:
-    pass
-' "$dir/pyproject.toml")"
+mapfile -t EJECUTABLES < <(python3 "$SCRIPT_DIR/ecosistema.py" listar --tipo cli --estado activo --formato ejecutables)
+for bin_name in "${EJECUTABLES[@]}"; do
+    if command -v "$bin_name" &>/dev/null; then
+        if "$bin_name" --help 2>&1 | grep -q -- "--show-completion"; then
+            echo "  [+] $bin_name: Configurando autocompletado..."
+            completion_tools+=("$bin_name")
+            "$bin_name" --install-completion &>/dev/null || true
 
-        for bin_name in $scripts; do
-            if command -v "$bin_name" &>/dev/null; then
-                if "$bin_name" --help 2>&1 | grep -q -- "--show-completion"; then
-                    echo "  [+] $bin_name: Configurando autocompletado..."
-                    completion_tools+=("$bin_name")
-                    "$bin_name" --install-completion &>/dev/null || true
-
-                    if [ "$IS_SOURCED" = true ]; then
-                        eval "$("$bin_name" --show-completion 2>/dev/null)" || true
-                    fi
-                fi
+            if [ "$IS_SOURCED" = true ]; then
+                eval "$("$bin_name" --show-completion 2>/dev/null)" || true
             fi
-        done
+        fi
     fi
 done
 

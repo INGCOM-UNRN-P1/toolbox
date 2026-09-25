@@ -6,25 +6,13 @@ set -euo pipefail
 # Cátedra de Programación 1 - Universidad Nacional de Río Negro
 # ==============================================================================
 
-TOOLS=(
-    daedalus
-    gaff
-    hal
-    bishop
-    spunkmeyer
-    brett
-    kaneda
-    nostromo
-    drake
-    holden
-    ripley
-    dredd
-    deckard
-    alucard
-    idkfa
-    moodle-toolbox
-    myst-tools
-)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Un ejecutable por herramienta activa, desde el manifiesto ecosistema.toml
+# (N-P1TOOLS-02). Antes la lista fija cubría 17 de las 42 herramientas.
+if ! mapfile -t TOOLS < <(python3 "$SCRIPT_DIR/ecosistema.py" listar --tipo cli --estado activo --formato ejecutable-principal); then
+    echo "[ERROR] No se pudo leer ecosistema.toml con scripts/ecosistema.py (requiere Python >= 3.11)." >&2
+    exit 1
+fi
 
 echo "=============================================================================="
 echo " Auditoría de Salud del Ecosistema P1 (doctor)"

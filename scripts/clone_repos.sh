@@ -53,51 +53,12 @@ done
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="${TARGET_DIR:-$(cd "$SCRIPT_DIR/../.." && pwd)}"
 
-# Lista de repositorios: "nombre_carpeta:organizacion:nombre_repo"
-REPOSITORIOS=(
-    # Core pedagógico y evaluación
-    "dredd:INGCOM-UNRN-P1:dredd"
-    "ripley:INGCOM-UNRN-P1:ripley"
-    "daedalus:INGCOM-UNRN-P1:daedalus"
-    "gaff:INGCOM-UNRN-P1:gaff"
-    "hal:INGCOM-UNRN-P1:hal"
-    "bishop:INGCOM-UNRN-P1:bishop"
-    "spunkmeyer:INGCOM-UNRN-P1:spunkmeyer"
-    "brett:INGCOM-UNRN-P1:brett"
-    "kaneda:INGCOM-UNRN-P1:kaneda"
-    "nostromo:INGCOM-UNRN-P1:nostromo"
-    "drake:INGCOM-UNRN-P1:drake"
-    "holden:INGCOM-UNRN-P1:holden"
-    "rachel:INGCOM-UNRN-P1:rachel"
-    "sebastian:INGCOM-UNRN-P1:sebastian"
-    "callahan:INGCOM-UNRN-P1:callahan"
-    "weyl:INGCOM-UNRN-P1:weyl"
-    "giger:INGCOM-UNRN-P1:giger"
-    "esper:INGCOM-UNRN-P1:esper"
-
-    # Autoría docente y exámenes
-    "deckard:INGCOM-UNRN:deckard"
-    "alucarD:INGCOM-UNRN:alucarD"
-    "idkfa:INGCOM-UNRN-P1:idkfa"
-    "moodle-toolbox:INGCOM-UNRN:moodle-toolbox"
-    "myst-tools:martinvilu:mystmd-tools"
-
-    # Entorno y utilidades complementarias
-    "entorno:INGCOM-UNRN-P1:entorno"
-    "corbel:INGCOM-UNRN-P1:corbel"
-    "crowe:INGCOM-UNRN-P1:crowe"
-    "dietrich:INGCOM-UNRN-P1:dietrich"
-    "ferro:INGCOM-UNRN-P1:ferro"
-    "kane:INGCOM-UNRN-P1:kane"
-    "motoko:INGCOM-UNRN-P1:motoko"
-    "parker:INGCOM-UNRN-P1:parker"
-    "tetsuo:INGCOM-UNRN-P1:tetsuo"
-    "tyrell:INGCOM-UNRN-P1:tyrell"
-    "vasquez:INGCOM-UNRN-P1:vasquez"
-    "vassili:INGCOM-UNRN-P1:vassili"
-    "wierzbowski:INGCOM-UNRN-P1:wierzbowski"
-    "zhora:INGCOM-UNRN-P1:zhora"
-)
+# La lista sale del manifiesto único ecosistema.toml (N-P1TOOLS-02): cada
+# línea es "carpeta url". Incluye plantillas y librerías (carpetas anidadas).
+if ! mapfile -t REPOSITORIOS < <(python3 "$SCRIPT_DIR/ecosistema.py" listar --formato clonar); then
+    echo "[ERROR] No se pudo leer ecosistema.toml con scripts/ecosistema.py (requiere Python >= 3.11)." >&2
+    exit 1
+fi
 
 echo "==> Directorio destino de repositorios: $BASE_DIR"
 mkdir -p "$BASE_DIR"
@@ -108,16 +69,17 @@ fallos=0
 
 for item in "${REPOSITORIOS[@]}"; do
     actual=$((actual + 1))
-    IFS=':' read -r dir_name org repo_name <<< "$item"
+    read -r dir_name https_url <<< "$item"
     target_path="$BASE_DIR/$dir_name"
 
     if [ "$USE_SSH" = true ]; then
-        repo_url="git@github.com:${org}/${repo_name}.git"
+        repo_url="git@github.com:${https_url#https://github.com/}.git"
     else
-        repo_url="https://github.com/${org}/${repo_name}.git"
+        repo_url="${https_url}.git"
     fi
 
-    echo "[$actual/$total] Procesando $dir_name ($org/$repo_name)..."
+    echo "[$actual/$total] Procesando $dir_name (${https_url#https://github.com/})..."
+    mkdir -p "$(dirname "$target_path")"
 
     if [ -d "$target_path/.git" ]; then
         echo "  -> Repositorio existente. Sincronizando con git pull..."
