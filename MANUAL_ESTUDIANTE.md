@@ -28,26 +28,30 @@ source ~/.bashrc  # o reiniciá tu terminal
 ```
 
 ### 1.2 Instalación en Windows
-Si utilizás Windows, la cátedra provee el **Entorno Portable de Programación 1** (`entorno`), que incluye una terminal WezTerm, compilador GCC UCRT64 de 64 bits, VS Code Portable configurado y todas las herramientas preinstaladas sin necesidad de configurar variables de entorno en tu sistema.
+Si utilizás Windows, la cátedra provee el **Entorno Portable de Programación 1** (`entorno`), que incluye una terminal WezTerm, compilador GCC UCRT64 de 64 bits, GDB, `make`, Python con `uv`, VS Code Portable configurado y el lanzador de **`ripley`** (usa el zipapp `ripley.pyz` que descarga la instalación o, si no está, una instalación de `ripley` hecha con `uv`).
+
+El resto de las herramientas de esta guía está pensado para Linux: varias dependen de programas que no existen en Windows (Valgrind, bubblewrap). En Windows usalas desde **WSL** con la modalidad Linux del [entorno](https://github.com/INGCOM-UNRN-P1/entorno) y seguí la sección 1.3.
 
 ### 1.3 Instalación de las Herramientas del Estudiante
 
-Podés instalar las herramientas que usarás cotidianamente con un único comando:
+Las herramientas se instalan **siempre desde su repositorio de GitHub**. No las instales por nombre desde PyPI: la mayoría de esos nombres pertenece en PyPI a otros proyectos y terminarías instalando un programa que no tiene nada que ver con la materia.
 
 ```bash
-# Si clonaste el repositorio p1-tools:
+# Si clonaste el repositorio p1-tools (instala todas en modo editable):
 ./scripts/install_tools.sh
 
-# O podés instalarlas de forma individual con uv tool:
-uv tool install daedalus
-uv tool install gaff
-uv tool install hal
-uv tool install bishop
-uv tool install spunkmeyer
-uv tool install kaneda
-uv tool install nostromo
-uv tool install ripley
+# O de forma individual, desde cada repositorio:
+uv tool install git+https://github.com/INGCOM-UNRN-P1/daedalus
+uv tool install git+https://github.com/INGCOM-UNRN-P1/gaff
+uv tool install git+https://github.com/INGCOM-UNRN-P1/hal
+uv tool install git+https://github.com/INGCOM-UNRN-P1/bishop
+uv tool install git+https://github.com/INGCOM-UNRN-P1/spunkmeyer
+uv tool install git+https://github.com/INGCOM-UNRN-P1/kaneda
+uv tool install git+https://github.com/INGCOM-UNRN-P1/nostromo
+uv tool install git+https://github.com/INGCOM-UNRN-P1/ripley
 ```
+
+Para actualizarlas a la última versión: `uv tool upgrade --all`.
 
 Para verificar que tu instalación esté en óptimas condiciones, ejecutá:
 ```bash
@@ -68,9 +72,9 @@ flowchart TD
     CODIGO["1. Escribí tu código C (.c y .h)"]
     GAFF["2. gaff check archivo.c<br/>(Estilo, indentación x4, naming, 1 return)"]
     SPUNK["3. spunkmeyer check archivo.c<br/>(Detección de antipatrones didácticos)"]
-    DAED["4. daedalus run archivo.c<br/>(Compilación estricta y traducción de errores)"]
+    DAED["4. daedalus compile archivo.c<br/>(Compilación estricta y traducción de errores)"]
     BISHOP["5. bishop trace archivo.c<br/>(Visualización de memoria Stack y Heap)"]
-    HAL["6. hal diag ./programa<br/>(Diagnóstico de segfaults si se cuelga)"]
+    HAL["6. hal run ./programa<br/>(Diagnóstico de segfaults si se cuelga)"]
     RIPLEY["7. ripley check .<br/>(Verificación final integral de cátedra)"]
     ENTREGA["8. Entrega en Campus Moodle o Git Push"]
 
@@ -125,21 +129,21 @@ spunkmeyer check ejercicio1.c
 ---
 
 ### 3.3 `daedalus` — Compilador con Banderas de Cátedra y Diagnóstico Pedagógico
-La cátedra compila con parámetros muy exigentes:
-`-Wall -Wextra -Werror -pedantic -std=c11 -fsanitize=address,undefined`
+La cátedra compila con parámetros exigentes:
+`-std=c11 -Wall -Wextra -pedantic -Wconversion -Werror=implicit-function-declaration -Werror=return-type -g -O0`
+
+(las dos últimas advertencias se tratan como error: llamar a una función sin declararla y olvidarse el `return` de una función no `void` no compilan).
 
 `daedalus` compila tu código con estas mismas directivas y, si el compilador arroja errores técnicos incomprensibles, **te los traduce a explicaciones claras en español rioplatense**, indicándote exactamente qué significa el error y qué debes revisar.
 
 **Comandos:**
 ```bash
-# Compilar y ejecutar de una sola vez
-daedalus run ejercicio1.c
+# Compilar generando el binario (y ejecutarlo si compiló bien)
+daedalus compile ejercicio1.c -o ejercicio1 && ./ejercicio1
 
-# Compilar generando el binario
-daedalus compile ejercicio1.c -o ejercicio1
-
-# Explicar un mensaje de error que copiaste de la terminal
-daedalus explain "implicit declaration of function 'printf'"
+# Traducir errores que ya tenés de otra compilación (desde un archivo o por tubería)
+gcc ejercicio1.c 2> errores.txt; daedalus translate errores.txt
+gcc ejercicio1.c 2>&1 | daedalus translate
 ```
 
 ---
@@ -155,8 +159,10 @@ daedalus explain "implicit declaration of function 'printf'"
 # Trazar el comportamiento de memoria de un programa
 bishop trace ejercicio1.c
 
-# Inspeccionar el mapa de memoria en formato tabla ASCII
-bishop stack ejercicio1.c
+# Ver punteros y marcos del Stack con flechas ASCII
+bishop ascii ejercicio1.c
+
+# Auditar solo el Heap (bloques activos y punteros huérfanos)
 bishop heap ejercicio1.c
 ```
 
@@ -170,11 +176,11 @@ Si al ejecutar tu programa aparece el temido `Segmentation fault (core dumped)` 
 
 **Comandos:**
 ```bash
-# Ejecutar tu binario bajo el diagnóstico de hal
-hal diag ./ejercicio1
+# Ejecutar tu binario bajo el diagnóstico de hal (también acepta el .c y lo compila)
+hal run ./ejercicio1
 
 # O si tenés argumentos:
-hal diag ./ejercicio1 arg1 arg2
+hal run ./ejercicio1 arg1 arg2
 ```
 
 ---
@@ -200,10 +206,10 @@ Cuando quieras probar tu código ante posibles lazos infinitos o consumos desmed
 **Comandos:**
 ```bash
 # Ejecutar con límite de 2 segundos de CPU y 32 MB de RAM
-nostromo run ./ejercicio1 --timeout 2.0 --mem 32
+nostromo run ./ejercicio1 --timeout 2.0 --memory 32
 
-# Probar con un archivo de entrada estándar (.in) y verificar la salida (.out)
-nostromo test ./ejercicio1 --input caso1.in --expected caso1.out
+# Correr todos los casos de prueba de una carpeta (pares caso.in / caso.out)
+nostromo test ./ejercicio1 casos/
 ```
 
 ---
@@ -228,9 +234,9 @@ Si `ripley` reporta que todas las verificaciones fueron superadas, podés enviar
 | Revisar estilo y convenciones | **`gaff`** | `gaff check archivo.c` |
 | Auto-formatear espaciado | **`gaff`** | `gaff fix archivo.c` |
 | Detectar antipatrones comunes | **`spunkmeyer`** | `spunkmeyer check archivo.c` |
-| Compilar y entender errores | **`daedalus`** | `daedalus run archivo.c` |
+| Compilar y entender errores | **`daedalus`** | `daedalus compile archivo.c -o programa` |
 | Ver la memoria (Stack / Punteros) | **`bishop`** | `bishop trace archivo.c` |
-| Diagnosticar un cuelgue / Segfault | **`hal`** | `hal diag ./programa` |
+| Diagnosticar un cuelgue / Segfault | **`hal`** | `hal run ./programa` |
 | Auditar funciones peligrosas | **`kaneda`** | `kaneda audit archivo.c` |
 | Probar límites y tiempos | **`nostromo`** | `nostromo run ./programa -t 2.0 -m 32` |
 | Chequeo integral previo a entregar | **`ripley`** | `ripley check .` |
