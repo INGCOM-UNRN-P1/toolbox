@@ -123,6 +123,26 @@ student-smoke-test/
 make smoke
 ```
 
+#### Cómo se evalúa cada paso (oráculos)
+
+`scripts/test_all_tools.sh` no se limita a correr los comandos: cada paso
+declara el código de salida que acepta y textos que su salida debe (o no
+debe) contener. Algunos ejemplos:
+
+- `gaff check` debe salir con 1 (el ejemplo tiene incumplimientos a
+  propósito), reportar `0x200Ch` y **no** reportar `0x000Eh`, `0x000Fh` ni
+  `0x2011h` (falsos positivos ya corregidos, que no deben volver).
+- `kaneda audit` debe salir con 1 y detectar `gets()` (`KAN001`).
+- `tetsuo run build/app` debe salir con 1 avisando que el binario no está
+  instrumentado; con libasan disponible, además se compila una versión con
+  sanitizers y debe salir limpia.
+- `ripley doctor` debe describir los satélites con el catálogo único.
+
+Cada verificación fallida se informa como `✗ FALLO` y se cuenta; el script
+sale con 1 si hubo alguna. Los pasos que dependen de herramientas del
+sistema ausentes (gdb, frama-c, libasan) se informan como `○ OMITIDO` y no
+cuentan como fallo. Resumen final: `Verificaciones: N · Fallos: F · Pasos omitidos: O`.
+
 ### 2. Ejecución Individual de Cada Herramienta
 
 ```bash
