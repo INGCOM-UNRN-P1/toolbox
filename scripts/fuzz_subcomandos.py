@@ -9,7 +9,9 @@ formas de argumento (un .c, un .h, un directorio y dos .c), sobre una copia
 descartable de los fuentes del smoke test.
 
 Uso:
-    fuzz_subcomandos.py [--salida informe.json] [--timeout SEG]
+    fuzz_subcomandos.py [EJECUTABLE ...] [--salida informe.json] [--timeout SEG]
+
+Sin ejecutables recorre todos los de las herramientas activas.
 
 Sale con 1 si encontró algún traceback. Omite subcomandos que levantan
 servidores, publican o modifican configuración global.
@@ -52,13 +54,14 @@ def subcomandos(ejecutable: str) -> list[str]:
 
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("ejecutables", nargs="*")
     parser.add_argument("--salida", type=Path)
     parser.add_argument("--timeout", type=float, default=30.0)
     args = parser.parse_args(argv)
 
     _, repos = cargar()
-    ejecutables = [e for r in filtrar(repos, estados=["activo"]) if r.tipo == "cli" for e in r.ejecutables
-                   if shutil.which(e)]
+    ejecutables = args.ejecutables or [e for r in filtrar(repos, estados=["activo"]) if r.tipo == "cli"
+                                       for e in r.ejecutables if shutil.which(e)]
     resultados = []
     with tempfile.TemporaryDirectory(prefix="fuzz-subcomandos-") as tmp:
         base = Path(tmp)

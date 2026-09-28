@@ -6,7 +6,7 @@
 #   - los chequeos de documentación (instalación por nombre, comandos citados);
 #   - los dos smoke tests estudiantiles con oráculos;
 #   - el doctor de cada herramienta (informativo);
-#   - el fuzz de subcomandos (informativo hasta cerrar N-ECO-05).
+#   - el fuzz de subcomandos: ninguna entrada inválida termina en traceback.
 #
 # Además de cada push, corre todos los lunes: así los arreglos ya cerrados en
 # el ledger de la revisión se vuelven a verificar periódicamente.
@@ -85,10 +85,8 @@ jobs:
         run: python3 scripts/verificar_comandos_docs.py
 
   fuzz-subcomandos:
-    name: Fuzz de subcomandos (informativo)
+    name: Fuzz de subcomandos
     runs-on: ubuntu-24.04
-    # Informativo hasta cerrar N-ECO-05 (tracebacks ante entradas inválidas).
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v7
 
