@@ -186,7 +186,7 @@ deckard export guias/parcial1.yaml --type=pdf,md -o dist/
 
 ## 📖 Documentación Detallada
 
-Para una guía paso a paso con todos los flujos pedagógicos, modelos de datos, personalización de plantillas CSS y ejemplos de integración con Ripley y Dredd, consultá el [**Manual Integral de Uso (`MANUAL.md`)**](MANUAL.md).
+Para una guía paso a paso con todos los flujos pedagógicos, modelos de datos, personalización de plantillas CSS y ejemplos de integración con Ripley y Dredd, consultá el [**Manual Integral de Uso (`MANUAL.md`)**](https://github.com/INGCOM-UNRN/deckard/blob/main/MANUAL.md).
 
 ---
 

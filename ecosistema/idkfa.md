@@ -120,7 +120,7 @@ finalmente produce un archivo XML compatible con Moodle listo para importar.
   para hacerlos _resistentes_ a copypasteo, pero también para sumar legibilidad
   a caracteres invisibles.
 
-![caracter impostor](impostor.jpg)
+![caracter impostor](https://github.com/INGCOM-UNRN-P1/idkfa/blob/main/impostor.jpg)
 
 ## 2. Uso Básico
 

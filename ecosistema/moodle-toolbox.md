@@ -118,12 +118,12 @@ El CLI `questions` se organiza en subcomandos especializados:
 
 ## 📚 Documentación Detallada
 
-Para más información sobre funcionalidades específicas, consulta la carpeta [docs/](./docs):
+Para más información sobre funcionalidades específicas, consulta la carpeta [docs/](https://github.com/INGCOM-UNRN/moodle-toolbox/tree/main/docs):
 
-- **[Guía de Inicio Rápido](./docs/QUICK_START.md)**
-- **[Validación y Análisis](./docs/README_validate_questions.md)**
-- **[Mantenimiento XML](./docs/README_xml_maintenance.md)**
-- **[Referencia de Caracteres Especiales](./docs/caracteres_especiales.md)**
+- **[Guía de Inicio Rápido](https://github.com/INGCOM-UNRN/moodle-toolbox/blob/main/docs/QUICK_START.md)**
+- **[Validación y Análisis](https://github.com/INGCOM-UNRN/moodle-toolbox/blob/main/docs/README_validate_questions.md)**
+- **[Mantenimiento XML](https://github.com/INGCOM-UNRN/moodle-toolbox/blob/main/docs/README_xml_maintenance.md)**
+- **[Referencia de Caracteres Especiales](https://github.com/INGCOM-UNRN/moodle-toolbox/blob/main/docs/caracteres_especiales.md)**
 
 ## 📋 Requisitos
 

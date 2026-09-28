@@ -113,7 +113,7 @@ uv run python scripts/build_zipapp.py
 
 #### Publicación de Releases (CI)
 
-El workflow [`.github/workflows/release.yml`](.github/workflows/release.yml) publica el zipapp automáticamente:
+El workflow [`.github/workflows/release.yml`](https://github.com/INGCOM-UNRN-P1/ripley/blob/main/.github/workflows/release.yml) publica el zipapp automáticamente:
 
 - **Disparo**: push de un tag `v*` (ej: `git tag v1.0.0 && git push origin v1.0.0`) o ejecución manual (`workflow_dispatch`).
 - **Pipeline**: compila `dist/ripley.pyz` (+ alias `ripley_check.pyz`) con `scripts/build_zipapp.py`, verifica que el zipapp sea ejecutable y responde, genera `SHA256SUMS`.

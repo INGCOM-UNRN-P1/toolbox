@@ -1232,10 +1232,10 @@ Este proyecto incluye documentación completa y detallada:
 
 ### Documentos Principales
 
-1. **[README.md](README.md)** - Este archivo: Guía completa de uso
-2. **[CHANGELOG.md](CHANGELOG.md)** - Historial de cambios y versiones
-3. **[COMPLIANCE_REPORT.md](COMPLIANCE_REPORT.md)** - Verificación de cumplimiento con especificaciones
-4. **[descripcion.md](descripcion.md)** - Especificaciones técnicas originales del proyecto
+1. **[README.md](https://github.com/INGCOM-UNRN/alucarD/blob/main/README.md)** - Este archivo: Guía completa de uso
+2. **[CHANGELOG.md](https://github.com/INGCOM-UNRN/alucarD/blob/main/CHANGELOG.md)** - Historial de cambios y versiones
+3. **COMPLIANCE_REPORT.md** - Verificación de cumplimiento con especificaciones
+4. **descripcion.md** - Especificaciones técnicas originales del proyecto
 
 ### Documentación en el Código
 

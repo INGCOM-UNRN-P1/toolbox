@@ -6,6 +6,7 @@
 #   - los chequeos de documentación (instalación por nombre, comandos citados);
 #   - los dos smoke tests estudiantiles con oráculos;
 #   - el doctor de cada herramienta (informativo);
+#   - los enlaces de la documentación Markdown;
 #   - el fuzz de subcomandos: ninguna entrada inválida termina en traceback.
 #
 # Además de cada push, corre todos los lunes: así los arreglos ya cerrados en
@@ -45,6 +46,10 @@ jobs:
 
       - name: Instrucciones de instalación solo desde git
         run: python3 scripts/verificar_docs_instalacion.py --raiz "$RUNNER_TEMP/ecosistema"
+
+      # apunte se excluye hasta corregir sus enlaces rotos (N-APUNTE-02).
+      - name: Enlaces de la documentación
+        run: python3 scripts/verificar_enlaces_md.py --raiz "$RUNNER_TEMP/ecosistema" --excluir apunte
 
   smoke-desde-git:
     name: Instalación desde git y smoke tests
