@@ -35,9 +35,12 @@ MANIFIESTO = P1_TOOLS / "ecosistema.toml"
 TIPOS = {"cli", "biblioteca", "extension-vscode", "apps-script", "contenido", "plantilla",
          "libreria-c", "ejemplo", "entorno", "documentacion", "android", "especificacion",
          "workflows", "datos"}
-ESTADOS = {"activo", "deprecado", "especificacion", "ajeno", "sin-publicar"}
+ESTADOS = {"activo", "deprecado", "retirado", "especificacion", "ajeno", "sin-publicar"}
 # Repos creados localmente que todavía no están en GitHub: no se clonan ni se instalan.
 SIN_PUBLICAR = "sin-publicar"
+# Herramientas retiradas (reemplazadas y con el repo archivado): tampoco se clonan ni se instalan.
+RETIRADO = "retirado"
+NO_SE_CLONAN = {SIN_PUBLICAR, RETIRADO}
 # Carpetas de dev/tools que no son repositorios del ecosistema.
 NO_SON_REPOS = {"revision", "skills", "scripts", "generated", "guias", "node_modules", "htmlcov",
                 "__pycache__", "scratch", "uatu-test", "plantillas", "librerias"}
@@ -131,7 +134,7 @@ def cmd_listar(args, repos: list[Repo]) -> int:
             print(repo.url)
         elif args.formato == "carpeta":
             print(repo.ruta)
-        elif args.formato == "clonar" and repo.url and repo.estado != SIN_PUBLICAR:
+        elif args.formato == "clonar" and repo.url and repo.estado not in NO_SE_CLONAN:
             print(f"{repo.ruta} {repo.url}")
         elif args.formato == "ejecutables":
             for ejecutable in repo.ejecutables:
@@ -287,7 +290,8 @@ def cmd_verificar(args, repos: list[Repo]) -> int:
     for repo in repos:
         carpeta = raiz / repo.ruta
         if not carpeta.is_dir():
-            avisos.append(f"{repo.nombre}: no está clonado en {carpeta}")
+            if repo.estado not in NO_SE_CLONAN:  # esos no se clonan: que falten es lo esperado
+                avisos.append(f"{repo.nombre}: no está clonado en {carpeta}")
             continue
         if repo.url:
             remoto = _remoto(carpeta)

@@ -98,6 +98,24 @@ def test_instalar_local_reconstruye_el_paquete(tmp_path, capsys):
     assert "--reinstall-package questions" in salida
 
 
+def test_repos_retirados_no_se_clonan_ni_se_instalan(tmp_path, capsys):
+    manifiesto = MANIFIESTO + textwrap.dedent("""
+        [[repo]]
+        nombre = "esper"
+        url = "https://github.com/INGCOM-UNRN-P1/esper"
+        tipo = "cli"
+        paquete = "esper"
+        ejecutables = ["esper"]
+        perfiles = ["estudiante"]
+        estado = "retirado"
+        """)
+    ruta = str(_manifiesto(tmp_path, manifiesto))
+    ecosistema.main(["--manifiesto", ruta, "listar", "--formato", "clonar"])
+    ecosistema.main(["--manifiesto", ruta, "listar", "--formato", "requisito"])
+    salida = capsys.readouterr().out
+    assert "ripley" in salida and "esper" not in salida
+
+
 def test_repos_sin_publicar_no_se_clonan(tmp_path, capsys):
     manifiesto = MANIFIESTO + textwrap.dedent("""
         [[repo]]
