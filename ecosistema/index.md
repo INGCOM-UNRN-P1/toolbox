@@ -18,7 +18,7 @@ Este catálogo documenta integralmente las 41 herramientas pedagógicas, linters
 ### 2. Compilación, Diagnóstico y Manejo de Errores
 * [**`daedalus`**](daedalus.md): Compilador pedagógico que ejecuta GCC/Clang bajo las banderas estrictas de cátedra y traduce diagnósticos crudos a explicaciones claras en español rioplatense.
 * [**`hal`**](hal.md): Diagnóstico pedagógico de fallos fatales (`SIGSEGV`, `SIGABRT`, `SIGFPE`, doble liberación) con decodificación de core dumps e indicación de la línea exacta del fallo.
-* [**`esper`**](esper.md): Ejecutor configurable de compiladores con perfiles pedagógicos predeterminados.
+* [**`esper`**](esper.md): **retirado**; lo reemplaza `daedalus`, que explica los diagnósticos de GCC.
 
 ### 3. Inspección de Memoria y Arquitectura Interna
 * [**`bishop`**](bishop.md): Trazador visual de memoria C. Genera diagramas ASCII y Mermaid de Stack Frames, variables locales, relaciones entre punteros y bloques del Heap (`malloc`/`free`).

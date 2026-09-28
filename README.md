@@ -72,7 +72,7 @@ Podés poner a punto toda la estación de trabajo y el ecosistema completo en cu
 ### Compilación y Diagnóstico Pedagógico
 * [**`daedalus`**](ecosistema/daedalus.md): Compilador estricto C11 (`-Wall -Wextra -Werror -pedantic`) con traducción de diagnósticos a español rioplatense.
 * [**`hal`**](ecosistema/hal.md): Diagnóstico pedagógico de segfaults (`SIGSEGV`), abortos (`SIGABRT`) y core dumps.
-* [**`esper`**](ecosistema/esper.md): Wrapper de compilación con perfiles pedagógicos preconfigurados.
+* [**`esper`**](ecosistema/esper.md): **retirado**; lo reemplaza `daedalus`, que explica los diagnósticos de GCC.
 
 ### Memoria, Structs y Bajo Nivel
 * [**`bishop`**](ecosistema/bishop.md): Trazador e inspector visual de Stack Frames, Heap y relaciones de punteros en tablas ASCII y Mermaid.

@@ -1,5 +1,9 @@
 # esper
 
+> **Retirado.** Lo reemplaza [`daedalus`](daedalus.md), que compila con las banderas de la
+> cátedra y explica los diagnósticos de GCC en español. ripley y dredd ya no lo usan y el
+> manifiesto no lo clona ni lo instala (estado `retirado`). Esta página queda como referencia.
+
 Explicador pedagógico y formateador interactivo de salidas y errores de GCC/Clang
 
 ## 🎯 Propósito y Alcance
