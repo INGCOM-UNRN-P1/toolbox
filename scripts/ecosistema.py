@@ -34,7 +34,9 @@ P1_TOOLS = Path(__file__).resolve().parents[1]
 MANIFIESTO = P1_TOOLS / "ecosistema.toml"
 TIPOS = {"cli", "biblioteca", "extension-vscode", "apps-script", "contenido", "plantilla",
          "libreria-c", "ejemplo", "entorno", "documentacion", "android", "especificacion"}
-ESTADOS = {"activo", "deprecado", "especificacion", "ajeno"}
+ESTADOS = {"activo", "deprecado", "especificacion", "ajeno", "sin-publicar"}
+# Repos creados localmente que todavía no están en GitHub: no se clonan ni se instalan.
+SIN_PUBLICAR = "sin-publicar"
 # Carpetas de dev/tools que no son repositorios del ecosistema.
 NO_SON_REPOS = {"revision", "skills", "scripts", "generated", "guias", "node_modules", "htmlcov",
                 "__pycache__", "scratch", "uatu-test", "plantillas", "librerias"}
@@ -128,7 +130,7 @@ def cmd_listar(args, repos: list[Repo]) -> int:
             print(repo.url)
         elif args.formato == "carpeta":
             print(repo.ruta)
-        elif args.formato == "clonar" and repo.url:
+        elif args.formato == "clonar" and repo.url and repo.estado != SIN_PUBLICAR:
             print(f"{repo.ruta} {repo.url}")
         elif args.formato == "ejecutables":
             for ejecutable in repo.ejecutables:

@@ -98,6 +98,20 @@ def test_instalar_local_reconstruye_el_paquete(tmp_path, capsys):
     assert "--reinstall-package questions" in salida
 
 
+def test_repos_sin_publicar_no_se_clonan(tmp_path, capsys):
+    manifiesto = MANIFIESTO + textwrap.dedent("""
+        [[repo]]
+        nombre = "yutani"
+        url = "https://github.com/INGCOM-UNRN-P1/yutani"
+        tipo = "biblioteca"
+        paquete = "yutani"
+        estado = "sin-publicar"
+        """)
+    ecosistema.main(["--manifiesto", str(_manifiesto(tmp_path, manifiesto)), "listar", "--formato", "clonar"])
+    salida = capsys.readouterr().out
+    assert "ripley" in salida and "yutani" not in salida
+
+
 def test_instalar_desde_git_nunca_por_nombre(tmp_path, capsys):
     ecosistema.main(["--manifiesto", str(_manifiesto(tmp_path)), "instalar", "--simular"])
     for linea in capsys.readouterr().out.splitlines():
