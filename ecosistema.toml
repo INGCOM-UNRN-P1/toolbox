@@ -539,7 +539,7 @@ url = "https://github.com/INGCOM-UNRN-P1/yutani"
 tipo = "biblioteca"
 paquete = "yutani"
 perfiles = ["estudiante", "analisis", "docente", "contenido", "aula"]
-estado = "sin-publicar"
+estado = "activo"
 
 [[repo]]
 nombre = "cast-tools-common"
