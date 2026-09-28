@@ -152,7 +152,11 @@ def cmd_instalar(args, repos: list[Repo]) -> int:
             # Instalación no editable desde el clon local: el paquete queda en
             # site-packages, como lo instalaría cualquiera desde git. Sirve para
             # detectar dependencias no declaradas (imports de carpetas hermanas).
-            comando = ["uv", "tool", "install", repo.requisito_editable(Path(args.local))]
+            # --reinstall-package: sin él, uv reutiliza la rueda cacheada de una
+            # corrida anterior mientras no cambie pyproject.toml, y se prueba
+            # código viejo.
+            comando = ["uv", "tool", "install", "--reinstall-package", repo.paquete,
+                       repo.requisito_editable(Path(args.local))]
         else:
             comando = ["uv", "tool", "install", repo.requisito_git()]
         print("$ " + " ".join(f'"{c}"' if " " in c else c for c in comando), flush=True)
