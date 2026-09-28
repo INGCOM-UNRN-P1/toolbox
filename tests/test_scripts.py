@@ -245,6 +245,31 @@ def test_revisar_dependencias_exige_referencias_fijadas():
     assert all("extra flojo" in p for p in problemas)
 
 
+HERMANO = 'import sys\nsys.path.insert(0, "../daedalus/src")\n'
+
+
+@pytest.mark.parametrize("disposicion, pyproject, archivo", [
+    ("src", {}, "src/herramienta/core.py"),
+    ("rueda de hatch", {"tool": {"hatch": {"build": {"targets": {"wheel": {"packages": ["herramienta"]}}}}}},
+     "herramienta/core.py"),
+    ("paquete en la raíz", {}, "herramienta/core.py"),
+])
+def test_revisar_imports_hermanos(tmp_path, disposicion, pyproject, archivo):
+    """sys.path.insert en el código instalable, esté o no en src/ (alucarD e idkfa no usan src/)."""
+    ruta = tmp_path / archivo
+    ruta.parent.mkdir(parents=True)
+    (ruta.parent / "__init__.py").write_text("", encoding="utf-8")
+    ruta.write_text(HERMANO, encoding="utf-8")
+    (tmp_path / "tests").mkdir()
+    (tmp_path / "tests" / "__init__.py").write_text(HERMANO, encoding="utf-8")  # los tests no se instalan
+
+    problemas = ecosistema.revisar_imports_hermanos(tmp_path, pyproject)
+    assert len(problemas) == 1 and archivo in problemas[0], disposicion
+
+    ruta.write_text("import daedalus\n", encoding="utf-8")
+    assert ecosistema.revisar_imports_hermanos(tmp_path, pyproject) == []
+
+
 # --- política de versiones (ecosistema.py verificar) -----------------------------------------
 
 def test_revisar_versionado(tmp_path):

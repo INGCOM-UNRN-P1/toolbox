@@ -223,6 +223,35 @@ RE_REFERENCIA_GIT = re.compile(r"@\s*git\+(?P<url>[^@\s;]+)(?:@(?P<ref>[^\s;]+))
 RE_REF_FIJADA = re.compile(r"^(?:[0-9a-f]{40}|v\d+\.\d+\.\d+)$")
 
 
+CARPETAS_QUE_NO_SE_INSTALAN = {"tests", "test", "scripts", "docs", "examples", "ejemplos", "build", "dist"}
+
+
+def carpetas_del_paquete(carpeta: Path, pyproject: dict) -> list[Path]:
+    """El código que se instala: las carpetas de la rueda de hatch, `src/` o los paquetes de la raíz."""
+    rueda = pyproject.get("tool", {}).get("hatch", {}).get("build", {}).get("targets", {}).get("wheel", {})
+    declaradas = [carpeta / ruta for ruta in rueda.get("packages", [])]
+    if declaradas:
+        return [d for d in declaradas if d.is_dir()]
+    if (carpeta / "src").is_dir():
+        return [carpeta / "src"]
+    return sorted(d for d in carpeta.iterdir() if d.is_dir() and (d / "__init__.py").is_file()
+                  and d.name not in CARPETAS_QUE_NO_SE_INSTALAN and not d.name.startswith("."))
+
+
+def revisar_imports_hermanos(carpeta: Path, pyproject: dict) -> list[str]:
+    """Código instalable que busca otras herramientas con sys.path.insert en carpetas hermanas (N-ECO-01).
+
+    Mira también los paquetes que no están en `src/` (alucarD, idkfa): antes solo se revisaba `src/`.
+    """
+    ocultos = sorted(str(archivo.relative_to(carpeta)) for paquete in carpetas_del_paquete(carpeta, pyproject)
+                     for archivo in paquete.rglob("*.py")
+                     if "sys.path.insert" in archivo.read_text(encoding="utf-8", errors="replace"))
+    if not ocultos:
+        return []
+    return [f"importa carpetas hermanas con sys.path.insert en {ocultos} "
+            "(declarar la dependencia como extra con referencia git, N-ECO-01)"]
+
+
 def revisar_dependencias(proyecto: dict) -> list[str]:
     """Dependencias entre herramientas: siempre `paquete @ git+…` fijada a un commit o tag (N-ECO-01)."""
     problemas = []
@@ -269,7 +298,8 @@ def cmd_verificar(args, repos: list[Repo]) -> int:
             if not pyproject.exists():
                 problemas.append(f"{repo.nombre}: es {repo.tipo} pero no tiene pyproject.toml")
                 continue
-            proyecto = tomllib.loads(pyproject.read_text(encoding="utf-8"))["project"]
+            datos = tomllib.loads(pyproject.read_text(encoding="utf-8"))
+            proyecto = datos["project"]
             if proyecto.get("name") != repo.paquete:
                 problemas.append(f"{repo.nombre}: el paquete se llama {proyecto.get('name')!r}, no {repo.paquete!r}")
             faltan = set(repo.ejecutables) - set(proyecto.get("scripts", {}))
@@ -285,12 +315,8 @@ def cmd_verificar(args, repos: list[Repo]) -> int:
                 problemas.append(f"{repo.nombre}: extras inexistentes: {sorted(faltan_extras)}")
             problemas += [f"{repo.nombre}: {p}" for p in revisar_versionado(carpeta, proyecto)]
             problemas += [f"{repo.nombre}: {p}" for p in revisar_dependencias(proyecto)]
-            ocultos = [p.relative_to(carpeta) for p in (carpeta / "src").rglob("*.py")
-                       if "sys.path.insert" in p.read_text(encoding="utf-8", errors="replace")] \
-                if (carpeta / "src").is_dir() and repo.estado == "activo" else []
-            if ocultos:
-                problemas.append(f"{repo.nombre}: importa carpetas hermanas con sys.path.insert en {[str(o) for o in ocultos]} "
-                                 "(declarar la dependencia como extra con referencia git, N-ECO-01)")
+            if repo.estado == "activo":
+                problemas += [f"{repo.nombre}: {p}" for p in revisar_imports_hermanos(carpeta, datos)]
 
     for aviso in avisos:
         print(f"· {aviso}")
