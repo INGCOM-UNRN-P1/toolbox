@@ -33,7 +33,8 @@ from pathlib import Path
 P1_TOOLS = Path(__file__).resolve().parents[1]
 MANIFIESTO = P1_TOOLS / "ecosistema.toml"
 TIPOS = {"cli", "biblioteca", "extension-vscode", "apps-script", "contenido", "plantilla",
-         "libreria-c", "ejemplo", "entorno", "documentacion", "android", "especificacion"}
+         "libreria-c", "ejemplo", "entorno", "documentacion", "android", "especificacion",
+         "workflows", "datos"}
 ESTADOS = {"activo", "deprecado", "especificacion", "ajeno", "sin-publicar"}
 # Repos creados localmente que todavía no están en GitHub: no se clonan ni se instalan.
 SIN_PUBLICAR = "sin-publicar"
@@ -184,6 +185,32 @@ def _remoto(carpeta: Path) -> str:
     return salida.stdout.strip().removesuffix(".git") if salida.returncode == 0 else ""
 
 
+RE_VERSION_LITERAL = re.compile(r'(?m)^__version__ = "([^"]+)"')
+RE_SECCION_CHANGELOG = re.compile(r"(?m)^## \[(\d+\.\d+\.\d+)\]")
+
+
+def revisar_versionado(carpeta: Path, proyecto: dict) -> list[str]:
+    """Política de LINEAMIENTOS §7: LICENSE, CHANGELOG y una sola versión (N-ECO-06)."""
+    problemas = []
+    version = proyecto.get("version", "")
+    licencia = proyecto.get("license", {})
+    licencia = licencia.get("text", "") if isinstance(licencia, dict) else str(licencia)
+    if "GPL" in licencia and not any((carpeta / n).exists() for n in ("LICENSE", "LICENSE.md", "COPYING")):
+        problemas.append(f"declara {licencia} pero no tiene el archivo LICENSE")
+    changelog = carpeta / "CHANGELOG.md"
+    if not changelog.exists():
+        problemas.append("no tiene CHANGELOG.md")
+    else:
+        secciones = RE_SECCION_CHANGELOG.findall(changelog.read_text(encoding="utf-8"))
+        if secciones and secciones[0] != version:
+            problemas.append(f"la última versión del CHANGELOG es {secciones[0]} y pyproject dice {version}")
+    for init in sorted((carpeta / "src").glob("*/__init__.py")) if (carpeta / "src").is_dir() else []:
+        m = RE_VERSION_LITERAL.search(init.read_text(encoding="utf-8"))
+        if m and m.group(1) != version:
+            problemas.append(f"{init.relative_to(carpeta)} dice __version__ = {m.group(1)!r} y pyproject {version!r}")
+    return problemas
+
+
 def cmd_verificar(args, repos: list[Repo]) -> int:
     raiz = Path(args.raiz).resolve()
     problemas: list[str] = []
@@ -231,6 +258,7 @@ def cmd_verificar(args, repos: list[Repo]) -> int:
             faltan_extras = set(repo.extras) - set(proyecto.get("optional-dependencies", {}))
             if faltan_extras:
                 problemas.append(f"{repo.nombre}: extras inexistentes: {sorted(faltan_extras)}")
+            problemas += [f"{repo.nombre}: {p}" for p in revisar_versionado(carpeta, proyecto)]
 
     for aviso in avisos:
         print(f"· {aviso}")

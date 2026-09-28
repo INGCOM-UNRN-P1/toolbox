@@ -226,3 +226,25 @@ def test_comandos_citados(herramienta_falsa):
     assert verificar_comandos_docs.verificar_linea("otra cosa", herramientas) is None
     error = verificar_comandos_docs.verificar_linea("falsa inexistente", herramientas)
     assert error is not None and "no existe" in error
+
+
+# --- política de versiones (ecosistema.py verificar) -----------------------------------------
+
+def test_revisar_versionado(tmp_path):
+    repo = tmp_path / "demo"
+    (repo / "src" / "demo").mkdir(parents=True)
+    proyecto = {"name": "demo", "version": "0.2.0", "license": {"text": "GPL-3.0-or-later"}}
+    (repo / "src" / "demo" / "__init__.py").write_text('__version__ = "0.1.0"\n')
+    problemas = ecosistema.revisar_versionado(repo, proyecto)
+    assert any("LICENSE" in p for p in problemas)
+    assert any("CHANGELOG" in p for p in problemas)
+    assert any("__version__ = '0.1.0'" in p for p in problemas)
+
+    (repo / "LICENSE").write_text("GPL")
+    (repo / "CHANGELOG.md").write_text("# Changelog\n\n## [0.2.0] - 2026-09-28\n\n## [0.1.0] - 2026-01-01\n")
+    (repo / "src" / "demo" / "__init__.py").write_text('__version__ = "0.2.0"\n')
+    assert ecosistema.revisar_versionado(repo, proyecto) == []
+
+    (repo / "CHANGELOG.md").write_text("# Changelog\n\n## [5.10.1] - 2025-11-06\n")
+    assert ecosistema.revisar_versionado(repo, proyecto) == [
+        "la última versión del CHANGELOG es 5.10.1 y pyproject dice 0.2.0"]

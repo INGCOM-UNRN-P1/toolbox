@@ -54,9 +54,11 @@ Toda herramienta debe implementarse como un paquete Python modular e independien
 <nombre_herramienta>/
 ├── pyproject.toml               # Configuración declarativa (hatchling / flit / uv)
 ├── README.md                    # Manual conciso de instalación, flags y ejemplos de uso
+├── CHANGELOG.md                 # Cambios por versión (sección 7)
+├── LICENSE                      # Texto de la licencia que declara pyproject (GPL-3.0-or-later)
 ├── src/
 │   └── <nombre_herramienta>/
-│       ├── __init__.py          # Define __version__
+│       ├── __init__.py          # Define __version__ (igual a la versión de pyproject)
 │       ├── cli.py               # Punto de entrada CLI con Typer y Rich
 │       └── core/                # Lógica pura desacoplada de la terminal
 │           ├── doctor.py        # Diagnóstico del entorno y dependencias del sistema
@@ -150,3 +152,31 @@ Para incorporar una nueva herramienta (`mi-herramienta`) al ecosistema P1:
    - Verificar la coherencia con `python3 scripts/ecosistema.py verificar`.
 6. **Actualizar el Catálogo**:
    Incorporar la herramienta al índice temático en `ecosistema/index.md` y en la tabla general de `README.md`.
+
+---
+
+## 7. Versiones, CHANGELOG y releases
+
+1. **SemVer**: `MAYOR.MENOR.PARCHE`. Mientras la versión sea `0.y.z`, un cambio
+   incompatible sube la menor.
+2. **Fuente única**: la versión vive en `pyproject.toml`; si el paquete define
+   `__version__` como literal, tiene que coincidir (lo controla
+   `python3 scripts/ecosistema.py verificar`).
+3. **Versión siguiente desde los commits**: `feat` sube la menor; `fix` y el resto,
+   el parche; `tipo!:` o `BREAKING CHANGE` en el cuerpo, la mayor.
+4. **CHANGELOG.md** en formato [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/),
+   generado desde los Conventional Commits, con una sección por versión.
+5. **Tag anotado `vX.Y.Z`** sobre el commit `chore(release): X.Y.Z`.
+6. **LICENSE**: el texto de la licencia que declara `pyproject.toml`.
+7. **Matriz del cuatrimestre**: al empezar cada cuatrimestre se fija en
+   `ecosistema.toml` el campo `ref = "vX.Y.Z"` de cada herramienta (lo que instala
+   `mother`) y se etiqueta p1-tools con `cuatrimestre-AAAA-N`.
+
+Todo el procedimiento de los puntos 3 a 5 lo hace `scripts/version.py`:
+
+```bash
+python3 scripts/version.py siguiente ../mi-herramienta     # qué versión corresponde
+python3 scripts/version.py publicar ../mi-herramienta --simular
+(cd ../mi-herramienta && uv run pytest -q) && python3 scripts/version.py publicar ../mi-herramienta
+git -C ../mi-herramienta push --follow-tags
+```
