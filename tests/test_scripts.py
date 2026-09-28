@@ -228,6 +228,23 @@ def test_comandos_citados(herramienta_falsa):
     assert error is not None and "no existe" in error
 
 
+# --- dependencias entre herramientas (ecosistema.py verificar) -------------------------------
+
+def test_revisar_dependencias_exige_referencias_fijadas():
+    sha = "cd3eb998193cd5bd9ea881aa9a0e19f5fe6d9a86"
+    proyecto = {
+        "dependencies": ["typer>=0.12", f"daedalus @ git+https://github.com/INGCOM-UNRN-P1/daedalus@{sha}"],
+        "optional-dependencies": {
+            "ecosistema": ["nostromo @ git+https://github.com/INGCOM-UNRN-P1/nostromo@v0.2.0"],
+            "flojo": ["gaff @ git+https://github.com/INGCOM-UNRN-P1/gaff",
+                      "kaneda @ git+https://github.com/INGCOM-UNRN-P1/kaneda@main"],
+        },
+    }
+    problemas = ecosistema.revisar_dependencias(proyecto)
+    assert len(problemas) == 2
+    assert all("extra flojo" in p for p in problemas)
+
+
 # --- política de versiones (ecosistema.py verificar) -----------------------------------------
 
 def test_revisar_versionado(tmp_path):
@@ -248,3 +265,14 @@ def test_revisar_versionado(tmp_path):
     (repo / "CHANGELOG.md").write_text("# Changelog\n\n## [5.10.1] - 2025-11-06\n")
     assert ecosistema.revisar_versionado(repo, proyecto) == [
         "la última versión del CHANGELOG es 5.10.1 y pyproject dice 0.2.0"]
+
+
+def test_revisar_versionado_plugin_con_version_fija(tmp_path):
+    repo = tmp_path / "demo"
+    (repo / "src" / "demo").mkdir(parents=True)
+    (repo / "LICENSE").write_text("GPL")
+    (repo / "CHANGELOG.md").write_text("# Changelog\n\n## [0.2.0] - 2026-09-28\n")
+    (repo / "src" / "demo" / "ripley_plugin.py").write_text('class P:\n    name = "x"\n    version = "0.1.0"\n')
+    proyecto = {"name": "demo", "version": "0.2.0", "license": {"text": "GPL-3.0-or-later"}}
+    assert ecosistema.revisar_versionado(repo, proyecto) == [
+        "src/demo/ripley_plugin.py declara version = '0.1.0' y pyproject '0.2.0'"]

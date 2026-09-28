@@ -187,6 +187,7 @@ def _remoto(carpeta: Path) -> str:
 
 RE_VERSION_LITERAL = re.compile(r'(?m)^__version__ = "([^"]+)"')
 RE_SECCION_CHANGELOG = re.compile(r"(?m)^## \[(\d+\.\d+\.\d+)\]")
+RE_VERSION_PLUGIN = re.compile(r'(?m)^\s+version\s*=\s*"(\d+\.\d+\.\d+)"')
 
 
 def revisar_versionado(carpeta: Path, proyecto: dict) -> list[str]:
@@ -208,6 +209,30 @@ def revisar_versionado(carpeta: Path, proyecto: dict) -> list[str]:
         m = RE_VERSION_LITERAL.search(init.read_text(encoding="utf-8"))
         if m and m.group(1) != version:
             problemas.append(f"{init.relative_to(carpeta)} dice __version__ = {m.group(1)!r} y pyproject {version!r}")
+    # Plugins de ripley con la versión escrita a mano (quedaba en 0.1.0 al publicar).
+    plugins = [*(carpeta / "src").glob("*/ripley_plugin.py"), *(carpeta / "src").glob("*/plugins/*.py")] \
+        if (carpeta / "src").is_dir() else []
+    for plugin in sorted(plugins):
+        for literal in RE_VERSION_PLUGIN.findall(plugin.read_text(encoding="utf-8")):
+            if literal != version:
+                problemas.append(f"{plugin.relative_to(carpeta)} declara version = {literal!r} y pyproject {version!r}")
+    return problemas
+
+
+RE_REFERENCIA_GIT = re.compile(r"@\s*git\+(?P<url>[^@\s;]+)(?:@(?P<ref>[^\s;]+))?")
+RE_REF_FIJADA = re.compile(r"^(?:[0-9a-f]{40}|v\d+\.\d+\.\d+)$")
+
+
+def revisar_dependencias(proyecto: dict) -> list[str]:
+    """Dependencias entre herramientas: siempre `paquete @ git+…` fijada a un commit o tag (N-ECO-01)."""
+    problemas = []
+    requisitos = list(proyecto.get("dependencies", []))
+    for extra, lista in proyecto.get("optional-dependencies", {}).items():
+        requisitos += [f"{r}  (extra {extra})" for r in lista]
+    for requisito in requisitos:
+        m = RE_REFERENCIA_GIT.search(requisito)
+        if m and not (m["ref"] and RE_REF_FIJADA.match(m["ref"])):
+            problemas.append(f"la referencia git no está fijada a un commit completo ni a un tag vX.Y.Z: {requisito}")
     return problemas
 
 
@@ -259,6 +284,13 @@ def cmd_verificar(args, repos: list[Repo]) -> int:
             if faltan_extras:
                 problemas.append(f"{repo.nombre}: extras inexistentes: {sorted(faltan_extras)}")
             problemas += [f"{repo.nombre}: {p}" for p in revisar_versionado(carpeta, proyecto)]
+            problemas += [f"{repo.nombre}: {p}" for p in revisar_dependencias(proyecto)]
+            ocultos = [p.relative_to(carpeta) for p in (carpeta / "src").rglob("*.py")
+                       if "sys.path.insert" in p.read_text(encoding="utf-8", errors="replace")] \
+                if (carpeta / "src").is_dir() and repo.estado == "activo" else []
+            if ocultos:
+                problemas.append(f"{repo.nombre}: importa carpetas hermanas con sys.path.insert en {[str(o) for o in ocultos]} "
+                                 "(declarar la dependencia como extra con referencia git, N-ECO-01)")
 
     for aviso in avisos:
         print(f"· {aviso}")
