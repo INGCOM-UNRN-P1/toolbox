@@ -2,6 +2,7 @@
 #
 # Corre en un runner limpio, instala todas las herramientas DESDE GIT (como lo
 # haría un estudiante o un docente, sin el monorepo local) y ejecuta:
+#   - los tests de los propios scripts de verificación;
 #   - la coherencia del manifiesto ecosistema.toml con los repositorios;
 #   - los chequeos de documentación (instalación por nombre, comandos citados);
 #   - los dos smoke tests estudiantiles con oráculos;
@@ -25,6 +26,19 @@ permissions:
   contents: read
 
 jobs:
+  scripts:
+    name: Tests de los scripts de verificación
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: pytest
+        run: uvx pytest -q tests
+
   manifiesto-y-documentacion:
     name: Manifiesto y documentación
     runs-on: ubuntu-24.04
