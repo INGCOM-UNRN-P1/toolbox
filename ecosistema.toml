@@ -498,6 +498,15 @@ sistema = []
 estado = "activo"
 
 [[repo]]
+nombre = "mother"
+url = "https://github.com/INGCOM-UNRN-P1/mother"
+tipo = "cli"
+paquete = "mother"
+ejecutables = ["mother"]
+perfiles = ["estudiante", "analisis", "docente", "contenido", "aula"]
+estado = "sin-publicar"
+
+[[repo]]
 nombre = "yutani"
 url = "https://github.com/INGCOM-UNRN-P1/yutani"
 tipo = "biblioteca"

@@ -41,6 +41,11 @@ Podés poner a punto toda la estación de trabajo y el ecosistema completo en cu
 ```
 *Ejecuta el subcomando `doctor` en todas las herramientas para comprobar compiladores (`gcc`), depuradores (`gdb`), memoria (`valgrind`), linters (`clang-format`) y tipografía (`typst`).*
 
+> **Próximamente: `mother`.** Los pasos 2 y 4 pasan a ser `mother instalar --perfil <perfil>` y
+> `mother doctor` (instalador y diagnóstico agregado que lee este mismo `ecosistema.toml`, sin
+> dependencias y también como `mother.pyz`). El repositorio está creado pero todavía no se
+> publicó en GitHub (estado `sin-publicar` en el manifiesto); hasta entonces se usan estos scripts.
+
 ---
 
 ## 📚 Documentación y Manuales
