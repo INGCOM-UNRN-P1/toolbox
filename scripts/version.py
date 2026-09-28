@@ -14,10 +14,11 @@ Política (LINEAMIENTOS §8):
 Uso:
     version.py siguiente REPO [--desde REF|FECHA]
     version.py changelog REPO [--version X.Y.Z] [--desde REF|FECHA]
-    version.py publicar REPO [--version X.Y.Z] [--desde REF|FECHA] [--simular]
+    version.py publicar REPO [--version X.Y.Z] [--desde REF|FECHA] [--probar COMANDO] [--simular]
 
-`publicar` no empuja nada: el commit y el tag quedan locales. Correr los tests
-antes de publicar es responsabilidad de quien lo llama.
+`publicar` no empuja nada: el commit y el tag quedan locales. Con `--probar`
+corre los tests con la versión ya cambiada y, si fallan, deshace todo (así
+aparece un test que fija la versión vieja antes de crear el tag).
 """
 
 from __future__ import annotations
@@ -184,6 +185,9 @@ def main(argv: list[str]) -> int:
     parser.add_argument("--desde", help="tag, commit o fecha AAAA-MM-DD (por defecto, el último tag v*)")
     parser.add_argument("--fecha", default=dt.date.today().isoformat())
     parser.add_argument("--simular", action="store_true")
+    parser.add_argument("--probar", metavar="COMANDO",
+                        help="comando de tests a correr con la versión nueva antes de commitear "
+                             "(p. ej. \"uv run pytest -q\"); si falla, se deshacen los cambios")
     args = parser.parse_args(argv)
 
     repo = args.repo.resolve()
@@ -210,8 +214,20 @@ def main(argv: list[str]) -> int:
     ignorado = subprocess.run(["git", "-C", str(repo), "check-ignore", "-q", "CHANGELOG.md"]).returncode == 0
     if ignorado:
         raise SystemExit(f"{repo}: .gitignore ignora CHANGELOG.md; agregá la excepción «!CHANGELOG.md».")
+    changelog_existia = (repo / "CHANGELOG.md").exists()
     cambiados = actualizar_version(repo, actual, nueva) if nueva != actual else []
     escribir_changelog(repo, texto)
+    if args.probar:
+        # Los tests corren con la versión ya cambiada: un test que fija la versión vieja
+        # (o un __version__ repetido en otro módulo) aparece acá y no después del tag.
+        prueba = subprocess.run(args.probar, shell=True, cwd=repo)
+        if prueba.returncode != 0:
+            git(repo, "checkout", "--", *(str(p.relative_to(repo)) for p in cambiados))
+            if changelog_existia:
+                git(repo, "checkout", "--", "CHANGELOG.md")
+            else:
+                (repo / "CHANGELOG.md").unlink()
+            raise SystemExit(f"{repo}: «{args.probar}» falló con la versión {nueva}; no se publicó nada.")
     git(repo, "add", "CHANGELOG.md", *(str(p.relative_to(repo)) for p in cambiados))
     git(repo, "commit", "-q", "-m", f"chore(release): {nueva}\n\nVersión {nueva} según los Conventional Commits desde "
         f"{args.desde or ultimo_tag(repo) or 'el inicio'}; sección nueva en CHANGELOG.md (N-ECO-06).")

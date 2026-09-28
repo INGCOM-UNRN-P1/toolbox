@@ -177,6 +177,6 @@ Todo el procedimiento de los puntos 3 a 5 lo hace `scripts/version.py`:
 ```bash
 python3 scripts/version.py siguiente ../mi-herramienta     # qué versión corresponde
 python3 scripts/version.py publicar ../mi-herramienta --simular
-(cd ../mi-herramienta && uv run pytest -q) && python3 scripts/version.py publicar ../mi-herramienta
+python3 scripts/version.py publicar ../mi-herramienta --probar "uv run pytest -q"   # tests con la versión nueva
 git -C ../mi-herramienta push --follow-tags
 ```

@@ -117,6 +117,25 @@ def test_no_publica_con_cambios_sin_commitear(repo):
         version.main(["publicar", str(repo)])
 
 
+def test_probar_con_la_version_nueva_y_deshacer_si_falla(repo):
+    (repo / "prueba.py").write_text(
+        "import tomllib, sys\n"
+        "v = tomllib.load(open('pyproject.toml', 'rb'))['project']['version']\n"
+        "sys.exit(0 if v == '0.1.0' else 1)  # un test que fija la versión vieja\n")
+    _commit(repo, "feat: algo")
+    with pytest.raises(SystemExit, match="no se publicó nada"):
+        version.main(["publicar", str(repo), "--probar", f"{sys.executable} prueba.py"])
+    assert 'version = "0.1.0"' in (repo / "pyproject.toml").read_text()
+    assert '__version__ = "0.1.0"' in (repo / "src/demo/__init__.py").read_text()
+    assert not (repo / "CHANGELOG.md").exists()
+    assert _git(repo, "tag") == "" and _git(repo, "status", "--porcelain", "--untracked-files=no") == ""
+
+    (repo / "prueba.py").write_text("import sys\nsys.exit(0)\n")
+    _commit(repo, "test: la prueba no fija la versión")
+    assert version.main(["publicar", str(repo), "--probar", f"{sys.executable} prueba.py"]) == 0
+    assert _git(repo, "tag").split() == ["v0.2.0"]
+
+
 def test_simular_no_modifica_nada(repo, capsys):
     _commit(repo, "feat: algo")
     version.main(["publicar", str(repo), "--simular"])
