@@ -22,32 +22,11 @@ uv tool install "questions[ai,ui,languagetool] @ git+https://github.com/INGCOM-U
 moodle-toolbox --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: moodle-toolbox [OPTIONS] COMMAND [ARGS]...
-
-  Herramientas para la gestión de preguntas de Moodle.
-
-Options:
-  --llm                 Muestra instrucciones generales para un LLM.
-  --show-completion     Show completion for the current shell, to copy it or
-                        customize the installation.
-  --install-completion  Install completion for the current shell.
-  --help                Show this message and exit.
-
-Commands:
-  ai        Procesamiento de preguntas usando IA (Gemini).
-  analyze   Análisis y estadísticas de preguntas.
-  config    Configuración global de las herramientas.
-  convert   Comandos para convertir entre formatos.
-  fix       Comandos para corregir problemas comunes.
-  format    Formatea archivos GIFT y ajusta bloques de código.
-  split     Divide archivos GIFT con múltiples preguntas en archivos...
-  tree      Organiza bancos en árboles de directorios por categoría.
-  validate  Valida archivos o directorios de preguntas GIFT.
-  xml       Herramientas para archivos XML de Moodle.
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN/moodle-toolbox#referencia-rápida), generada desde `moodle-toolbox --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `moodle-toolbox <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

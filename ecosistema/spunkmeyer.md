@@ -22,26 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/spunkmeyer
 spunkmeyer --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: spunkmeyer [OPTIONS] COMMAND [ARGS]...                                  
-                                                                                
- 💡 SPUNKMEYER — Detector de antipatrones de programación y vicios didácticos   
- en código C.                                                                   
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de SPUNKMEYER.            │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ detect   Detecta antipatrones y malas prácticas en el código C.              │
-│ catalog  Muestra el catálogo completo de antipatrones detectados.            │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/spunkmeyer#referencia-rápida), generada desde `spunkmeyer --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `spunkmeyer <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

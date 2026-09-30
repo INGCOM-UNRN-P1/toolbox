@@ -22,30 +22,11 @@ uv tool install "bishop[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/bish
 bishop --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: bishop [OPTIONS] COMMAND [ARGS]...                                      
-                                                                                
- 🧠 BISHOP — Visualizador pedagógico de memoria C (Stack, Heap y punteros) en   
- terminal y diagramas.                                                          
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de BISHOP.                │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ trace     Ejecuta el programa, pausa en el punto indicado e inspecciona el   │
-│           estado vivo del Stack y Heap.                                      │
-│ snapshot  Toma una foto exacta del estado del Stack y Heap en una línea      │
-│           específica de código.                                              │
-│ heap      Audita exclusivamente el estado del Heap, bloques activos y        │
-│           detección de punteros huérfanos.                                   │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/bishop#referencia-rápida), generada desde `bishop --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `bishop <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

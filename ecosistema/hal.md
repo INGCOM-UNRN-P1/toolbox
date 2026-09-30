@@ -22,29 +22,11 @@ uv tool install "hal[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/hal"
 hal --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: hal [OPTIONS] COMMAND [ARGS]...                                         
-                                                                                
- 🤖 HAL — Asistente forense de core dumps y análisis pedagógico post-mortem de  
- segfaults en C.                                                                
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de HAL.                   │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ run      Compila (si es .c), ejecuta el programa y genera un diagnóstico     │
-│          forense pedagógico si ocurre un crash.                              │
-│ inspect  Inspecciona un binario compilado ante posibles fallos de ejecución. │
-│ doctor   Verifica el estado del entorno (GCC, GDB, configuración de core     │
-│          dumps y límites de sistema).                                        │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/hal#referencia-rápida), generada desde `hal --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `hal <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

@@ -22,30 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/callahan
 callahan --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: callahan [OPTIONS] COMMAND [ARGS]...                                    
-                                                                                
- 📜 CALLAHAN — Verificador formal de contratos ACSL (pre/post condiciones) y    
- Frama-C WP.                                                                    
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de CALLAHAN.              │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ verify   Verifica deductivamente las precondiciones, postcondiciones e       │
-│          invariantes del archivo C.                                          │
-│ extract  Extrae e imprime las cláusulas de contratos ACSL encontradas en el  │
-│          código.                                                             │
-│ doctor   Comprueba si el entorno cuenta con Frama-C y provers SMT (Alt-Ergo, │
-│          Z3).                                                                │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/callahan#referencia-rápida), generada desde `callahan --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `callahan <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

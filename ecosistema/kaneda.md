@@ -22,27 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/kaneda
 kaneda --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: kaneda [OPTIONS] COMMAND [ARGS]...                                      
-                                                                                
- 🔒 KANEDA — Auditor pedagógico de seguridad C, buffer overflows y llamadas a   
- sistema restringidas.                                                          
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de KANEDA.                │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ audit  Audita código C en busca de funciones vulnerables a buffer overflow y │
-│        llamadas restringidas.                                                │
-│ rules  Lista las reglas de seguridad auditadas por KANEDA.                   │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/kaneda#referencia-rápida), generada desde `kaneda --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `kaneda <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

@@ -22,30 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/daedalus
 daedalus --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: daedalus [OPTIONS] COMMAND [ARGS]...                                    
-                                                                                
- 🛠️ DAEDALUS — Compilador C pedagógico y traductor de diagnósticos GCC/Clang/ld 
- a español rioplatense.                                                         
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de DAEDALUS.              │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ compile    Compila código C con banderas estrictas de cátedra y traduce      │
-│            errores a español didáctico.                                      │
-│ translate  Traduce un bloque de texto o log de compilador a diagnósticos     │
-│            didácticos.                                                       │
-│ doctor     Verifica disponibilidad de herramientas del toolchain (GCC,       │
-│            Clang, Make, ld).                                                 │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/daedalus#referencia-rápida), generada desde `daedalus --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `daedalus <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

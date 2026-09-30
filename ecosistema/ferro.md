@@ -22,25 +22,11 @@ uv tool install "ferro[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/ferro
 ferro --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: ferro [OPTIONS] COMMAND [ARGS]...                                       
-                                                                                
- Perfilador de rendimiento algorítmico y hardware counters en C                 
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ profile  Mide tiempo de ejecución, ciclos estimados y evalúa complejidad     │
-│          empírica vs teórica.                                                │
-│ version  Muestra la versión de FERRO.                                        │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/ferro#referencia-rápida), generada desde `ferro --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `ferro <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

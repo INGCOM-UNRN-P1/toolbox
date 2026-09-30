@@ -22,47 +22,11 @@ uv tool install "ripley[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/ripl
 ripley --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: ripley [OPTIONS] COMMAND [ARGS]...                                      
-                                                                                
- CLI para procesar, compilar, probar y evaluar entregas de C descargadas de     
- Moodle.                                                                        
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ evaluate  Ejecuta la compilación, linters, estilo, pruebas y calificación de │
-│           los estudiantes.                                                   │
-│ explain   Explica una regla pedagógica de cátedra con ejemplos de código     │
-│           correcto vs. código incorrecto.                                    │
-│ doctor    Diagnóstico del entorno: herramientas externas presentes y checks  │
-│           afectados.                                                         │
-│ run       Verificación temprana completa: compila, corre testcases públicos  │
-│           y aplica los checks del manifiesto.                                │
-│ show      Inspecciona y muestra el contenido, metadatos, enunciado y         │
-│           testcases de un paquete .ripkg.                                    │
-│ watch     Modo Live TDD: recompila y verifica automáticamente al guardar     │
-│           (Ctrl+C para salir).                                               │
-│ check     Verificación unificada y pedagógica de código C: AST, reglas P1,   │
-│           compilación y AddressSanitizer.                                    │
-│ analyze   Análisis programático sin estado para orquestadores (dredd, CI/CD, │
-│           scripts).                                                          │
-│ template  Gestión y verificación de plantillas Markdown Jinja2.              │
-│ testcase  Gestión y esqueletos de casos de prueba.                           │
-│ practica  Gestión de prácticas en ./practicas.                               │
-│ audit     Flujo de auditoría docente: tablero de estados, transiciones e     │
-│           historia.                                                          │
-│ checks    Catálogo unificado de verificaciones.                              │
-│ plugins   Plugins de usuario en plugins/: hooks de ciclo de vida y git       │
-│           hooks.                                                             │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/ripley#referencia-rápida), generada desde `ripley --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `ripley <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

@@ -22,68 +22,11 @@ uv tool install "generador-examenes[ecosistema,languagetool] @ git+https://githu
 alucard --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-usage: generador-examenes [-h] [--init] [--wizard [YAML]]
-                          [--category-tree BANCO [BANCO ...]]
-                          [--sintetizar PLANTILLA] [--listar-sintetizadores]
-                          [--cantidad CANTIDAD] [--formato-banco {gift,xml}]
-                          [-d DEFINICION] [-i INPUT_BANCO [INPUT_BANCO ...]]
-                          [-o OUTPUT_DIR] [-p PATH_IMAGES] [-n NUMERO_TEMAS]
-                          [-s SEMILLA] [-f {html,pdf} [{html,pdf} ...]]
-                          [-t TYPST_TEMPLATE] [--validate] [--debug]
-                          [--show-completion] [--install-completion]
-
-Generador de exámenes basado en plantillas YAML y bancos Moodle/GIFT
-
-options:
-  -h, --help            show this help message and exit
-  --init                Inicializar proyecto con archivos de ejemplo
-  --wizard [YAML]       Asistente interactivo para crear/editar configuración
-                        de examen
-  --category-tree BANCO [BANCO ...]
-                        Generar árbol HTML de categorías de uno o más bancos
-                        de preguntas
-  --sintetizar PLANTILLA
-                        Generar un banco de preguntas de C con daedalus
-                        (sintetizador verificado con gcc). Ver plantillas
-                        disponibles con --listar-sintetizadores
-  --listar-sintetizadores
-                        Lista las plantillas disponibles del sintetizador
-                        daedalus
-  --cantidad CANTIDAD   Cantidad de preguntas a sintetizar (default: 5)
-  --formato-banco {gift,xml}
-                        Formato del banco generado por daedalus (default:
-                        gift)
-  -d, --definicion DEFINICION
-                        Ruta al archivo de definición YAML del examen
-  -i, --input-banco INPUT_BANCO [INPUT_BANCO ...]
-                        Ruta(s) a los archivos de banco de preguntas (override
-                        de YAML)
-  -o, --output-dir OUTPUT_DIR
-                        Directorio de salida para los exámenes generados
-                        (override de YAML, default: ./output)
-  -p, --path-images PATH_IMAGES
-                        Ruta al directorio de imágenes referenciadas en las
-                        preguntas (override de YAML)
-  -n, --numero-temas NUMERO_TEMAS
-                        Número de temas/versiones a generar (override de YAML,
-                        default: 1)
-  -s, --semilla SEMILLA
-                        Semilla pseudo-aleatoria para generación (override de
-                        YAML, default: 42)
-  -f, --formato {html,pdf} [{html,pdf} ...]
-                        Formato(s) de salida (override de YAML, default: html)
-  -t, --template, --typst-template TYPST_TEMPLATE
-                        Ruta a una plantilla Typst personalizada (.typ /
-                        .typ.j2) para generación de PDF
-  --validate            Validar la definición sin generar archivos
-  --debug               Activar modo debug con logging detallado
-  --show-completion     Show completion for the current shell, to copy it or
-                        customize the installation.
-  --install-completion  Install completion for the current shell.
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN/alucarD#referencia-rápida), generada desde `alucard --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `alucard <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

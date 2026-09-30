@@ -22,25 +22,11 @@ uv tool install "vassili[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/vas
 vassili --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: vassili [OPTIONS] COMMAND [ARGS]...                                     
-                                                                                
- Motor de Mutation Testing en C para evaluar la efectividad de los tests        
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ mutate   Genera mutantes sintéticos del código C y evalúa qué porcentaje es  │
-│          detectado por los tests.                                            │
-│ version  Muestra la versión de VASSILI.                                      │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/vassili#referencia-rápida), generada desde `vassili --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `vassili <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

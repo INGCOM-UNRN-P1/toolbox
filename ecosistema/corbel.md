@@ -22,38 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/corbel
 corbel --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: corbel [OPTIONS] COMMAND [ARGS]...                                      
-                                                                                
- Generador liviano de documentación de APIs, TDAs, man pages (man 3) y          
- scaffolding de comentarios en C                                                
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ doc       Genera documentación a partir de comentarios estructurados o       │
-│           inyecta placeholders en cabeceras C.                               │
-│ stub      Agrega placeholders estructurados de documentación (@brief,        │
-│           @param, @return, @pre, @post)                                      │
-│           a todas las funciones, estructuras, uniones, enumeraciones y tipos │
-│           indocumentados.                                                    │
-│ scaffold  Agrega placeholders estructurados de documentación (@brief,        │
-│           @param, @return, @pre, @post)                                      │
-│           a todas las funciones, estructuras, uniones, enumeraciones y tipos │
-│           indocumentados.                                                    │
-│ lint      Audita e informa todos los elementos C que carecen de comentarios  │
-│           Doxygen.                                                           │
-│ check     Audita e informa todos los elementos C que carecen de comentarios  │
-│           Doxygen.                                                           │
-│ version   Muestra la versión de CORBEL.                                      │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/corbel#referencia-rápida), generada desde `corbel --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `corbel <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

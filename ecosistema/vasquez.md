@@ -22,25 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/vasquez
 vasquez --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: vasquez [OPTIONS] COMMAND [ARGS]...                                     
-                                                                                
- Motor de inyección de fallos de entorno y hardware en C vía LD_PRELOAD         
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ inject   Inyecta fallos controlados (malloc NULL, fopen EACCES) evaluando si │
-│          el código C maneja el error sin crashear.                           │
-│ version  Muestra la versión de VASQUEZ.                                      │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/vasquez#referencia-rápida), generada desde `vasquez --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `vasquez <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

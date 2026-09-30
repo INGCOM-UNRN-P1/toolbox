@@ -22,64 +22,11 @@ uv tool install "deckard[ecosistema,languagetool] @ git+https://github.com/INGCO
 deckard --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: deckard [OPTIONS] COMMAND [ARGS]...                                     
-                                                                                
- Gestor de bancos de ejercicios prácticos, guías y graduación (Programación 1). 
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ init       Inicializa la estructura del banco (banco/, guias/).              │
-│ new        Crea un ejercicio nuevo con esqueleto de metadata, funciones,     │
-│            enunciado.md y solución.                                          │
-│ organize   Reorganiza los ejercicios en carpetas según nivel de Bloom, tipo  │
-│            (funciones vs io) y/o tema.                                       │
-│ show       Muestra el enunciado y detalles de un ejercicio con control de    │
-│            secciones.                                                        │
-│ audit      Audita la salud del banco: longitud y calidad de redacción del    │
-│            enunciado, y completitud de especificación.                       │
-│ compose    Compone una guía balanceada por carga cognitiva y taxonomía de    │
-│            Bloom.                                                            │
-│ pack       Empaqueta ejercicios o guías como .ripkg para Ripley y starter    │
-│            repos.                                                            │
-│ multiplex  tp-multiplexer: Genera variantes combinatorias y asignación       │
-│            determinista por alumno.                                          │
-│ stats      Grafica la distribución de Bloom y tiempos acumulados con         │
-│            histogramas ASCII en terminal.                                    │
-│ lint       Verifica que los metadatos y el starter_code de los ejercicios    │
-│            compilen limpiamente antes de exportar.                           │
-│ duplicate  Clona y versiona variantes de ejercicios conservando enunciados,  │
-│            solución y tests.                                                 │
-│ graph      Detecta y grafica dependencias conceptuales y grafo de            │
-│            prerrequisitos entre ejercicios.                                  │
-│ deps       Detecta y grafica dependencias conceptuales y grafo de            │
-│            prerrequisitos entre ejercicios.                                  │
-│ index      Actualiza o reconstruye el índice SQLite                          │
-│            (~/.cache/deckard/index.db) para acelerar búsquedas en bancos     │
-│            masivos.                                                          │
-│ cache      Actualiza o reconstruye el índice SQLite                          │
-│            (~/.cache/deckard/index.db) para acelerar búsquedas en bancos     │
-│            masivos.                                                          │
-│ unpack     Extrae un bundle .deckard.tar.gz en el banco o directorio         │
-│            especificado.                                                     │
-│ bank       Inspección del banco de ejercicios.                               │
-│ verify     Verificación pedagógica (ripley check), fuzzing (dredd) y arnés   │
-│            de pruebas (vasquez inject).                                      │
-│ tag        Gestión y consulta de etiquetas (tags) en el banco.               │
-│ export     Exportación multiformato (PDF, Markdown, HTML) y gestión de       │
-│            plantillas.                                                       │
-│ guide      Gestión, inspección y exportación de guías.                       │
-│ spec       Gestión, validación y composición de especificaciones de guías    │
-│            (GuiaSpec).                                                       │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN/deckard#referencia-rápida), generada desde `deckard --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `deckard <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

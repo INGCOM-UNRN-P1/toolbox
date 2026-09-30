@@ -22,25 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/wierzbowski
 wierzbowski --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: wierzbowski [OPTIONS] COMMAND [ARGS]...                                 
-                                                                                
- Auditor de grafos de inclusión de headers, dependencias circulares y Makefiles 
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ audit    Audita dependencias entre cabeceras, ciclos de inclusión y          │
-│          Makefiles.                                                          │
-│ version  Muestra la versión de WIERZBOWSKI.                                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/wierzbowski#referencia-rápida), generada desde `wierzbowski --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `wierzbowski <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

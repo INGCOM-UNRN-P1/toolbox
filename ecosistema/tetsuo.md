@@ -22,25 +22,11 @@ uv tool install "tetsuo[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/tets
 tetsuo --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: tetsuo [OPTIONS] COMMAND [ARGS]...                                      
-                                                                                
- Traductor y explicador pedagógico de sanitizers (ASan, UBSan, MSan) en español 
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ run      Compila y ejecuta con AddressSanitizer/UBSan traduciendo cualquier  │
-│          violación a español didáctico.                                      │
-│ version  Muestra la versión de TETSUO.                                       │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/tetsuo#referencia-rápida), generada desde `tetsuo --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `tetsuo <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

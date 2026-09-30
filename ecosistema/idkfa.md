@@ -22,57 +22,11 @@ uv tool install "idkfa[ecosistema,languagetool] @ git+https://github.com/INGCOM-
 idkfa --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: idkfa [OPTIONS]                                                         
-                                                                                
- Genera cuestionarios XML para Moodle a partir de plantillas C ejecutadas y     
- verificadas.                                                                   
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --source              -s      <path>  Directorio con las plantillas .c o     │
-│                                       archivo .c individual.                 │
-│                                       [default: templates]                   │
-│ --template            -t      <path>  Procesar solo este archivo .c          │
-│                                       específico (ruta completa o relativa). │
-│ --output              -o      <path>  Archivo XML de salida.                 │
-│                                       [default: cuestionario_moodle.xml]     │
-│ --num,--num-variants  -n      <int>   Número de preguntas/variantes a        │
-│                                       generar por plantilla.                 │
-│                                       [default: 5]                           │
-│ --category            -c      <str>   Categoría base en Moodle.              │
-│                                       [default: Cuestionario C]              │
-│ --generate-only       -g              Solo generar código C en el directorio │
-│                                       'generated' sin crear XML.             │
-│ --dry-run,--check     -d              Modo validación rápida: verifica       │
-│                                       sintaxis y compilación sin generar     │
-│                                       XML.                                   │
-│ --jobs                -j      <int>   Número de procesos concurrentes para   │
-│                                       compilación y generación.              │
-│                                       [default: 1]                           │
-│ --penalty                     <str>   Penalización por defecto para          │
-│                                       respuestas incorrectas (ej: 0.25).     │
-│ --defaultgrade                <str>   Calificación por defecto de las        │
-│                                       preguntas (ej: 1.0).                   │
-│ --min-distractors             <int>   Mínimo de distractores para preguntas  │
-│                                       de opción múltiple.                    │
-│                                       [default: 3]                           │
-│ --compiler                    <str>   Compilador C a utilizar (por defecto:  │
-│                                       gcc).                                  │
-│ --cflags                      <str>   Flags de compilación C adicionales o   │
-│                                       globales.                              │
-│ --config                      <path>  Ruta a archivo de configuración JSON   │
-│                                       personalizada.                         │
-│ --log-file                    <path>  Ruta al archivo de log.                │
-│ --install-completion                  Install completion for the current     │
-│                                       shell.                                 │
-│ --show-completion                     Show completion for the current shell, │
-│                                       to copy it or customize the            │
-│                                       installation.                          │
-│ --help                                Show this message and exit.            │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/idkfa#referencia-rápida), generada desde `idkfa --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `idkfa <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

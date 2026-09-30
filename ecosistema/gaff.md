@@ -22,32 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/gaff
 gaff --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: gaff [OPTIONS] COMMAND [ARGS]...                                        
-                                                                                
- 📏 GAFF — Linter pedagógico de estilo arquitectónico y convenciones            
- obligatorias de cátedra con autofix.                                           
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de GAFF.                  │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ check    Audita archivos de código C comprobando las reglas de estilo y      │
-│          arquitectura de la cátedra.                                         │
-│ fix      Aplica correcciones automáticas de estilo directamente sobre los    │
-│          archivos.                                                           │
-│ rules    Lista todas las reglas de estilo y arquitectura del catálogo de     │
-│          GAFF.                                                               │
-│ explain  Explica en detalle una regla de cátedra con ejemplos de código      │
-│          correctos e incorrectos.                                            │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/gaff#referencia-rápida), generada desde `gaff --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `gaff <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

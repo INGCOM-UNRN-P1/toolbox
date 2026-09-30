@@ -26,29 +26,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/esper
 esper --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: esper [OPTIONS] COMMAND [ARGS]...                                       
-                                                                                
- Explicador pedagógico y formateador interactivo de salidas y errores de        
- GCC/Clang                                                                      
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ compile  Envuelve la ejecución de GCC y traduce todos los errores y          │
-│          advertencias.                                                       │
-│ explain  Explica un mensaje de error puntual o texto copiado de GCC.         │
-│ pipe     Lee mensajes de GCC desde stdin (tubería: `gcc ... 2>&1 | esper     │
-│          pipe`).                                                             │
-│ version  Muestra la versión de ESPER.                                        │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/esper#referencia-rápida), generada desde `esper --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `esper <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

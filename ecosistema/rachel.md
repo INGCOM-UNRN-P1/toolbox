@@ -22,28 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/rachel
 rachel --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: rachel [OPTIONS] COMMAND [ARGS]...                                      
-                                                                                
- ⚡ RACHEL — Desensamblador y visualizador pedagógico de estructuras de control 
- y jump tables en C.                                                            
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de RACHEL.                │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ switch   Analiza las sentencias switch del código C, visualiza su diagrama   │
-│          de flujo y desensambla jump tables.                                 │
-│ compare  Compara el costo computacional entre la implementación de switch vs │
-│          cadenas de if-else.                                                 │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/rachel#referencia-rápida), generada desde `rachel --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `rachel <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

@@ -22,28 +22,11 @@ uv tool install "sebastian[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/s
 sebastian --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: sebastian [OPTIONS] COMMAND [ARGS]...                                   
-                                                                                
- 🌀 SEBASTIAN — Analizador de llamadas recursivas, consumo de stack frame y     
- riesgos de stack overflow en C.                                                
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de SEBASTIAN.             │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ trace    Ejecuta el código instrumentado, traza las llamadas recursivas y    │
-│          visualiza el árbol de ejecución.                                    │
-│ analyze  Analiza estáticamente todas las funciones del archivo en busca de   │
-│          recursión y riesgos de desbordamiento.                              │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/sebastian#referencia-rápida), generada desde `sebastian --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `sebastian <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

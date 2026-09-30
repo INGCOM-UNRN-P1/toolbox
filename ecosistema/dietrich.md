@@ -22,26 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/dietrich
 dietrich --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: dietrich [OPTIONS] COMMAND [ARGS]...                                    
-                                                                                
- Validador de cobertura lógica avanzada MC/DC (Modified Condition/Decision      
- Coverage) en C                                                                 
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ analyze  Analiza condiciones booleanas compuestas (&&, ||) y calcula los     │
-│          vectores de prueba requeridos para MC/DC.                           │
-│ version  Muestra la versión de DIETRICH.                                     │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/dietrich#referencia-rápida), generada desde `dietrich --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `dietrich <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

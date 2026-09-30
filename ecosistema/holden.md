@@ -22,27 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/holden
 holden --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: holden [OPTIONS] COMMAND [ARGS]...                                      
-                                                                                
- 💉 HOLDEN — Generador de mocks e inyección controlada de fallos en funciones C 
- (malloc, fopen, etc.).                                                         
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de HOLDEN.                │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ generate  Genera un archivo C con la implementación del mock y wrapper de la │
-│           función.                                                           │
-│ list      Lista las funciones con soporte de mocks preconfigurados.          │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/holden#referencia-rápida), generada desde `holden --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `holden <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

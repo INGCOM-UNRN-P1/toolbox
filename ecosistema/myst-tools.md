@@ -22,33 +22,11 @@ uv tool install git+https://github.com/martinvilu/mystmd-tools
 myst-tools --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: myst-tools [OPTIONS] COMMAND [ARGS]...                                  
-                                                                                
- Herramientas unificadas para automatizar, formatear e indexar material         
- didáctico MyST Markdown.                                                       
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --force               -f        Fuerza la ejecución saliéndose de la         │
-│                                 verificación de la existencia de 'myst.yml'. │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ add-anchors  Agrega etiquetas/anclas de MyST a los encabezados de archivos   │
-│              Markdown.                                                       │
-│ gen-apunte   Genera el índice detallado para el apunte de cátedra.           │
-│ gen-guides   Genera el índice para las guías de trabajos prácticos.          │
-│ gen-rules    Genera el índice de las reglas de estilo de programación.       │
-│ fix-anchors  Detecta y corrige anclas MyST duplicadas.                       │
-│ fmt          Formatea archivos MyST Markdown (longitud de línea, fences y    │
-│              comentarios).                                                   │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/martinvilu/mystmd-tools#referencia-rápida), generada desde `myst-tools --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `myst-tools <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

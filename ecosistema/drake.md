@@ -22,25 +22,11 @@ uv tool install "drake[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/drake
 drake --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: drake [OPTIONS] COMMAND [ARGS]...                                       
-                                                                                
- ⚡ DRAKE — Fuzzer pedagógico guiado por límites y analizador de robustez en C. 
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de DRAKE.                 │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ fuzz  Ejecuta fuzzing enviando payloads extremos y mutados a la entrada      │
-│       estándar.                                                              │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/drake#referencia-rápida), generada desde `drake --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `drake <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

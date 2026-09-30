@@ -22,30 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/nostromo
 nostromo --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: nostromo [OPTIONS] COMMAND [ARGS]...                                    
-                                                                                
- 📦 NOSTROMO — Sandbox de ejecución aislada con Bubblewrap y evaluador de casos 
- de prueba .in/.out.                                                            
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de NOSTROMO.              │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ run     Ejecuta un binario dentro del sandbox con límites estrictos de CPU y │
-│         memoria.                                                             │
-│ test    Ejecuta una suite completa de casos de prueba .in/.out y genera el   │
-│         reporte de evaluación.                                               │
-│ doctor  Verifica disponibilidad del motor de sandbox (Bubblewrap /           │
-│         namespaces del kernel).                                              │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/nostromo#referencia-rápida), generada desde `nostromo --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `nostromo <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

@@ -18,11 +18,11 @@ uv tool install git+https://github.com/martinvilu/meet-tools
 meet-tools --help
 ```
 
-### Comandos disponibles
+### Comandos
 
-```text
-
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/martinvilu/meet-tools#referencia-rápida), generada desde `meet-tools --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `meet-tools <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

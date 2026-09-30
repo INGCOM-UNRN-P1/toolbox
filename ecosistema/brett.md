@@ -22,28 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/brett
 brett --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: brett [OPTIONS] COMMAND [ARGS]...                                       
-                                                                                
- 📏 BRETT — Auditor de alineación y padding de estructuras C y optimizador de   
- reordenamiento de campos.                                                      
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de BRETT.                 │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ audit     Audita estructuras en busca de bytes de memoria desperdiciados por │
-│           desalineación y padding.                                           │
-│ optimize  Genera el código C optimizado reordenando los campos de menor a    │
-│           mayor alineación.                                                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/brett#referencia-rápida), generada desde `brett --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `brett <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

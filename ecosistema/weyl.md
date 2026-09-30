@@ -22,25 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/weyl
 weyl --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: weyl [OPTIONS] COMMAND [ARGS]...                                        
-                                                                                
- ⚖️ WEYL — Herramienta de diffing semántico y comparación estructural AST entre 
- códigos C.                                                                     
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --version             -v        Muestra la versión de WEYL.                  │
-│ --install-completion            Install completion for the current shell.    │
-│ --show-completion               Show completion for the current shell, to    │
-│                                 copy it or customize the installation.       │
-│ --help                          Show this message and exit.                  │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ diff  Compara semánticamente ambos códigos función por función.              │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/weyl#referencia-rápida), generada desde `weyl --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `weyl <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

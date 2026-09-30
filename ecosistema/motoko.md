@@ -22,25 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/motoko
 motoko --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: motoko [OPTIONS] COMMAND [ARGS]...                                      
-                                                                                
- Verificador de encapsulamiento estricto y opacidad de TDAs en C                
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ verify   Verifica que los TDAs sean opacos y no sufran accesos directos a    │
-│          sus campos internos.                                                │
-│ version  Muestra la versión de MOTOKO.                                       │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/motoko#referencia-rápida), generada desde `motoko --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `motoko <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

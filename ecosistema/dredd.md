@@ -22,48 +22,11 @@ uv tool install "dredd[ecosistema,guias] @ git+https://github.com/INGCOM-UNRN-P1
 dredd --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: dredd [OPTIONS] COMMAND [ARGS]...                                       
-                                                                                
- Orquestador docente de evaluación masiva y gestión de entregas (GitHub         
- Classroom + Moodle).                                                           
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ init           Inicializa un espacio de trabajo de Dredd con carpetas        │
-│                estructuradas y mapeo declarativo en dredd.yaml.              │
-│ eval           Clona/actualiza el repositorio o evalúa entregas locales,     │
-│                ejecuta el análisis con Ripley y genera el informe Markdown.  │
-│ comment        Envía el informe Markdown generado como comentario en el Pull │
-│                Request de GitHub.                                            │
-│ plagiarism     Calcula la matriz de similitud Winnowing entre todas las      │
-│                entregas descargadas.                                         │
-│ pr-fix         Reconstruye o crea el Pull Request de corrección para un      │
-│                estudiante (reemplaza prfix.sh).                              │
-│ map            Mapeo interactivo y heurístico entre archivos C de            │
-│                estudiantes y especificaciones de la guía.                    │
-│ export         Exporta calificaciones CSV, paquete ZIP de retroalimentación  │
-│                y dashboard consolidado de cohorte.                           │
-│ export-report  Convierte un informe Markdown a HTML autocontenido            │
-│                enriquecido o PDF (zero-dependencies).                        │
-│ fuzz-gen       fuzz-gen: endurece el banco generando casos límite contra la  │
-│                solución modelo.                                              │
-│ oral-guide     oral-exam-companion: genera una guía de preguntas para        │
-│                coloquio/defensa.                                             │
-│ multiplex      tp-multiplexer: Genera variantes combinatorias y asignación   │
-│                determinista por alumno.                                      │
-│ moodle         Gestión de canales Moodle (ingesta ZIP y planillas).          │
-│ config         Gestión de configuración, entregas, guías y políticas de      │
-│                chequeo.                                                      │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/dredd#referencia-rápida), generada desde `dredd --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `dredd <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

@@ -22,25 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/tyrell
 tyrell --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: tyrell [OPTIONS] COMMAND [ARGS]...                                      
-                                                                                
- Generador sintético y determinista de datasets y casos de prueba (.in/.out)    
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ generate  Genera casos de prueba .in (y .out con binario de referencia)      │
-│           deterministas.                                                     │
-│ version   Muestra la versión de TYRELL.                                      │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/tyrell#referencia-rápida), generada desde `tyrell --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `tyrell <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

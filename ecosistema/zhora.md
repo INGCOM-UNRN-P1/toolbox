@@ -22,25 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/zhora
 zhora --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: zhora [OPTIONS] COMMAND [ARGS]...                                       
-                                                                                
- Linter y auditor de seguridad en macros del preprocesador C (#define)          
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ audit    Audita macros #define en busca de efectos de lado, falta de         │
-│          paréntesis o puntos y coma.                                         │
-│ version  Muestra la versión de ZHORA.                                        │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/zhora#referencia-rápida), generada desde `zhora --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `zhora <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

@@ -18,44 +18,11 @@ uv tool install git+https://github.com/martinvilu/slides-tools
 slide-tools --help
 ```
 
-### Comandos disponibles
+### Comandos
 
-```text
-Usage: slide-tools [OPTIONS] COMMAND [ARGS]...                                 
-                                                                                
- Sistema de control remoto para Google Slides.                                  
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ daemon       Inicia el daemon concentrador WebSocket en primer plano.        │
-│ status       Muestra el estado consolidado de la presentación activa.        │
-│ next         Avanza a la siguiente diapositiva o animación (NEXT_SLIDE).     │
-│ prev         Retrocede a la diapositiva o animación anterior (PREV_SLIDE).   │
-│ first        Salta a la primera diapositiva (FIRST_SLIDE).                   │
-│ last         Salta a la última diapositiva (LAST_SLIDE).                     │
-│ goto         Salta directamente a una diapositiva específica (GO_TO_SLIDE).  │
-│ blackout     Conmuta pantalla en negro (TOGGLE_BLACKOUT).                    │
-│ whiteout     Conmuta pantalla en blanco (TOGGLE_WHITEOUT).                   │
-│ laser        Conmuta puntero láser virtual (TOGGLE_LASER).                   │
-│ timer-reset  Reinicia el temporizador (TIMER_RESET).                         │
-│ timer-pause  Pausa o reanuda el temporizador (TIMER_TOGGLE_PAUSE).           │
-│ monitor      Monitorea en tiempo real cambios de diapositiva, notas y        │
-│              cronómetro.                                                     │
-│ mock-slides  Simula una sesión de Google Slides conectada al daemon para     │
-│              pruebas.                                                        │
-│ pack         Empaqueta la extensión WebExtensions para Chrome (.zip) y       │
-│              Firefox (.xpi).                                                 │
-│ sign         Valida y firma digitalmente el addon para Firefox utilizando    │
-│              Mozilla web-ext.                                                │
-│ qr           Muestra el código QR para emparejamiento directo con la app     │
-│              Android.                                                        │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/martinvilu/slides-tools#referencia-rápida), generada desde `slide-tools --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `slide-tools <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

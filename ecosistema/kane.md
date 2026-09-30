@@ -22,25 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/kane
 kane --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: kane [OPTIONS] COMMAND [ARGS]...                                        
-                                                                                
- Simulador y depurador visual de I/O de bajo nivel y archivos binarios en C     
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ inspect  Inspecciona y desglosa el contenido de un archivo binario           │
-│          mapeándolo a un struct C.                                           │
-│ version  Muestra la versión de KANE.                                         │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/kane#referencia-rápida), generada desde `kane --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `kane <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 

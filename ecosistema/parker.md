@@ -22,25 +22,11 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/parker
 parker --help
 ```
 
-### Salida de ayuda y comandos disponibles
+### Comandos
 
-```text
-Usage: parker [OPTIONS] COMMAND [ARGS]...                                      
-                                                                                
- Auditor de estabilidad de ABI, visibilidad de símbolos y cabeceras C           
-                                                                                
-╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.      │
-│ --show-completion             Show completion for the current shell, to copy │
-│                               it or customize the installation.              │
-│ --help                        Show this message and exit.                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ───────────────────────────────────────────────────────────────────╮
-│ audit    Audita la cabecera y contrasta los símbolos exportados por la       │
-│          biblioteca.                                                         │
-│ version  Muestra la versión de PARKER.                                       │
-╰──────────────────────────────────────────────────────────────────────────────╯
-```
+La tabla de comandos y opciones está en la **Referencia rápida** del
+[README](https://github.com/INGCOM-UNRN-P1/parker#referencia-rápida), generada desde `parker --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `parker <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 
