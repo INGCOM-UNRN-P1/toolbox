@@ -41,7 +41,8 @@ def verificar(ejecutable: str) -> dict:
         rc, out, err = correr([ejecutable, *args])
         resultado[etiqueta] = rc == 0 and "Traceback" not in out + err
     rc, out, err = correr([ejecutable, "doctor"])
-    resultado["doctor"] = rc in (0, 1) and "No such command" not in err and "Traceback" not in out + err
+    resultado["doctor"] = (rc in (0, 1) and "No such command" not in err and "No existe el comando" not in err
+                           and "Traceback" not in out + err)
     rc, out, err = correr([ejecutable, "doctor", "--json"])
     try:
         datos = json.loads(out)

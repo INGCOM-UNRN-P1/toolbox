@@ -205,11 +205,17 @@ else:
 """
 
 
+# La misma herramienta con la ayuda de Typer en español, como las que usan yutani (N-ECO-14).
+HERRAMIENTA_EN_ESPANOL = HERRAMIENTA_QUE_CUMPLE.replace("Usage:", "Uso:").replace("Commands", "Comandos").replace(
+    "No such command '{args[0]}'.", "No existe el comando '{args[0]}'.")
+
+
 @pytest.fixture
 def herramienta_falsa(tmp_path, monkeypatch):
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
     _ejecutable(bin_dir, "falsa", HERRAMIENTA_QUE_CUMPLE)
+    _ejecutable(bin_dir, "falsa-es", HERRAMIENTA_EN_ESPANOL)
     _ejecutable(bin_dir, "incumple", 'print("sin contrato"); sys.exit(0 if args in (["--help"],) else 2)')
     monkeypatch.setenv("PATH", f"{bin_dir}{os.pathsep}{os.environ['PATH']}")
     monkeypatch.setattr(verificar_contrato_cli, "ENTORNO", dict(os.environ))
@@ -244,6 +250,16 @@ def test_comandos_citados(herramienta_falsa):
     assert verificar_comandos_docs.verificar_linea("otra cosa", herramientas) is None
     error = verificar_comandos_docs.verificar_linea("falsa inexistente", herramientas)
     assert error is not None and "no existe" in error
+
+
+def test_ayuda_en_espanol(herramienta_falsa):
+    """Con la ayuda de Typer en español (yutani) los subcomandos se siguen viendo: antes se buscaba
+    «Commands» y, al no encontrarlo, ninguna cita se verificaba ni se fuzzeaba ningún subcomando."""
+    assert verificar_comandos_docs.verificar_linea("falsa-es analizar main.c", {"falsa-es"}) is None
+    error = verificar_comandos_docs.verificar_linea("falsa-es inexistente", {"falsa-es"})
+    assert error is not None and "no existe" in error
+    assert fuzz_subcomandos.subcomandos("falsa-es") == ["doctor", "analizar"]
+    assert verificar_contrato_cli.verificar("falsa-es")["cumple"] is True
 
 
 # --- dependencias entre herramientas (ecosistema.py verificar) -------------------------------

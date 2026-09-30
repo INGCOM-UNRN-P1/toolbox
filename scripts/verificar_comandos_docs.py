@@ -28,6 +28,7 @@ from pathlib import Path
 RAIZ_P1 = Path(__file__).resolve().parents[1]
 RE_BLOQUE = re.compile(r"```[^\n]*\n(.*?)```", re.DOTALL)
 RE_COMANDO_HELP = re.compile(r"^│ ([a-z][a-z0-9-]*)\s", re.MULTILINE)
+RE_PANEL_COMANDOS = re.compile(r"\b(?:Commands|Comandos)\b")
 ENTORNO = dict(os.environ, NO_COLOR="1", TERM="dumb", COLUMNS="200")
 
 
@@ -53,10 +54,12 @@ def subcomandos(cadena: tuple[str, ...]) -> frozenset[str]:
     except (OSError, subprocess.TimeoutExpired):
         return frozenset()
     texto = salida.stdout + salida.stderr
-    if "Commands" not in texto:
+    # «Comandos»: las herramientas que usan yutani muestran la ayuda de Typer en español
+    # (N-ECO-14). Sin esto, sus subcomandos no se veían y ninguna cita se verificaba.
+    panel = RE_PANEL_COMANDOS.search(texto)
+    if not panel:
         return frozenset()
-    bloque = texto[texto.index("Commands"):]
-    return frozenset(RE_COMANDO_HELP.findall(bloque))
+    return frozenset(RE_COMANDO_HELP.findall(texto[panel.start():]))
 
 
 def verificar_linea(linea: str, herramientas: set[str]) -> str | None:

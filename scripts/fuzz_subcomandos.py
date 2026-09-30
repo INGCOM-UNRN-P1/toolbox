@@ -41,15 +41,18 @@ OMITIR = {"serve", "daemon", "watch", "tui", "run-daemon", "start", "shell", "re
 FORMAS = [["src/data_structures.c"], ["src/data_structures.h"], ["src"], ["src/data_structures.c", "canon/data_structures_canon.c"]]
 RE_TRACEBACK = re.compile(r"Traceback \(most recent call last\)")
 RE_COMANDO = re.compile(r"^│ ([a-z][a-z0-9-]*)\s", re.MULTILINE)
+# «Comandos»: ayuda de Typer en español (herramientas que usan yutani, N-ECO-14).
+RE_PANEL_COMANDOS = re.compile(r"\b(?:Commands|Comandos)\b")
 ENTORNO = dict(os.environ, NO_COLOR="1", TERM="dumb", COLUMNS="200")
 
 
 def subcomandos(ejecutable: str) -> list[str]:
     salida = subprocess.run([ejecutable, "--help"], capture_output=True, text=True, timeout=60, env=ENTORNO)
     texto = salida.stdout + salida.stderr
-    if "Commands" not in texto:
+    panel = RE_PANEL_COMANDOS.search(texto)
+    if not panel:
         return []
-    return RE_COMANDO.findall(texto[texto.index("Commands"):])
+    return RE_COMANDO.findall(texto[panel.start():])
 
 
 def main(argv: list[str]) -> int:
