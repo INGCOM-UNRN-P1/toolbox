@@ -244,6 +244,15 @@ def test_fuzz_descubre_subcomandos_y_detecta_tracebacks(herramienta_falsa, tmp_p
     assert con_traceback[0]["excepcion"] == ["ValueError", "no se pudo analizar"]
 
 
+def test_fuzz_lista_los_subcomandos_que_aceptan_rutas_inexistentes(herramienta_falsa, tmp_path, capsys):
+    """`falsa doctor no_existe_p1.c` sale con 0 (ignora el argumento): se lista para revisarlo."""
+    codigo = fuzz_subcomandos.main(["falsa", "--rutas-inexistentes"])
+    salida = capsys.readouterr().out
+    assert codigo == 1  # por el traceback de `analizar`, no por las rutas
+    assert "? falsa doctor no_existe_p1.c → 0" in salida
+    assert "aceptan una ruta inexistente: 1" in salida
+
+
 def test_comandos_citados(herramienta_falsa):
     herramientas = {"falsa"}
     assert verificar_comandos_docs.verificar_linea("falsa analizar main.c", herramientas) is None

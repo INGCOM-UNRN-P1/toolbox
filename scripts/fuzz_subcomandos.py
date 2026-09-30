@@ -9,12 +9,19 @@ formas de argumento (un .c, un .h, un directorio y dos .c), sobre una copia
 descartable de los fuentes del smoke test.
 
 Uso:
-    fuzz_subcomandos.py [EJECUTABLE ...] [--salida informe.json] [--timeout SEG]
+    fuzz_subcomandos.py [EJECUTABLE ...] [--salida informe.json] [--timeout SEG] [--rutas-inexistentes]
 
 Sin ejecutables recorre todos los de las herramientas activas.
 
 Sale con 1 si encontró algún traceback. Omite subcomandos que levantan
 servidores, publican o modifican configuración global.
+
+Con --rutas-inexistentes, además invoca cada subcomando con un archivo que no
+existe y lista los que terminan con 0: un nombre mal escrito que la
+herramienta toma por una entrada válida sin problemas (N-GAFF-07,
+N-DAEDALUS-01). Es exploratorio y no cambia el código de salida: para
+algunos subcomandos una ruta nueva es válida (un archivo de salida, un
+proyecto a crear).
 """
 
 from __future__ import annotations
@@ -55,12 +62,32 @@ def subcomandos(ejecutable: str) -> list[str]:
     return RE_COMANDO.findall(texto[panel.start():])
 
 
+RUTA_INEXISTENTE = "no_existe_p1.c"
+
+
+def silencio_ante_ruta_inexistente(ejecutable: str, comando: str, trabajo: Path, timeout: float) -> dict | None:
+    """Invoca `ejecutable comando no_existe_p1.c`: si sale con 0, devuelve el caso para revisarlo."""
+    try:
+        proc = subprocess.run([ejecutable, comando, RUTA_INEXISTENTE], cwd=trabajo, capture_output=True,
+                              text=True, timeout=timeout, env=ENTORNO, stdin=subprocess.DEVNULL)
+    except subprocess.TimeoutExpired:
+        return None
+    if proc.returncode != 0 or (trabajo / RUTA_INEXISTENTE).exists():
+        return None  # rechazó la ruta, o la creó (era una salida): nada que revisar
+    lineas = [linea.strip(" │╭╮╰╯─") for linea in (proc.stdout + proc.stderr).splitlines()]
+    primera = next((linea for linea in lineas if linea.strip()), "")
+    return {"ejecutable": ejecutable, "comando": comando, "salida": primera[:160]}
+
+
 def main(argv: list[str]) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("ejecutables", nargs="*")
     parser.add_argument("--salida", type=Path)
     parser.add_argument("--timeout", type=float, default=30.0)
+    parser.add_argument("--rutas-inexistentes", action="store_true",
+                        help="listar los subcomandos que aceptan sin error un archivo que no existe")
     args = parser.parse_args(argv)
+    silencios: list[dict] = []
 
     _, repos = cargar()
     ejecutables = args.ejecutables or [e for r in filtrar(repos, estados=["activo"]) if r.tipo == "cli"
@@ -88,6 +115,11 @@ def main(argv: list[str]) -> int:
                                        "traceback": traceback, "excepcion": excepcion[-1] if excepcion else None})
                     if rc != 2:  # error de uso: se prueba la siguiente forma de argumentos
                         break
+                if args.rutas_inexistentes:
+                    caso = silencio_ante_ruta_inexistente(ejecutable, comando, base / f"{ejecutable}-{comando}",
+                                                          args.timeout)
+                    if caso:
+                        silencios.append(caso)
 
     con_traceback = [r for r in resultados if r["traceback"]]
     cuelgues = [r for r in resultados if r["rc"] == "TIMEOUT"]
@@ -95,7 +127,10 @@ def main(argv: list[str]) -> int:
         print(f"✗ {r['ejecutable']} {r['comando']} {' '.join(r['args'])} → rc={r['rc']} {r['excepcion']}")
     for r in cuelgues:
         print(f"⏱ {r['ejecutable']} {r['comando']} {' '.join(r['args'])} → no terminó en {args.timeout}s")
-    print(f"\nInvocaciones: {len(resultados)} · con traceback: {len(con_traceback)} · sin terminar: {len(cuelgues)}")
+    for caso in silencios:
+        print(f"? {caso['ejecutable']} {caso['comando']} {RUTA_INEXISTENTE} → 0: {caso['salida']}")
+    print(f"\nInvocaciones: {len(resultados)} · con traceback: {len(con_traceback)} · sin terminar: {len(cuelgues)}"
+          + (f" · aceptan una ruta inexistente: {len(silencios)}" if args.rutas_inexistentes else ""))
     if args.salida:
         args.salida.write_text(json.dumps(resultados, ensure_ascii=False, indent=1), encoding="utf-8")
     return 1 if con_traceback else 0
