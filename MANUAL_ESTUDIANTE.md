@@ -36,6 +36,17 @@ El resto de las herramientas de esta guía está pensado para Linux: varias depe
 
 Las herramientas se instalan **siempre desde su repositorio de GitHub**. No las instales por nombre desde PyPI: la mayoría de esos nombres pertenece en PyPI a otros proyectos y terminarías instalando un programa que no tiene nada que ver con la materia.
 
+La forma más simple es con **`mother`**, el instalador del ecosistema: instala las herramientas del
+perfil estudiante desde git y después verifica que funcionen.
+
+```bash
+uv tool install git+https://github.com/INGCOM-UNRN-P1/mother
+mother instalar --perfil estudiante
+mother doctor --perfil estudiante
+```
+
+Si preferís hacerlo a mano:
+
 ```bash
 # Si clonaste el repositorio p1-tools (instala todas en modo editable):
 ./scripts/install_tools.sh
@@ -51,7 +62,7 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/nostromo
 uv tool install git+https://github.com/INGCOM-UNRN-P1/ripley
 ```
 
-Para actualizarlas a la última versión: `uv tool upgrade --all`.
+Para actualizarlas a la última versión: `mother actualizar --perfil estudiante` (o `uv tool upgrade --all`).
 
 Para verificar que tu instalación esté en óptimas condiciones, ejecutá:
 ```bash
