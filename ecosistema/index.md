@@ -44,6 +44,7 @@ Este catálogo documenta integralmente las 41 herramientas pedagógicas, linters
 * [**`giger`**](giger.md): Visualizador de Call Graphs (árboles de llamadas) y grafos de flujo de control (CFG), con detección de funciones muertas.
 * [**`ferro`**](ferro.md): Perfilador de rendimiento: mide tiempo e instrucciones (Cachegrind) para varios tamaños de entrada e infiere la complejidad empírica ($O(N)$, $O(N \log N)$, $O(N^2)$).
 * [**`parker`**](parker.md): Auditor de ABI y visibilidad de símbolos en bibliotecas compartidas y objetos ELF (`.so`, `.o`) y sus cabeceras: símbolos privados expuestos o faltantes.
+* [**`crowe`**](crowe.md): Linter de portabilidad multi-arquitectura: detecta asunciones no portables (endianness, tamaño de punteros y de `long`, signo de `char`, VLAs) y puede validar la compilación cruzada para x86_64, aarch64 y riscv64.
 
 ### 7. Diseño Modular, TDAs y Documentación
 * [**`motoko`**](motoko.md): Verificador de encapsulamiento de TDAs: detecta accesos directos a campos internos desde el código cliente y controla el uso de tipos opacos.
