@@ -45,7 +45,7 @@ RE_ARGPARSE_OPCIONES = re.compile(r"^(?:opciones|options|optional arguments):$")
 RE_ARGPARSE_OPCION = re.compile(r"^  (-\S.*?)(?:\s{2,}(\S.*?))?\s*$")
 RE_ARGPARSE_CONTINUACION = re.compile(r"^\s{6,}(\S.*?)\s*$")
 RE_LICENCIA = re.compile(r"(?m)^## [^\n]*Licencia")
-ENTORNO = dict(os.environ, NO_COLOR="1", TERM="dumb", COLUMNS="250")
+ENTORNO = dict(os.environ, NO_COLOR="1", TERM="xterm", COLUMNS="250")
 
 # Cómo instalar cada programa del sistema. Windows: el entorno de la cátedra (entorno, MSYS2
 # UCRT64) ya trae `mingw-w64-ucrt-x86_64-toolchain` (gcc, gdb) y git.
@@ -240,7 +240,14 @@ def main(argv: list[str]) -> int:
             readme.write_text(nuevo, encoding="utf-8")
             print(f"✓ {readme}")
         else:
-            desactualizados.append(str(readme))
+            import difflib
+            diff = "".join(difflib.unified_diff(
+                texto.splitlines(keepends=True),
+                nuevo.splitlines(keepends=True),
+                fromfile=f"a/{readme.name}",
+                tofile=f"b/{readme.name}",
+            ))
+            desactualizados.append(f"{readme}\n{diff}")
     if desactualizados:
         print("README con la referencia generada desactualizada (correr `readme_generado.py actualizar`):")
         print("\n".join(f"✗ {r}" for r in desactualizados))
