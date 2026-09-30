@@ -7,6 +7,9 @@ Este catálogo documenta integralmente las 41 herramientas pedagógicas, linters
 
 ## 🗺️ Mapa Taxonómico del Ecosistema
 
+### 0. Instalación y Diagnóstico del Ecosistema
+* [**`mother`**](mother.md): Instala, actualiza y diagnostica las herramientas por perfil (estudiante, análisis, docente, contenido, aula), siempre desde git y leyendo `ecosistema.toml`; también como `mother.pyz`.
+
 ### 1. Estilo, Buenas Prácticas y Antipatrones
 * [**`gaff`**](gaff.md): Linter de estilo y convenciones arquitectónicas de cátedra. Audita indentación en múltiplos de 4 espacios, naming sin sufijos/prefijos numéricos redundantes (`num_1`, `a_n`), máximo un único return por función, `snake_case` estricto y guardas de encabezado.
 * [**`spunkmeyer`**](spunkmeyer.md): Detector de antipatrones didácticos en C. Marca patrones viciosos como `while(!feof())`, casteo innecesario de `malloc()`, verificación redundante de `NULL` antes de `free()`, retornos de punteros a variables de stack y comparaciones booleanas redundantes (`if (cond == true)`).
