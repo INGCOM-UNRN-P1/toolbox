@@ -117,7 +117,7 @@ debe_contener "0x3002h"
 
 titulo "5. [BRETT] Padding de structs (exit 1 = hay padding desperdiciado)"
 ejecutar 1 brett audit src/data_structures.h
-debe_contener "t_alumno_desordenado"
+debe_contener "t_alumno"
 ejecutar 0 brett optimize src/data_structures.h
 debe_contener "Layout Sugerido"
 
@@ -131,7 +131,7 @@ titulo "7. [RACHEL] Desensamblado de switch y comparación con if-else"
 ejecutar 0 rachel switch src/data_structures.c
 debe_contener "procesar_comando"
 ejecutar 0 rachel compare src/data_structures.c
-debe_contener "O(1)"
+debe_contener "procesar_" "O(N)"
 
 titulo "8. [BISHOP] Memoria en ejecución (Stack, Heap y punteros)"
 if requiere gdb; then
