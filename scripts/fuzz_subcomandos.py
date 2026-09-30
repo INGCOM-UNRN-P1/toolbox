@@ -44,7 +44,9 @@ OMITIR = {"serve", "daemon", "watch", "tui", "run-daemon", "start", "shell", "re
           "browse", "record", "live", "stats", "hub", "pair", "sign", "publish", "push", "deploy", "install",
           "update", "upgrade", "init-repo", "completion", "sync", "clone", "fetch", "download", "upload",
           "send", "mail", "notify", "dashboard", "serve-dashboard", "unlock", "lock", "protect-branches",
-          "install-hook", "lsp", "notify-batch", "publish-classroom", "config", "github", "moodle"}
+          "install-hook", "lsp", "notify-batch", "publish-classroom", "config", "github", "moodle",
+          # mother: instala o actualiza herramientas de verdad.
+          "instalar", "actualizar"}
 FORMAS = [["src/data_structures.c"], ["src/data_structures.h"], ["src"], ["src/data_structures.c", "canon/data_structures_canon.c"]]
 RE_TRACEBACK = re.compile(r"Traceback \(most recent call last\)")
 RE_COMANDO = re.compile(r"^│ ([a-z][a-z0-9-]*)\s", re.MULTILINE)

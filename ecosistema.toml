@@ -521,21 +521,21 @@ tipo = "cli"
 paquete = "mother"
 ejecutables = ["mother"]
 perfiles = ["estudiante", "analisis", "docente", "contenido", "aula"]
-estado = "sin-publicar"
+estado = "activo"
 
 [[repo]]
 nombre = "sulaco"
 url = "https://github.com/INGCOM-UNRN-P1/sulaco"
 tipo = "workflows"
 perfiles = ["docente"]
-estado = "sin-publicar"
+estado = "activo"
 
 [[repo]]
 nombre = "corpus"
 url = "https://github.com/INGCOM-UNRN-P1/corpus"
 tipo = "datos"
 perfiles = ["docente"]
-estado = "sin-publicar"
+estado = "activo"
 
 [[repo]]
 nombre = "yutani"
