@@ -29,6 +29,12 @@ NOMBRES_EXTRA = {"alucard", "generador-examenes", "gift-linter", "questions", "m
                  "ripley-check", "uatu-audit", "uatu-admin", "mother", "yutani", "sulaco"}
 
 INSTALADORES = r"(?:uv\s+tool\s+install|uvx|pipx\s+install|pip3?\s+install|uv\s+pip\s+install|uv\s+add)"
+# La ruta de la máquina de alguien (`uv tool install --editable /home/<usuario>/dev/tools/gaff`) no
+# existe en otra; desde un clon sirve una ruta relativa (`uv tool install --editable .`).
+RUTA_LOCAL = re.compile(
+    rf"{INSTALADORES}(?:\s+-{{1,2}}[\w-]+)*\s+[\"']?(?P<ruta>(?:/home/|/Users/|~/|[A-Za-z]:\\Users\\)\S*)",
+    re.IGNORECASE,
+)
 EXTENSIONES = {".md", ".sh", ".ps1", ".bat", ".txt", ".rst", ".yml", ".yaml"}
 EXCLUIR_PARTES = {".git", ".venv", "node_modules", "_build", "historico", ".docs_backup", "revision", "build", "dist"}
 # qol.md y CHANGELOG.md son historia; publicar.md describe un flujo de PyPI no vigente.
@@ -80,6 +86,9 @@ def revisar(rutas: list[Path], nombres: set[str]) -> list[str]:
             for numero, linea in enumerate(lineas, 1):
                 for m in patron.finditer(linea):
                     hallazgos.append(f"{archivo}:{numero}: instala «{m.group('nombre')}» por nombre: {linea.strip()}")
+                for m in RUTA_LOCAL.finditer(linea):
+                    hallazgos.append(f"{archivo}:{numero}: instala desde una ruta de una máquina "
+                                     f"({m.group('ruta')}): {linea.strip()}")
     return hallazgos
 
 
@@ -93,8 +102,8 @@ def main(argv: list[str]) -> int:
     for h in hallazgos:
         print(h)
     if hallazgos:
-        print(f"\n{len(hallazgos)} instrucción(es) instalan herramientas propias por nombre. "
-              "Usá `uv tool install git+https://github.com/<org>/<repo>` "
+        print(f"\n{len(hallazgos)} instrucción(es) instalan herramientas propias por nombre o desde la ruta "
+              "de una máquina. Usá `uv tool install git+https://github.com/<org>/<repo>` "
               "o `uv tool install \"paquete[extra] @ git+https://…\"`.", file=sys.stderr)
         return 1
     print("✓ La documentación instala las herramientas propias solo desde git.")

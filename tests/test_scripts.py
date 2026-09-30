@@ -153,6 +153,20 @@ def test_instalacion_por_nombre(linea, insegura):
     assert bool(patron.search(linea)) is insegura
 
 
+@pytest.mark.parametrize("linea, local", [
+    ("uv tool install --editable /home/mrtin/dev/tools/gaff", True),
+    ("uv tool install --editable ~/dev/tools/gaff", True),
+    ("pip install -e C:\\Users\\docente\\gaff", True),
+    ("uv tool install --editable .", False),
+    ("uv tool install git+https://github.com/INGCOM-UNRN-P1/gaff", False),
+])
+def test_instalacion_desde_una_ruta_de_una_maquina(tmp_path, linea, local):
+    doc = tmp_path / "MANUAL.md"
+    doc.write_text(f"```bash\n{linea}\n```\n", encoding="utf-8")
+    hallazgos = verificar_docs_instalacion.revisar([doc], {"gaff"})
+    assert bool(hallazgos) is local
+
+
 # --- verificar_enlaces_md.py ----------------------------------------------------------------
 
 def test_enlaces(tmp_path):
