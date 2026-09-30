@@ -23,6 +23,7 @@ sys.path.insert(0, str(SCRIPTS))  # los scripts se importan como módulos suelto
 
 import ecosistema  # noqa: E402
 import fuzz_subcomandos  # noqa: E402
+import readme_generado  # noqa: E402
 import verificar_comandos_docs  # noqa: E402
 import verificar_contrato_cli  # noqa: E402
 import verificar_docs_instalacion  # noqa: E402
@@ -221,6 +222,7 @@ def herramienta_falsa(tmp_path, monkeypatch):
     monkeypatch.setattr(verificar_contrato_cli, "ENTORNO", dict(os.environ))
     monkeypatch.setattr(fuzz_subcomandos, "ENTORNO", dict(os.environ))
     monkeypatch.setattr(verificar_comandos_docs, "ENTORNO", dict(os.environ))
+    monkeypatch.setattr(readme_generado, "ENTORNO", dict(os.environ))
     verificar_comandos_docs.subcomandos.cache_clear()
     verificar_comandos_docs.acepta_como_argumento.cache_clear()
     return bin_dir
@@ -344,3 +346,39 @@ def test_revisar_versionado_plugin_con_version_fija(tmp_path):
     proyecto = {"name": "demo", "version": "0.2.0", "license": {"text": "GPL-3.0-or-later"}}
     assert ecosistema.revisar_versionado(repo, proyecto) == [
         "src/demo/ripley_plugin.py declara version = '0.1.0' y pyproject '0.2.0'"]
+
+
+# --- README: bloque generado (readme_generado.py) --------------------------------------------
+
+def test_readme_generado(herramienta_falsa, tmp_path, capsys):
+    """Requisitos por sistema y tabla de comandos desde `--help` (N-ECO-09), idempotente."""
+    assert readme_generado.comandos("falsa") == [("doctor", "Diagnóstico"), ("analizar", "Analiza")]
+    assert readme_generado.comandos("falsa-es") == readme_generado.comandos("falsa")  # ayuda en español
+
+    manifiesto = MANIFIESTO + textwrap.dedent("""
+        [[repo]]
+        nombre = "falsa"
+        url = "https://github.com/INGCOM-UNRN-P1/falsa"
+        tipo = "cli"
+        paquete = "falsa"
+        ejecutables = ["falsa"]
+        perfiles = ["estudiante"]
+        sistema = ["gcc", "valgrind"]
+        estado = "activo"
+        """)
+    raiz = tmp_path / "tools"
+    (raiz / "falsa").mkdir(parents=True)
+    readme = raiz / "falsa" / "README.md"
+    readme.write_text("# falsa\n\nPropósito.\n\n## Licencia\n\nGPL\n", encoding="utf-8")
+    ruta = str(_manifiesto(tmp_path, manifiesto))
+    argumentos = ["--raiz", str(raiz), "--manifiesto", ruta, "falsa"]
+
+    assert readme_generado.main(["verificar", *argumentos]) == 1
+    assert readme_generado.main(["actualizar", *argumentos]) == 0
+    texto = readme.read_text(encoding="utf-8")
+    assert texto.index("## Referencia rápida") < texto.index("## Licencia")  # antes de la licencia
+    assert "| `falsa doctor` | Diagnóstico |" in texto and "`sudo apt install valgrind`" in texto
+    assert "no existe: usar WSL" in texto  # valgrind en Windows
+    assert readme_generado.main(["verificar", *argumentos]) == 0
+    assert readme_generado.main(["actualizar", *argumentos]) == 0
+    assert readme.read_text(encoding="utf-8") == texto  # idempotente
