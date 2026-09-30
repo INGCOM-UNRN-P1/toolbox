@@ -39,7 +39,8 @@ RE_FILA = re.compile(r"^│ ([a-z][a-z0-9-]*)\s+(.*?)\s*│?$")
 RE_CONTINUACION = re.compile(r"^│\s{2,}(\S.*?)\s*│?$")
 # Ayuda de argparse (hardboiled, uatu-tools): los subcomandos van después de la línea con las
 # opciones entre llaves y las opciones de la raíz bajo «opciones:» (u «options:» en inglés).
-RE_ARGPARSE_ELECCION = re.compile(r"^  \{[^}]*\}\s*$")
+# La línea de los subcomandos: sus nombres entre llaves o, con metavar (mother), p. ej. COMANDO.
+RE_ARGPARSE_ELECCION = re.compile(r"^  (?:\{[^}]*\}|[A-ZÁÉÍÓÚÑ_]+)\s*$")
 RE_ARGPARSE_COMANDO = re.compile(r"^    ([a-z][a-z0-9-]*)(?:\s{2,}(\S.*?))?\s*$")
 RE_ARGPARSE_OPCIONES = re.compile(r"^(?:opciones|options|optional arguments):$")
 RE_ARGPARSE_OPCION = re.compile(r"^  (-\S.*?)(?:\s{2,}(\S.*?))?\s*$")

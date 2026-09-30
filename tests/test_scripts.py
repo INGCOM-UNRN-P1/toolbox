@@ -435,6 +435,18 @@ def test_readme_generado_con_ayuda_de_argparse(tmp_path, monkeypatch, textos):
     ]
 
 
+def test_readme_generado_con_metavar_en_los_subcomandos(tmp_path, monkeypatch):
+    """mother nombra la línea de los subcomandos con un metavar (COMANDO) en lugar de {a,b}."""
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    ayuda = AYUDA_ARGPARSE.format(uso="uso", argumentos="argumentos", opciones="opciones",
+                                  ayuda="muestra esta ayuda y sale").replace("  {new,run}\n", "  COMANDO\n")
+    _ejecutable(bin_dir, "conmetavar", f"print({ayuda!r})")
+    monkeypatch.setenv("PATH", f"{bin_dir}{os.pathsep}{os.environ['PATH']}")
+    monkeypatch.setattr(readme_generado, "ENTORNO", dict(os.environ))
+    assert readme_generado.comandos("conmetavar") == [("new", "crea un proyecto nuevo"), ("run", "ejecuta un ELF")]
+
+
 def test_readme_generado_python_minimo(tmp_path):
     pyproject = tmp_path / "pyproject.toml"
     assert readme_generado.python_minimo(pyproject) == "3.11"  # sin pyproject
