@@ -382,3 +382,21 @@ def test_readme_generado(herramienta_falsa, tmp_path, capsys):
     assert readme_generado.main(["verificar", *argumentos]) == 0
     assert readme_generado.main(["actualizar", *argumentos]) == 0
     assert readme.read_text(encoding="utf-8") == texto  # idempotente
+
+
+def test_readme_generado_opciones_de_la_raiz(tmp_path, monkeypatch):
+    """Las CLI que trabajan con opciones (alucard --definicion …) listan sus opciones propias."""
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    _ejecutable(bin_dir, "conopciones", '''print("Usage: conopciones [OPTIONS]\\n╭─ Options ─╮\\n"
+      "│ --version            -v         Muestra la versión.  │\\n"
+      "│ --definicion         -d  <path>  Ruta al YAML         │\\n"
+      "│ --spellcheck,--lt               Revisa la ortografía │\\n"
+      "│                                 [default: False]     │\\n"
+      "│ --help               -h         Muestra esta ayuda.  │\\n╰───╯")''')
+    monkeypatch.setenv("PATH", f"{bin_dir}{os.pathsep}{os.environ['PATH']}")
+    monkeypatch.setattr(readme_generado, "ENTORNO", dict(os.environ))
+    assert readme_generado.opciones("conopciones") == [
+        ("`--definicion`, `-d`", "Ruta al YAML"),
+        ("`--spellcheck`, `--lt`", "Revisa la ortografía [default: False]"),
+    ]

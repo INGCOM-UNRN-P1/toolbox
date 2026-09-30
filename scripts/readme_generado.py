@@ -32,6 +32,8 @@ INICIO = "<!-- p1:referencia:inicio — generado por p1-tools/scripts/readme_gen
 FIN = "<!-- p1:referencia:fin -->"
 RE_BLOQUE = re.compile(r"<!-- p1:referencia:inicio[^\n]*-->\n.*?<!-- p1:referencia:fin -->\n?", re.DOTALL)
 RE_PANEL_COMANDOS = re.compile(r"\b(?:Commands|Comandos)\b")
+RE_PANEL_OPCIONES = re.compile(r"╭─ (?:Options|Opciones) ─")
+OPCIONES_ESTANDAR = {"--help", "--version", "--install-completion", "--show-completion"}
 RE_FILA = re.compile(r"^│ ([a-z][a-z0-9-]*)\s+(.*?)\s*│?$")
 RE_CONTINUACION = re.compile(r"^│\s{2,}(\S.*?)\s*│?$")
 RE_LICENCIA = re.compile(r"(?m)^## [^\n]*Licencia")
@@ -61,11 +63,40 @@ INSTALACION = {
 SISTEMAS = ["Debian / Ubuntu", "Fedora", "Windows", "macOS"]
 
 
-def comandos(ejecutable: str) -> list[tuple[str, str]]:
-    """(comando, descripción) del panel de comandos de `--help` (vacío si no tiene subcomandos)."""
+def _ayuda(ejecutable: str) -> str:
     salida = subprocess.run([ejecutable, "--help"], capture_output=True, text=True, timeout=60, env=ENTORNO,
                             stdin=subprocess.DEVNULL)
-    texto = salida.stdout + salida.stderr
+    return salida.stdout + salida.stderr
+
+
+def opciones(ejecutable: str) -> list[tuple[str, str]]:
+    """(opciones, descripción) propias de la raíz: las CLI que trabajan con opciones y no con
+    subcomandos (p. ej., `alucard --definicion …`) no tendrían, si no, nada en la referencia."""
+    texto = _ayuda(ejecutable)
+    panel = RE_PANEL_OPCIONES.search(texto)
+    if not panel:
+        return []
+    filas: list[list[str]] = []
+    for linea in texto[panel.start():].splitlines()[1:]:
+        if linea.startswith("╰"):
+            break
+        cuerpo = linea.strip().strip("│").strip()
+        if not cuerpo:
+            continue
+        campos = re.split(r"\s{2,}", cuerpo.lstrip("*").strip())
+        if campos[0].startswith("--"):
+            nombres = campos[0].split(",") + [c for c in campos[1:2] if re.fullmatch(r"-\w", c)]
+            descripcion = campos[-1] if len(campos) > 1 and not re.fullmatch(r"-\w|<\w+>|[A-Z_]+", campos[-1]) else ""
+            filas.append([", ".join(f"`{n.strip()}`" for n in nombres), descripcion])
+        elif filas:  # continuación de la descripción anterior
+            filas[-1][1] = (filas[-1][1] + " " + cuerpo).strip()
+    return [(nombres, descripcion.replace("|", "\\|")) for nombres, descripcion in filas
+            if not set(re.findall(r"--[\w-]+", nombres)) & OPCIONES_ESTANDAR]
+
+
+def comandos(ejecutable: str) -> list[tuple[str, str]]:
+    """(comando, descripción) del panel de comandos de `--help` (vacío si no tiene subcomandos)."""
+    texto = _ayuda(ejecutable)
     panel = RE_PANEL_COMANDOS.search(texto)
     if not panel:
         return []
@@ -91,12 +122,18 @@ def bloque(repo: Repo) -> str:
         partes += ["", "| Sistema | " + " | ".join(f"`{s}`" for s in conocidos) + " |",
                    "|:--|" + ":--|" * len(conocidos)]
         partes += [f"| {so} | " + " | ".join(INSTALACION[s][so] for s in conocidos) + " |" for so in SISTEMAS]
-    vistos: set[tuple[tuple[str, str], ...]] = set()
+    vistos: set[tuple] = set()
     for ejecutable in repo.ejecutables:
         lista = tuple(comandos(ejecutable))
-        if not lista or lista in vistos:  # alias del mismo punto de entrada (p. ej., alucard y generador-examenes)
+        propias = tuple(opciones(ejecutable))
+        if (lista, propias) in vistos or not (lista or propias):  # alias del mismo punto de entrada
             continue
-        vistos.add(lista)
+        vistos.add((lista, propias))
+        if propias:
+            partes += ["", f"### Opciones de `{ejecutable}`", "", "| Opción | Descripción |", "|:--|:--|"]
+            partes += [f"| {nombres} | {descripcion} |" for nombres, descripcion in propias]
+        if not lista:
+            continue
         partes += ["", f"### Comandos de `{ejecutable}`" if len(repo.ejecutables) > 1 else "### Comandos", "",
                    "| Comando | Descripción |", "|:--|:--|"]
         # Los alias (mismo comando con dos nombres, p. ej. `hal check` y `hal run`) van en una fila.
