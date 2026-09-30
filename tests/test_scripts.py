@@ -384,6 +384,50 @@ def test_readme_generado(herramienta_falsa, tmp_path, capsys):
     assert readme.read_text(encoding="utf-8") == texto  # idempotente
 
 
+AYUDA_ARGPARSE = """{uso}: conargparse [-h] [-v] [--repo REPO] {{new,run}} ...
+
+Emulador de prueba.
+
+{argumentos}:
+  {{new,run}}
+    new                 crea un proyecto
+                        nuevo
+    run                 ejecuta un ELF
+
+{opciones}:
+  -h, --help            {ayuda}
+  -v, --version         muestra la versión y sale
+  --repo REPO           Ruta del repositorio
+  --teacher-key TEACHER_KEY
+                        Clave pública docente
+"""
+
+
+@pytest.mark.parametrize("textos", [
+    dict(uso="uso", argumentos="argumentos", opciones="opciones", ayuda="muestra esta ayuda y sale"),
+    dict(uso="usage", argumentos="positional arguments", opciones="options", ayuda="show this help message and exit"),
+])
+def test_readme_generado_con_ayuda_de_argparse(tmp_path, monkeypatch, textos):
+    """hardboiled y uatu-tools usan argparse: subcomandos después de {…} y opciones de la raíz."""
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    _ejecutable(bin_dir, "conargparse", f"print({AYUDA_ARGPARSE.format(**textos)!r})")
+    monkeypatch.setenv("PATH", f"{bin_dir}{os.pathsep}{os.environ['PATH']}")
+    monkeypatch.setattr(readme_generado, "ENTORNO", dict(os.environ))
+    assert readme_generado.comandos("conargparse") == [("new", "crea un proyecto nuevo"), ("run", "ejecuta un ELF")]
+    assert readme_generado.opciones("conargparse") == [
+        ("`--repo`", "Ruta del repositorio"),
+        ("`--teacher-key`", "Clave pública docente"),
+    ]
+
+
+def test_readme_generado_python_minimo(tmp_path):
+    pyproject = tmp_path / "pyproject.toml"
+    assert readme_generado.python_minimo(pyproject) == "3.11"  # sin pyproject
+    pyproject.write_text('[project]\nname = "x"\nrequires-python = ">=3.12"\n', encoding="utf-8")
+    assert readme_generado.python_minimo(pyproject) == "3.12"
+
+
 def test_readme_generado_opciones_de_la_raiz(tmp_path, monkeypatch):
     """Las CLI que trabajan con opciones (alucard --definicion …) listan sus opciones propias."""
     bin_dir = tmp_path / "bin"

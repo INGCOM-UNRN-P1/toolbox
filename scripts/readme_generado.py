@@ -24,6 +24,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 
 from ecosistema import Repo, cargar, filtrar  # scripts/ecosistema.py (misma carpeta)
@@ -36,6 +37,13 @@ RE_PANEL_OPCIONES = re.compile(r"╭─ (?:Options|Opciones) ─")
 OPCIONES_ESTANDAR = {"--help", "--version", "--install-completion", "--show-completion"}
 RE_FILA = re.compile(r"^│ ([a-z][a-z0-9-]*)\s+(.*?)\s*│?$")
 RE_CONTINUACION = re.compile(r"^│\s{2,}(\S.*?)\s*│?$")
+# Ayuda de argparse (hardboiled, uatu-tools): los subcomandos van después de la línea con las
+# opciones entre llaves y las opciones de la raíz bajo «opciones:» (u «options:» en inglés).
+RE_ARGPARSE_ELECCION = re.compile(r"^  \{[^}]*\}\s*$")
+RE_ARGPARSE_COMANDO = re.compile(r"^    ([a-z][a-z0-9-]*)(?:\s{2,}(\S.*?))?\s*$")
+RE_ARGPARSE_OPCIONES = re.compile(r"^(?:opciones|options|optional arguments):$")
+RE_ARGPARSE_OPCION = re.compile(r"^  (-\S.*?)(?:\s{2,}(\S.*?))?\s*$")
+RE_ARGPARSE_CONTINUACION = re.compile(r"^\s{6,}(\S.*?)\s*$")
 RE_LICENCIA = re.compile(r"(?m)^## [^\n]*Licencia")
 ENTORNO = dict(os.environ, NO_COLOR="1", TERM="dumb", COLUMNS="250")
 
@@ -75,7 +83,7 @@ def opciones(ejecutable: str) -> list[tuple[str, str]]:
     texto = _ayuda(ejecutable)
     panel = RE_PANEL_OPCIONES.search(texto)
     if not panel:
-        return []
+        return _opciones_argparse(texto)
     filas: list[list[str]] = []
     for linea in texto[panel.start():].splitlines()[1:]:
         if linea.startswith("╰"):
@@ -99,7 +107,7 @@ def comandos(ejecutable: str) -> list[tuple[str, str]]:
     texto = _ayuda(ejecutable)
     panel = RE_PANEL_COMANDOS.search(texto)
     if not panel:
-        return []
+        return _comandos_argparse(texto)
     filas: list[list[str]] = []
     for linea in texto[panel.start():].splitlines()[1:]:
         if linea.startswith("╰"):
@@ -108,13 +116,61 @@ def comandos(ejecutable: str) -> list[tuple[str, str]]:
             filas.append([m.group(1), m.group(2).strip()])
         elif (m := RE_CONTINUACION.match(linea)) and filas:
             filas[-1][1] += " " + m.group(1).strip()
-    return [(nombre, descripcion.replace("|", "\\|")) for nombre, descripcion in filas]
+    # «Comandos» puede aparecer en la descripción de una CLI argparse: sin filas, se prueba así.
+    return [(nombre, descripcion.replace("|", "\\|")) for nombre, descripcion in filas] or _comandos_argparse(texto)
 
 
-def bloque(repo: Repo) -> str:
+def _filas_argparse(lineas: list[str], fila: re.Pattern[str]) -> list[list[str]]:
+    filas: list[list[str]] = []
+    for linea in lineas:
+        if m := fila.match(linea):
+            filas.append([m.group(1), (m.group(2) or "").strip()])
+        elif (m := RE_ARGPARSE_CONTINUACION.match(linea)) and filas:
+            filas[-1][1] = (filas[-1][1] + " " + m.group(1)).strip()
+        else:
+            break
+    return filas
+
+
+def _comandos_argparse(texto: str) -> list[tuple[str, str]]:
+    lineas = texto.splitlines()
+    for i, linea in enumerate(lineas):
+        if RE_ARGPARSE_ELECCION.match(linea):
+            return [(nombre, descripcion.replace("|", "\\|"))
+                    for nombre, descripcion in _filas_argparse(lineas[i + 1:], RE_ARGPARSE_COMANDO)]
+    return []
+
+
+def _opciones_argparse(texto: str) -> list[tuple[str, str]]:
+    lineas = texto.splitlines()
+    for i, linea in enumerate(lineas):
+        if RE_ARGPARSE_OPCIONES.match(linea):
+            filas = _filas_argparse(lineas[i + 1:], RE_ARGPARSE_OPCION)
+            break
+    else:
+        return []
+    resultado = []
+    for nombres, descripcion in filas:
+        banderas = [parte.split()[0] for parte in nombres.split(", ")]  # sin el METAVAR
+        if not set(banderas) & OPCIONES_ESTANDAR:
+            resultado.append((", ".join(f"`{b}`" for b in banderas), descripcion.replace("|", "\\|")))
+    return resultado
+
+
+def python_minimo(pyproject: Path) -> str:
+    """La versión mínima de Python que declara el paquete (`requires-python = ">=3.12"` → 3.12)."""
+    try:
+        requisito = tomllib.loads(pyproject.read_text(encoding="utf-8"))["project"]["requires-python"]
+    except (OSError, KeyError, tomllib.TOMLDecodeError):
+        return "3.11"
+    m = re.search(r">=\s*(\d+\.\d+)", requisito)
+    return m.group(1) if m else "3.11"
+
+
+def bloque(repo: Repo, python: str = "3.11") -> str:
     """El bloque generado para el README de `repo`."""
     partes = [INICIO, "", "## Referencia rápida", "", "### Requisitos", "",
-              "- Python ≥ 3.11 y [uv](https://docs.astral.sh/uv/getting-started/installation/)."]
+              f"- Python ≥ {python} y [uv](https://docs.astral.sh/uv/getting-started/installation/)."]
     conocidos = [s for s in repo.sistema if s in INSTALACION]
     if repo.sistema:
         partes.append("- Programas del sistema: " + ", ".join(f"`{s}`" for s in repo.sistema) + ".")
@@ -177,7 +233,7 @@ def main(argv: list[str]) -> int:
     for repo in seleccion(repos, args.herramientas, args.raiz):
         readme = args.raiz / repo.ruta / "README.md"
         texto = readme.read_text(encoding="utf-8")
-        nuevo = con_bloque(texto, bloque(repo))
+        nuevo = con_bloque(texto, bloque(repo, python_minimo(args.raiz / repo.ruta / "pyproject.toml")))
         if nuevo == texto:
             continue
         if args.accion == "actualizar":
