@@ -11,7 +11,7 @@ Generador de cuestionarios Moodle XML desde plantillas C con autocompletado y CL
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/idkfa
+uv tool install "idkfa[ecosistema,languagetool] @ git+https://github.com/INGCOM-UNRN-P1/idkfa"
 ```
 
 ## 🚀 Guía de Uso

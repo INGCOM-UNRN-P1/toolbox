@@ -9,7 +9,7 @@ Sistema de control y monitoreo bidireccional para Google Meet desde dispositivos
 ## 💻 Instalación y Requisitos
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/meet-tools
+uv tool install git+https://github.com/martinvilu/meet-tools
 ```
 
 ## 🚀 Guía de Uso

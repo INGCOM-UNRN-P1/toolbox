@@ -11,7 +11,7 @@ Detector de antipatrones de programación y vicios de diseño en código C
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/spunkmeyer
+uv tool install git+https://github.com/INGCOM-UNRN-P1/spunkmeyer
 ```
 
 ## 🚀 Guía de Uso

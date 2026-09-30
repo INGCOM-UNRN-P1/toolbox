@@ -11,7 +11,7 @@ Linter de portabilidad multi-arquitectura (x86_64, ARM, RISC-V, endianness) en C
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/crowe
+uv tool install git+https://github.com/INGCOM-UNRN-P1/crowe
 ```
 
 ## 🚀 Guía de Uso

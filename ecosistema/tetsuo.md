@@ -11,7 +11,7 @@ Traductor y explicador pedagógico en español de sanitizers (ASan, UBSan, MSan)
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/tetsuo
+uv tool install "tetsuo[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/tetsuo"
 ```
 
 ## 🚀 Guía de Uso

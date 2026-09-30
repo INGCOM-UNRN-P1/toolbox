@@ -9,7 +9,7 @@ Sistema de control remoto y telemetría bidireccional para Google Slides desde d
 ## 💻 Instalación y Requisitos
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/slide-tools
+uv tool install git+https://github.com/martinvilu/slides-tools
 ```
 
 ## 🚀 Guía de Uso

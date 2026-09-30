@@ -11,7 +11,7 @@ Herramientas para gestionar preguntas de Moodle (GIFT, XML)
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/moodle-toolbox
+uv tool install "questions[ai,ui,languagetool] @ git+https://github.com/INGCOM-UNRN/moodle-toolbox"
 ```
 
 ## 🚀 Guía de Uso

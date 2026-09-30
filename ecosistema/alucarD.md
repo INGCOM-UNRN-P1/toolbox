@@ -11,7 +11,7 @@ Generador de exámenes basado en plantillas, YAML y bancos Moodle/GIFT.
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/alucarD
+uv tool install "generador-examenes[ecosistema,languagetool] @ git+https://github.com/INGCOM-UNRN/alucarD"
 ```
 
 ## 🚀 Guía de Uso

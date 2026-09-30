@@ -11,7 +11,7 @@ Auditor de estabilidad de ABIs, visibilidad de símbolos y compatibilidad binari
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/parker
+uv tool install git+https://github.com/INGCOM-UNRN-P1/parker
 ```
 
 ## 🚀 Guía de Uso

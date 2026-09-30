@@ -11,7 +11,7 @@ Motor de Mutation Testing en C para evaluación de calidad y robustez de suites 
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/vassili
+uv tool install "vassili[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/vassili"
 ```
 
 ## 🚀 Guía de Uso

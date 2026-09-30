@@ -1,35 +1,28 @@
 # student-smoke-test
 
-Herramienta del ecosistema de Cátedra de Programación 1 para student-smoke-test.
+Suite de smoke test del ecosistema de la cátedra de Programación 1.
 
 ## 🎯 Propósito y Alcance
 
-`student-smoke-test` forma parte del ecosistema de herramientas de la cátedra de Programación 1. Provee mecanismos especializados para análisis, diagnóstico o evaluación pedagógica en C.
+`student-smoke-test` compila y analiza un proyecto C de ejemplo con cada herramienta del
+ecosistema, desde la perspectiva del estudiante, y compara cada paso con un oráculo (código de
+salida y textos esperados). Es la misma suite que corre el workflow E2E de p1-tools.
 
 ## 💻 Instalación y Requisitos
 
-La herramienta se distribuye como un paquete estándar gestionado con `uv`:
-
-```bash
-uv tool install --editable /home/mrtin/dev/tools/student-smoke-test
-```
+No es una herramienta que se instale: es un proyecto de ejemplo que vive en
+`p1-tools/student-smoke-test/` y ejercita las herramientas del ecosistema desde
+la perspectiva del estudiante. Necesita las herramientas del perfil estudiante
+(y las de análisis que se quieran probar) instaladas desde git, como indica
+[`MANUAL_ESTUDIANTE.md`](../MANUAL_ESTUDIANTE.md).
 
 ## 🚀 Guía de Uso
 
-### Invocación básica
-
 ```bash
-student-smoke-test --help
+cd student-smoke-test
+make smoke               # la suite completa, con los oráculos de cada paso
+make check-style         # o un paso por herramienta (ver el Makefile)
 ```
-
-## ⚙️ Configuración y Opciones
-
-`student-smoke-test` puede configurarse mediante parámetros de línea de comandos, variables de entorno o archivos de configuración locales del proyecto.
-
-### Parámetros principales
-
-* `--help`: Muestra la ayuda interactiva y las opciones disponibles.
-* `--version`: Muestra la versión actual instalada de `student-smoke-test`.
 
 ## 📖 Documentación y Detalles Técnicos
 

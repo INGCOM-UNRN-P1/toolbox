@@ -11,7 +11,7 @@ Asistente forense de core dumps y análisis pedagógico post-mortem de segfaults
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/hal
+uv tool install "hal[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/hal"
 ```
 
 ## 🚀 Guía de Uso

@@ -11,7 +11,7 @@ Auditor de alineación y padding de estructuras C y optimizador de reordenamient
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/brett
+uv tool install git+https://github.com/INGCOM-UNRN-P1/brett
 ```
 
 ## 🚀 Guía de Uso

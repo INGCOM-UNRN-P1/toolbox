@@ -11,7 +11,7 @@ Motor de inyección de fallos de entorno y hardware (Fault Injection Engine) en 
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/vasquez
+uv tool install git+https://github.com/INGCOM-UNRN-P1/vasquez
 ```
 
 ## 🚀 Guía de Uso

@@ -11,7 +11,7 @@ Herramienta de diffing semántico y comparación estructural AST entre códigos 
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/weyl
+uv tool install git+https://github.com/INGCOM-UNRN-P1/weyl
 ```
 
 ## 🚀 Guía de Uso

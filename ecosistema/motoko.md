@@ -11,7 +11,7 @@ Verificador de encapsulamiento estricto y opacidad de Tipos Abstractos de Datos 
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/motoko
+uv tool install git+https://github.com/INGCOM-UNRN-P1/motoko
 ```
 
 ## 🚀 Guía de Uso

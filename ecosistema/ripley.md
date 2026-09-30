@@ -11,7 +11,7 @@ CLI tool for batch processing, grading, versioning and evaluating Moodle C submi
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/ripley
+uv tool install "ripley[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/ripley"
 ```
 
 ## 🚀 Guía de Uso

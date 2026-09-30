@@ -11,7 +11,7 @@ Sandbox de ejecución aislada con Bubblewrap y evaluador de casos de prueba .in/
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/nostromo
+uv tool install git+https://github.com/INGCOM-UNRN-P1/nostromo
 ```
 
 ## 🚀 Guía de Uso

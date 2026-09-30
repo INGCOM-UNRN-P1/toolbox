@@ -11,7 +11,7 @@ Analizador de llamadas recursivas, consumo de stack frame y riesgos de stack ove
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/sebastian
+uv tool install "sebastian[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/sebastian"
 ```
 
 ## 🚀 Guía de Uso

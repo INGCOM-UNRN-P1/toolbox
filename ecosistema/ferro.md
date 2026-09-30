@@ -11,7 +11,7 @@ Perfilador de rendimiento algorítmico y hardware counters en C
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/ferro
+uv tool install "ferro[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/ferro"
 ```
 
 ## 🚀 Guía de Uso

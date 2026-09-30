@@ -11,7 +11,7 @@ Gestor de bancos de ejercicios prácticos, guías y graduación para cátedras d
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/deckard
+uv tool install "deckard[ecosistema,languagetool] @ git+https://github.com/INGCOM-UNRN/deckard"
 ```
 
 ## 🚀 Guía de Uso

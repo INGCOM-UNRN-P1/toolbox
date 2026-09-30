@@ -9,7 +9,7 @@ Gestor de cifrado e integridad de paquetes de examen para el ecosistema de cáte
 ## 💻 Instalación y Requisitos
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/keymaker
+uv tool install git+https://github.com/INGCOM-UNRN-P1/keymaker
 ```
 
 ## 🚀 Guía de Uso

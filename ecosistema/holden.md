@@ -11,7 +11,7 @@ Generador de mocks e inyección controlada de fallos en funciones C
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/holden
+uv tool install git+https://github.com/INGCOM-UNRN-P1/holden
 ```
 
 ## 🚀 Guía de Uso

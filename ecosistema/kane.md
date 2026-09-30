@@ -11,7 +11,7 @@ Simulador y depurador visual de I/O de bajo nivel y archivos binarios en C
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/kane
+uv tool install git+https://github.com/INGCOM-UNRN-P1/kane
 ```
 
 ## 🚀 Guía de Uso

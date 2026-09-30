@@ -11,7 +11,7 @@ Verificador formal de contratos ACSL y especificaciones deductivas con Frama-C
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/callahan
+uv tool install git+https://github.com/INGCOM-UNRN-P1/callahan
 ```
 
 ## 🚀 Guía de Uso

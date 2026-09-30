@@ -11,7 +11,7 @@ Compilador C pedagógico y traductor de diagnósticos de GCC/Clang/ld a español
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/daedalus
+uv tool install git+https://github.com/INGCOM-UNRN-P1/daedalus
 ```
 
 ## 🚀 Guía de Uso

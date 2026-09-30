@@ -11,7 +11,7 @@ Generador liviano de documentación de APIs, TDAs y man pages (man 3) en C
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/corbel
+uv tool install git+https://github.com/INGCOM-UNRN-P1/corbel
 ```
 
 ## 🚀 Guía de Uso

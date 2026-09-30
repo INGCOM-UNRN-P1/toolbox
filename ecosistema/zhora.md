@@ -11,7 +11,7 @@ Linter y auditor de seguridad en macros del preprocesador C (#define)
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/zhora
+uv tool install git+https://github.com/INGCOM-UNRN-P1/zhora
 ```
 
 ## 🚀 Guía de Uso

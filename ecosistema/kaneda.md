@@ -11,7 +11,7 @@ Auditor pedagógico de seguridad C, buffer overflows y llamadas a sistema restri
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/kaneda
+uv tool install git+https://github.com/INGCOM-UNRN-P1/kaneda
 ```
 
 ## 🚀 Guía de Uso

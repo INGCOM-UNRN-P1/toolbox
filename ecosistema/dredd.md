@@ -11,7 +11,7 @@ Multi-channel batch autograder and submission manager for C programming courses 
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/dredd
+uv tool install "dredd[ecosistema,guias] @ git+https://github.com/INGCOM-UNRN-P1/dredd"
 ```
 
 ## 🚀 Guía de Uso

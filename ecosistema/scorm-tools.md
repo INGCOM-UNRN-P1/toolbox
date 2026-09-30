@@ -9,7 +9,7 @@ Empaquetador y validador de paquetes de aprendizaje interactivo SCORM 1.2 / 2004
 ## 💻 Instalación y Requisitos
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/scorm-tools
+uv tool install "scorm-tools[ecosistema] @ git+https://github.com/INGCOM-UNRN/scorm-tools"
 ```
 
 ## 🚀 Guía de Uso

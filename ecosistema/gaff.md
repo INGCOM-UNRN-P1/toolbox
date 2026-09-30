@@ -11,7 +11,7 @@ Linter pedagógico de estilo arquitectónico y convenciones obligatorias de cát
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/gaff
+uv tool install git+https://github.com/INGCOM-UNRN-P1/gaff
 ```
 
 ## 🚀 Guía de Uso

@@ -11,7 +11,7 @@ Fuzzer pedagógico guiado por límites y analizador de cobertura dinámica en C
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/drake
+uv tool install "drake[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/drake"
 ```
 
 ## 🚀 Guía de Uso

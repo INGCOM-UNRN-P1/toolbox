@@ -11,7 +11,7 @@ Herramientas unificadas para automatizar, formatear e indexar material didáctic
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/myst-tools
+uv tool install git+https://github.com/martinvilu/mystmd-tools
 ```
 
 ## 🚀 Guía de Uso

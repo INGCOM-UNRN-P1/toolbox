@@ -11,7 +11,7 @@ Visualizador pedagógico de memoria C (Stack, Heap y punteros) en terminal y dia
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/bishop
+uv tool install "bishop[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/bishop"
 ```
 
 ## 🚀 Guía de Uso

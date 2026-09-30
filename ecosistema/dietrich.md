@@ -11,7 +11,7 @@ Validador de cobertura lógica avanzada MC/DC (Modified Condition/Decision Cover
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/dietrich
+uv tool install git+https://github.com/INGCOM-UNRN-P1/dietrich
 ```
 
 ## 🚀 Guía de Uso

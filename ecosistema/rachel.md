@@ -11,7 +11,7 @@ Desensamblador y visualizador pedagógico de estructuras de control y jump table
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install --editable /home/mrtin/dev/tools/rachel
+uv tool install git+https://github.com/INGCOM-UNRN-P1/rachel
 ```
 
 ## 🚀 Guía de Uso
