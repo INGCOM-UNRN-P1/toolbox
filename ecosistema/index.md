@@ -68,7 +68,11 @@ Este catálogo documenta integralmente las 41 herramientas pedagógicas, linters
 ### 9. Criptografía y Empaquetado de Evaluaciones
 * [**`keymaker`**](keymaker.md): Gestor criptográfico integral de confianza, firmas asimétricas Ed25519, sellado temporal Time-Lock y empaquetado seguro de exámenes.
 * [**`scorm-tools`**](scorm-tools.md): Empaquetador y validador de cursos interactivos SCORM 1.2 / 2004 4th Edition para Moodle.
+* [**`uatu-tools`**](uatu-tools.md): Validador forense (`uatu-audit`) y herramientas de cátedra (`uatu-admin`) de uatu, la proctorización Git-native de exámenes prácticos en VS Code.
 
 ### 10. Docencia Remota, Presentaciones y Telemetría de Clases
 * [**`meet-tools`**](meet-tools.md): Sistema de control y monitoreo bidireccional para Google Meet desde dispositivos móviles Android y microcontroladores Wi-Fi.
 * [**`slide-tools`**](slide-tools.md): Sistema de control remoto, sincronización de notas de orador y cronómetro para Google Slides.
+
+### 11. Emulación y Sistemas Embebidos
+* [**`hardboiled`**](hardboiled.md): Emulador pedagógico de un microcontrolador RISC-V de 32 bits (RV32I) bare-metal con depurador de C en la terminal y periféricos simulados (LEDs, switches, UART, timer con interrupciones).
