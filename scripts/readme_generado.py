@@ -169,7 +169,9 @@ def main(argv: list[str]) -> int:
     parser.add_argument("herramientas", nargs="*")
     parser.add_argument("--raiz", type=Path, default=Path(__file__).resolve().parents[2])
     parser.add_argument("--manifiesto", type=Path)
-    args = parser.parse_args(argv)
+    # intermixed: las herramientas pueden ir después de --raiz/--manifiesto; con parse_args, el
+    # argparse de Python 3.12.3 (Ubuntu 24.04, el del CI) las rechazaba («unrecognized arguments»).
+    args = parser.parse_intermixed_args(argv)
     _, repos = cargar(args.manifiesto) if args.manifiesto else cargar()
     desactualizados = []
     for repo in seleccion(repos, args.herramientas, args.raiz):
