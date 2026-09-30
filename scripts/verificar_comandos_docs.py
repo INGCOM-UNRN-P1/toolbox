@@ -33,10 +33,20 @@ ENTORNO = dict(os.environ, NO_COLOR="1", TERM="dumb", COLUMNS="200")
 
 
 def herramientas_del_ecosistema() -> list[str]:
-    """Ejecutables de las herramientas hermanas (según sus pyproject) presentes en el PATH."""
+    """Ejecutables de las herramientas del ecosistema presentes en el PATH."""
     import tomllib
 
     nombres = set()
+    try:
+        if str(RAIZ_P1 / "scripts") not in sys.path:
+            sys.path.insert(0, str(RAIZ_P1 / "scripts"))
+        from ecosistema import cargar, filtrar
+        _, repos = cargar()
+        for r in filtrar(repos, estados=["activo"]):
+            nombres.update(r.ejecutables)
+    except Exception:
+        pass
+
     for pyproject in RAIZ_P1.parent.glob("*/pyproject.toml"):
         try:
             scripts = tomllib.loads(pyproject.read_text(encoding="utf-8")).get("project", {}).get("scripts", {})
