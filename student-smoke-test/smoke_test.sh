@@ -153,9 +153,9 @@ run_step 25 "Depuración visual de archivos binarios y mapeo a structs" "kane" \
 run_step 26 "Perfilado de rendimiento algorítmico y ciclos CPU" "ferro" \
     "ferro profile build/app --inputs '100,500'"
 
-# 27. ESPER
-run_step 27 "Explicación didáctica y traducción de advertencias GCC" "esper" \
-    "esper explain \"main.c:10: warning: unused variable 'x' [-Wunused-variable]\""
+# 27. DAEDALUS (esper se retiró, N-ESPER-01)
+run_step 27 "Explicación didáctica y traducción de advertencias GCC" "daedalus" \
+    "printf '%s\\n' \"main.c:10:5: warning: unused variable 'x' [-Wunused-variable]\" | daedalus translate"
 
 # 28. VASQUEZ
 run_step 28 "Inyección de fallos en tiempo de ejecución (LD_PRELOAD)" "vasquez" \

@@ -227,9 +227,9 @@ titulo "26. [FERRO] Perfilado de rendimiento"
 ejecutar 0 ferro profile build/app --inputs '100,500'
 debe_contener "Complejidad Empírica"
 
-titulo "27. [ESPER] Explicación de advertencias de GCC"
-ejecutar 0 esper explain "main.c:10: warning: unused variable 'x' [-Wunused-variable]"
-debe_contener "¿Qué significa?"
+titulo "27. [DAEDALUS] Explicación de advertencias de GCC (esper se retiró, N-ESPER-01)"
+ejecutar 0 bash -c "printf '%s\n' \"main.c:10:5: warning: unused variable 'x' [-Wunused-variable]\" | daedalus translate"
+debe_contener "Variable Declarada sin Uso"
 
 titulo "28. [VASQUEZ] Inyección de fallos (LD_PRELOAD)"
 ejecutar 0 vasquez inject build/app --faults "malloc:1,fopen:1"
