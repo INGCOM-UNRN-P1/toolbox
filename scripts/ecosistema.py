@@ -268,6 +268,17 @@ def revisar_dependencias(proyecto: dict) -> list[str]:
     return problemas
 
 
+def revisar_urls(proyecto: dict, url: str) -> list[str]:
+    """Las URLs de GitHub de `[project.urls]` apuntan al repositorio del manifiesto (N-ECO-11).
+
+    Siete paquetes declaraban un repo en INGCOM-UNRN-P1 que no existe (una mudanza que no se hizo).
+    """
+    base = url.removesuffix(".git").lower()
+    ajenas = [f"{clave} = {valor}" for clave, valor in proyecto.get("urls", {}).items()
+              if "github.com" in valor and not valor.removesuffix(".git").lower().startswith(base)]
+    return [f"[project.urls] no apunta al repositorio del manifiesto ({url}): {', '.join(ajenas)}"] if ajenas else []
+
+
 def cmd_verificar(args, repos: list[Repo]) -> int:
     raiz = Path(args.raiz).resolve()
     problemas: list[str] = []
@@ -318,6 +329,7 @@ def cmd_verificar(args, repos: list[Repo]) -> int:
             if faltan_extras:
                 problemas.append(f"{repo.nombre}: extras inexistentes: {sorted(faltan_extras)}")
             problemas += [f"{repo.nombre}: {p}" for p in revisar_versionado(carpeta, proyecto)]
+            problemas += [f"{repo.nombre}: {p}" for p in revisar_urls(proyecto, repo.url)]
             problemas += [f"{repo.nombre}: {p}" for p in revisar_dependencias(proyecto)]
             if repo.estado == "activo":
                 problemas += [f"{repo.nombre}: {p}" for p in revisar_imports_hermanos(carpeta, datos)]

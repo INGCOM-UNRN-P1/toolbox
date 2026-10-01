@@ -137,6 +137,16 @@ def test_instalar_desde_git_nunca_por_nombre(tmp_path, capsys):
         assert "git+https://" in linea
 
 
+def test_las_urls_del_pyproject_apuntan_al_repositorio_del_manifiesto():
+    proyecto = {"urls": {"Homepage": "https://github.com/INGCOM-UNRN/deckard",
+                         "Repository": "https://github.com/INGCOM-UNRN/deckard.git",
+                         "Documentación": "https://deckard.readthedocs.io"}}
+    assert ecosistema.revisar_urls(proyecto, "https://github.com/INGCOM-UNRN/deckard") == []
+    proyecto["urls"]["Issues"] = "https://github.com/INGCOM-UNRN-P1/deckard/issues"  # un repo que no existe
+    (problema,) = ecosistema.revisar_urls(proyecto, "https://github.com/INGCOM-UNRN/deckard")
+    assert "INGCOM-UNRN-P1/deckard/issues" in problema
+
+
 # --- verificar_docs_instalacion.py ----------------------------------------------------------
 
 @pytest.mark.parametrize("linea, insegura", [
