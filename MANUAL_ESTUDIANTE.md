@@ -32,6 +32,17 @@ Si utilizás Windows, la cátedra provee el **Entorno Portable de Programación 
 
 El resto de las herramientas de esta guía está pensado para Linux: varias dependen de programas que no existen en Windows (Valgrind, bubblewrap). En Windows usalas desde **WSL** con la modalidad Linux del [entorno](https://github.com/INGCOM-UNRN-P1/entorno) y seguí la sección 1.3.
 
+Las herramientas del perfil estudiante también corren directamente en la terminal del entorno (MSYS2 UCRT64), pero sin estas funciones, que solo existen en Linux:
+
+| Función | Herramientas | En Windows (MSYS2 UCRT64) |
+| :--- | :--- | :--- |
+| Aislamiento con bubblewrap y límites de memoria y CPU | `nostromo`, `ripley` | No existe: los programas corren sin aislar, acotados solo por el tiempo máximo. |
+| Valgrind (fugas y accesos inválidos) | `hal valgrind`, `ripley` | No existe: el chequeo se omite y se informa como omitido. |
+| AddressSanitizer y UBSan | `tetsuo`, la compilación de `ripley` | El gcc de MinGW no trae libasan ni libubsan: `ripley` compila sin sanitizers y `tetsuo` avisa que no pudo instrumentar. |
+| Salida del programa en cada paso | `bishop trace --html` | La salida aparece recién cuando el programa la vuelca (sin `stdbuf`). |
+
+Para tenerlas todas, usá WSL.
+
 ### 1.3 Instalación de las Herramientas del Estudiante
 
 Las herramientas se instalan **siempre desde su repositorio de GitHub**. No las instales por nombre desde PyPI: la mayoría de esos nombres pertenece en PyPI a otros proyectos y terminarías instalando un programa que no tiene nada que ver con la materia.
