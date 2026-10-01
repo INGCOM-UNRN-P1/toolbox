@@ -25,7 +25,7 @@ uv tool install "hardboiled[zig] @ git+https://github.com/INGCOM-UNRN-P1/hardboi
 | `hardboiled examples` | lista, muestra o copia los ejemplos incluidos |
 | `hardboiled demo` | compila y ejecuta un ejemplo (por defecto, la demo) |
 | `hardboiled info` | muestra segmentos, símbolos y fuentes de un ELF |
-| `hardboiled validate` | valida un board.toml |
+| `hardboiled validate` | valida un board.toml (periféricos opcionales: `gpio` bidireccional, `adc` con potenciómetros y `bounce_cycles` en las entradas) |
 | `hardboiled board` | crea o muestra placas (board.toml) |
 | `hardboiled runtime` | imprime las rutas del runtime (include, linker script, crt0) |
 | `hardboiled gen-header` | genera hardboiled.h (o el linker script) para una placa |

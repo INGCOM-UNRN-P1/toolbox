@@ -24,6 +24,9 @@ ripley check solucion.c
 
 # Verificar proyecto completo en modo estricto
 ripley check src/ --strict
+
+# Modo pista de evaluación (también con [general] pistas = true en ripley.toml)
+ripley check src/ --pista
 ```
 
 ### 2. Análisis Estructurado para Automatizaciones (`analyze`)

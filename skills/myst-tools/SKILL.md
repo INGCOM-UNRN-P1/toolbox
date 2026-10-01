@@ -34,6 +34,13 @@ myst-tools fmt --check
 myst-tools fmt apunte/ --width 100
 ```
 
+### Accesibilidad (`check-a11y`)
+```bash
+# Texto alternativo, orden de encabezados, enlaces genéricos, contraste, iframes y tablas (WCAG 2.1)
+myst-tools check-a11y
+myst-tools check-a11y temas/ --strict --json
+```
+
 ### 2. Detección y Reparación de Anclas Duplicadas (`fix-anchors`)
 ```bash
 # Reportar anclas duplicadas sin realizar modificaciones

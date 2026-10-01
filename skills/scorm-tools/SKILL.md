@@ -20,7 +20,7 @@ uv tool install "scorm-tools[ecosistema] @ git+https://github.com/INGCOM-UNRN/sc
 | `scorm-tools doctor` | Verificá el estado del entorno, dependencias y esquemas XSD de scorm-tools. |
 | `scorm-tools init` | Creá un curso SCORM de ejemplo listo para editar. |
 | `scorm-tools build` | Generá imsmanifest.xml y empaquetá el curso en un .zip para Moodle. |
-| `scorm-tools validate` | Validá un paquete SCORM contra el esquema XSD y reglas de Moodle. |
+| `scorm-tools validate` | Validá un paquete SCORM contra el esquema XSD y reglas de Moodle (`--a11y`: también la accesibilidad de sus páginas HTML). |
 | `scorm-tools info` | Mostrá un resumen de la estructura del curso definida en scorm.yaml. |
 | `scorm-tools check-sequencing` | Verificá el grafo de secuenciamiento IMSSS y detectá ciclos o actividades huérfanas. |
 | `scorm-tools check-size` | Audita el peso del paquete y su desglose por tipo de contenido para Moodle. |

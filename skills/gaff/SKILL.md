@@ -38,4 +38,8 @@ gaff check src/ --json
 # 5. Listar o explicar reglas del catálogo
 gaff rules
 gaff explain GAFF001
+
+# 6. Equivalencias sintácticas: a[i] ≡ *(a + i), p->x ≡ (*p).x, for ≡ while…
+gaff explain-syntax main.c
+gaff explain-syntax --code 'p->sig->v[i] -= 1;'
 ```

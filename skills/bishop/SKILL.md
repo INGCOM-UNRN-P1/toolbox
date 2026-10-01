@@ -29,4 +29,7 @@ bishop heap main.c
 
 # 5. Salida estructurada JSON
 bishop trace main.c --json
+
+# 6. Ejecución paso a paso visual («Python Tutor para C»): página HTML navegable
+bishop trace main.c --html traza.html --input entrada.txt
 ```

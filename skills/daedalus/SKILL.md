@@ -19,6 +19,9 @@ daedalus compile main.c --json
 # Traducir archivo de log crudo de compilador
 daedalus translate stderr.log
 
+# Modo pista para evaluaciones (o P1_PISTA=1): el tipo de error y la función, sin la línea ni la corrección
+daedalus compile main.c --pista
+
 # Comprobar toolchain
 daedalus doctor
 ```

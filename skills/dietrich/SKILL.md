@@ -18,6 +18,7 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/dietrich
 | Comando | Descripción |
 |:--|:--|
 | `dietrich check`, `dietrich analyze` | Analiza condiciones booleanas compuestas (&&, \|\|) y calcula los vectores de prueba requeridos para MC/DC. |
+| `dietrich lines` | Mide qué líneas, ramas y condiciones ejecutan tus pruebas (gcc + gcov): el paso previo a MC/DC. |
 | `dietrich report` | Genera directamente la sección de reporte Markdown de DIETRICH para Dredd. |
 | `dietrich doctor` | Verifica el estado del entorno de análisis MC/DC de DIETRICH. |
 | `dietrich version` | Muestra la versión de DIETRICH. |

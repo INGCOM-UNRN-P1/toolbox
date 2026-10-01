@@ -18,6 +18,7 @@ uv tool install git+https://github.com/INGCOM-UNRN-P1/kane
 | Comando | Descripción |
 |:--|:--|
 | `kane check`, `kane inspect` | Inspecciona y desglosa el contenido de un archivo binario mapeándolo a un struct C. |
+| `kane bits` | Muestra cómo queda guardado un valor en un tipo de C, bit a bit, y las operaciones de bits paso a paso. |
 | `kane report` | Genera directamente la sección de reporte Markdown de KANE para Dredd. |
 | `kane doctor` | Verifica el estado del entorno de inspección binaria KANE (Python, xxd/hexdump, GCC). |
 

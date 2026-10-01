@@ -28,4 +28,7 @@ hal inspect ./binario_compilado
 
 # 5. Comprobar salud del entorno (GCC, GDB, Valgrind)
 hal doctor
+
+# 6. Modo pista para evaluaciones (o P1_PISTA=1): la falla y la función, sin la línea ni la corrección
+hal check programa_fallido.c --pista
 ```

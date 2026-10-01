@@ -17,7 +17,7 @@ uv tool install "tetsuo[ecosistema] @ git+https://github.com/INGCOM-UNRN-P1/tets
 
 | Comando | Descripción |
 |:--|:--|
-| `tetsuo check`, `tetsuo run` | Compila y ejecuta con AddressSanitizer/UBSan traduciendo cualquier violación a español didáctico. |
+| `tetsuo check`, `tetsuo run` | Compila y ejecuta con AddressSanitizer/UBSan traduciendo cualquier violación a español didáctico (`--pista` o `P1_PISTA=1`: el tipo y la función, sin la línea ni la corrección). |
 | `tetsuo report` | Genera directamente la sección de reporte Markdown de TETSUO para Dredd. |
 | `tetsuo doctor` | Verifica el estado del entorno de sanitizers TETSUO (GCC, Clang, soporte libasan/libubsan). |
 | `tetsuo version` | Muestra la versión de TETSUO. |
