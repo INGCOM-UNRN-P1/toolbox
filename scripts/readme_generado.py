@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Bloque generado de los README: requisitos por sistema operativo y tabla de comandos (N-ECO-09).
+"""Bloque generado de los README: requisitos, comandos, códigos de salida y salida JSON (N-ECO-09).
 
 Cada README de una herramienta activa lleva, entre las marcas
 `<!-- p1:referencia:inicio -->` y `<!-- p1:referencia:fin -->`, un bloque que
 se genera desde ecosistema.toml (programas del sistema que necesita) y desde
-`<ejecutable> --help` (sus comandos, con la ayuda en inglés o en español).
+`<ejecutable> --help` (sus comandos, con la ayuda en inglés o en español), más
+los códigos de salida del ecosistema y los comandos que aceptan `--json` (desde
+`<ejecutable> <comando> --help`).
 Así la tabla de comandos no deriva: `verificar` falla si algún README quedó
 desactualizado. Lo demás del README (propósito, ejemplos, instalación) se
 escribe a mano; la instalación ya la controla verificar_docs_instalacion.py.
@@ -21,6 +23,7 @@ from __future__ import annotations
 import argparse
 import os
 import re
+from concurrent.futures import ThreadPoolExecutor
 import shutil
 import subprocess
 import sys
@@ -70,6 +73,27 @@ INSTALACION = {
                 "Windows": "no existe: usar WSL", "macOS": "`opam install frama-c`"},
 }
 SISTEMAS = ["Debian / Ubuntu", "Fedora", "Windows", "macOS"]
+
+# Códigos de salida de todas las herramientas: 2 lo da Click (o argparse) ante un error de uso, 1 lo
+# da yutani (TyperConErrores) ante un dato que no se puede usar, y `doctor --json` sale con 0 o 1
+# según su `ok` (lo verifica el test de contrato de cada repo).
+CODIGOS_COMUNES = [
+    ("`0`", "Terminó bien (en `doctor`: está todo lo requerido)."),
+    ("`1`", "El comando encontró problemas (hallazgos, pruebas que fallan, un umbral que no se alcanza) "
+            "o un dato no se pudo usar (un archivo ilegible, un formato inválido)."),
+    ("`2`", "Error de uso: comando, opción o argumento inválido."),
+]
+# Las que tienen códigos propios (documentados en su README).
+CODIGOS_PROPIOS = {
+    "hardboiled": [
+        ("`0`–`255`", "`run --headless`: el valor que devuelve `main()` del programa (módulo 256)."),
+        ("`1`", "`test`: algún caso no pasó."),
+        ("`2`", "Error de uso."),
+        ("`3`", "`run --headless`: el programa cayó en una trampa."),
+        ("`130`", "Se interrumpió con Ctrl+C."),
+    ],
+}
+RE_OPCION_JSON = re.compile(r"(?<![\w-])--json\b")
 
 
 def _ayuda(ejecutable: str) -> str:
@@ -158,6 +182,17 @@ def _opciones_argparse(texto: str) -> list[tuple[str, str]]:
     return resultado
 
 
+def comandos_con_json(ejecutable: str, nombres: list[str]) -> list[str]:
+    """Los comandos cuya ayuda ofrece `--json` (una llamada a `--help` por comando, en paralelo)."""
+    def acepta(nombre: str) -> bool:
+        salida = subprocess.run([ejecutable, nombre, "--help"], capture_output=True, text=True, timeout=60,
+                                env=ENTORNO, stdin=subprocess.DEVNULL)
+        return bool(RE_OPCION_JSON.search(salida.stdout + salida.stderr))
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        return [nombre for nombre, si in zip(nombres, pool.map(acepta, nombres)) if si]
+
+
 def python_minimo(pyproject: Path) -> str:
     """La versión mínima de Python que declara el paquete (`requires-python = ">=3.12"` → 3.12)."""
     try:
@@ -200,6 +235,18 @@ def bloque(repo: Repo, python: str = "3.11") -> str:
         partes += ["| " + ", ".join(f"`{ejecutable} {n}`" for n in nombres) + f" | {descripcion} |"
                    for descripcion, nombres in por_descripcion.items()]
         partes += ["", f"Ayuda de cada comando: `{ejecutable} <comando> -h`."]
+        con_json = comandos_con_json(ejecutable, [nombre for nombre, _ in lista])
+        if con_json:
+            partes += ["", f"### Salida JSON de `{ejecutable}`" if len(repo.ejecutables) > 1 else "### Salida JSON",
+                       "", "Con `--json`, estos comandos emiten el resultado como JSON por la salida estándar, "
+                       "para usarlo desde scripts, ripley o dredd: "
+                       + ", ".join(f"`{ejecutable} {n}`" for n in con_json) + "."]
+            if "doctor" in con_json:
+                partes[-1] += " El de `doctor --json` lleva `schema_version` y `ok`."
+    if repo.ejecutables:
+        partes += ["", "### Códigos de salida", "", "| Código | Significado |", "|:--|:--|"]
+        partes += [f"| {codigo} | {significado} |"
+                   for codigo, significado in CODIGOS_PROPIOS.get(repo.nombre, CODIGOS_COMUNES)]
     partes += ["", FIN, ""]
     return "\n".join(partes)
 

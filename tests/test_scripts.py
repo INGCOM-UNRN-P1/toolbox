@@ -216,6 +216,8 @@ if args in (["-h"], ["--help"]):
     print("Usage: falsa [OPTIONS] COMMAND\\n╭─ Commands ─╮\\n│ doctor   Diagnóstico\\n│ analizar Analiza\\n╰────────────╯")
 elif args in (["--version"], ["-v"]):
     print("falsa 1.0.0")
+elif args == ["doctor", "--help"]:
+    print("Usage: falsa doctor [--json]")
 elif args[:1] == ["doctor"]:
     informe = {"schema_version": "1.0.0", "herramienta": "falsa", "ok": True, "chequeos": []}
     print(json.dumps(informe) if "--json" in args else "todo bien")
@@ -285,6 +287,19 @@ def test_comandos_citados(herramienta_falsa):
     assert verificar_comandos_docs.verificar_linea("otra cosa", herramientas) is None
     error = verificar_comandos_docs.verificar_linea("falsa inexistente", herramientas)
     assert error is not None and "no existe" in error
+
+
+def test_bloque_con_salida_json_y_codigos_de_salida(herramienta_falsa):
+    """N-ECO-09: el bloque generado dice qué comandos aceptan --json y qué significa cada código."""
+    repo = readme_generado.Repo(nombre="falsa", tipo="cli", estado="activo", ejecutables=["falsa"])
+    texto = readme_generado.bloque(repo)
+    json_seccion = texto.split("### Salida JSON", 1)[1].split("###", 1)[0]
+    assert "`falsa doctor`." in json_seccion and "`falsa analizar`" not in json_seccion
+    assert "El de `doctor --json` lleva `schema_version` y `ok`." in json_seccion
+    assert "| `2` | Error de uso: comando, opción o argumento inválido. |" in texto
+    propio = readme_generado.bloque(readme_generado.Repo(
+        nombre="hardboiled", tipo="cli", estado="activo", ejecutables=["falsa"]))
+    assert "| `3` | `run --headless`: el programa cayó en una trampa. |" in propio
 
 
 def test_ayuda_en_espanol(herramienta_falsa):
