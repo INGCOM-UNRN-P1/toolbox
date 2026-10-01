@@ -136,7 +136,11 @@ dredd doctor
 Para incorporar una nueva herramienta (`mi-herramienta`) al ecosistema P1:
 
 1. **Crear el repositorio**:
-   Inicializar el repositorio Git bajo la organización `INGCOM-UNRN-P1` con la estructura estándar descripta en la sección 2.
+   Inicializar el repositorio Git con la estructura estándar descripta en la sección 2. Las
+   herramientas de la materia van en la organización `INGCOM-UNRN-P1`; las que van más allá de la
+   materia pueden vivir en `INGCOM-UNRN`, y las personales en la cuenta de su autor. Lo que las
+   integra al ecosistema es su entrada en `ecosistema.toml` (paso 5), con el `url` real del
+   repositorio, que es también el de `[project.urls]` en su `pyproject.toml`.
 2. **Implementar el CLI y subcomando `doctor`**:
    Garantizar las banderas `--help`, `--version`, `--json` y el comando `mi-herramienta doctor`.
 3. **Escribir la documentación de la herramienta**:
