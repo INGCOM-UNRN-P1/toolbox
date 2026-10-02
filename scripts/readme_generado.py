@@ -49,7 +49,20 @@ RE_ARGPARSE_OPCIONES = re.compile(r"^(?:opciones|options|optional arguments):$")
 RE_ARGPARSE_OPCION = re.compile(r"^  (-\S.*?)(?:\s{2,}(\S.*?))?\s*$")
 RE_ARGPARSE_CONTINUACION = re.compile(r"^\s{6,}(\S.*?)\s*$")
 RE_LICENCIA = re.compile(r"(?m)^## [^\n]*Licencia")
-ENTORNO = dict(os.environ, NO_COLOR="1", TERM="xterm", COLUMNS="250")
+# Typer fuerza el modo terminal con estas variables (GitHub Actions define GITHUB_ACTIONS) y entonces
+# Rich emite estilos ANSI aunque esté NO_COLOR: en el CI las filas del panel de comandos no se
+# reconocían y la referencia salía sin comandos en casi todos los README.
+FUERZAN_TERMINAL = ("GITHUB_ACTIONS", "FORCE_COLOR", "PY_COLORS", "TTY_COMPATIBLE", "TTY_INTERACTIVE")
+RE_ANSI = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")
+
+
+def entorno_sin_terminal(base: dict[str, str]) -> dict[str, str]:
+    """El entorno para pedir la ayuda: sin colores ni modo terminal forzado y a 250 columnas."""
+    return {**{k: v for k, v in base.items() if k not in FUERZAN_TERMINAL},
+            "NO_COLOR": "1", "TERM": "xterm", "COLUMNS": "250"}
+
+
+ENTORNO = entorno_sin_terminal(dict(os.environ))
 
 # Cómo instalar cada programa del sistema. Windows: el entorno de la cátedra (entorno, MSYS2
 # UCRT64) ya trae `mingw-w64-ucrt-x86_64-toolchain` (gcc, gdb) y git.
@@ -99,7 +112,7 @@ RE_OPCION_JSON = re.compile(r"(?<![\w-])--json\b")
 def _ayuda(ejecutable: str) -> str:
     salida = subprocess.run([ejecutable, "--help"], capture_output=True, text=True, timeout=60, env=ENTORNO,
                             stdin=subprocess.DEVNULL)
-    return salida.stdout + salida.stderr
+    return RE_ANSI.sub("", salida.stdout + salida.stderr)
 
 
 def opciones(ejecutable: str) -> list[tuple[str, str]]:
@@ -187,7 +200,7 @@ def comandos_con_json(ejecutable: str, nombres: list[str]) -> list[str]:
     def acepta(nombre: str) -> bool:
         salida = subprocess.run([ejecutable, nombre, "--help"], capture_output=True, text=True, timeout=60,
                                 env=ENTORNO, stdin=subprocess.DEVNULL)
-        return bool(RE_OPCION_JSON.search(salida.stdout + salida.stderr))
+        return bool(RE_OPCION_JSON.search(RE_ANSI.sub("", salida.stdout + salida.stderr)))
 
     with ThreadPoolExecutor(max_workers=8) as pool:
         return [nombre for nombre, si in zip(nombres, pool.map(acepta, nombres)) if si]

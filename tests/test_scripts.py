@@ -472,6 +472,27 @@ def test_readme_generado_con_metavar_en_los_subcomandos(tmp_path, monkeypatch):
     assert readme_generado.comandos("conmetavar") == [("new", "crea un proyecto nuevo"), ("run", "ejecuta un ELF")]
 
 
+def test_readme_generado_sin_modo_terminal_forzado():
+    """En GitHub Actions Typer fuerza el modo terminal (GITHUB_ACTIONS) y Rich emite estilos ANSI aunque
+    esté NO_COLOR: la referencia del CI salía sin comandos en casi todos los README."""
+    entorno = readme_generado.entorno_sin_terminal({"GITHUB_ACTIONS": "true", "FORCE_COLOR": "1", "PATH": "/bin"})
+    assert entorno == {"PATH": "/bin", "NO_COLOR": "1", "TERM": "xterm", "COLUMNS": "250"}
+
+
+def test_readme_generado_con_estilos_ansi(tmp_path, monkeypatch):
+    """Aunque una herramienta emita estilos ANSI, el panel de comandos se reconoce."""
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    ayuda = ("\x1b[2m╭─\x1b[0m\x1b[2m Comandos \x1b[0m\x1b[2m──────────────────╮\x1b[0m\n"
+             "\x1b[2m│\x1b[0m \x1b[1mdoctor    \x1b[0m\x1b[1m \x1b[0m Diagnóstico   \x1b[2m│\x1b[0m\n"
+             "\x1b[2m│\x1b[0m \x1b[1manalizar  \x1b[0m\x1b[1m \x1b[0m Analiza       \x1b[2m│\x1b[0m\n"
+             "\x1b[2m╰────────────────────────────╯\x1b[0m")
+    _ejecutable(bin_dir, "conestilos", f"print({ayuda!r})")
+    monkeypatch.setenv("PATH", f"{bin_dir}{os.pathsep}{os.environ['PATH']}")
+    monkeypatch.setattr(readme_generado, "ENTORNO", dict(os.environ))
+    assert readme_generado.comandos("conestilos") == [("doctor", "Diagnóstico"), ("analizar", "Analiza")]
+
+
 def test_readme_generado_python_minimo(tmp_path):
     pyproject = tmp_path / "pyproject.toml"
     assert readme_generado.python_minimo(pyproject) == "3.11"  # sin pyproject
