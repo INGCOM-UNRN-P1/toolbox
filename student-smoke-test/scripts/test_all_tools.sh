@@ -256,11 +256,12 @@ ejecutar 0 dredd doctor
 
 titulo "33. [MEET-TOOLS] CLI de Google Meet"
 ejecutar 0 meet-tools --help
-debe_contener "meet-tools [OPTIONS]"  # igual en la ayuda en inglés y en español (yutani)
+# El uso cambia con el idioma ([OPTIONS] / [OPCIONES], yutani): se verifican los subcomandos.
+debe_contener "meet-tools [" "admit-all" "mute-all"
 
 titulo "34. [SLIDE-TOOLS] CLI de Google Slides"
 ejecutar 0 slide-tools --help
-debe_contener "slide-tools [OPTIONS]"
+debe_contener "slide-tools [" "next" "goto"
 
 titulo "35. [KEYMAKER] Cifrado y time-lock"
 ejecutar 0 keymaker doctor
