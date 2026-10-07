@@ -173,8 +173,10 @@ Para incorporar una nueva herramienta (`mi-herramienta`) al ecosistema P1:
 5. **Tag anotado `vX.Y.Z`** sobre el commit `chore(release): X.Y.Z`.
 6. **LICENSE**: el texto de la licencia que declara `pyproject.toml`.
 7. **Matriz del cuatrimestre**: al empezar cada cuatrimestre se fija en
-   `ecosistema.toml` el campo `ref = "vX.Y.Z"` de cada herramienta (lo que instala
-   `mother`) y se etiqueta p1-tools con `cuatrimestre-AAAA-N`.
+   `ecosistema.toml` el bloque `[cuatrimestres."AAAA-N"]` con el tag de cada
+   herramienta (`mother fijar AAAA-N --tags`), se marca `cuatrimestre_vigente` y se
+   etiqueta p1-tools con `cuatrimestre-AAAA-N`. El procedimiento completo, en orden,
+   está en [RELEASES.md](RELEASES.md).
 
 Todo el procedimiento de los puntos 3 a 5 lo hace `scripts/version.py`:
 
