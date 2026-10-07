@@ -121,7 +121,7 @@ Permite convertir preguntas escritas en formato GIFT a XML de Moodle y viceversa
 voight convert gift-to-xml banco.gift --output banco.xml
 
 # Validar integridad sintáctica del XML de Moodle
-voight validate banco.xml
+voight health validate banco.xml
 ```
 
 ---

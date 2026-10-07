@@ -63,12 +63,12 @@ uv run voight --help
 El CLI `voight` se organiza en subcomandos especializados:
 
 ### 1. Validación y Análisis
-- `voight validate`: Valida archivos o directorios GIFT, genera informes detallados y detecta duplicados.
-- `voight analyze stats`: Genera estadísticas completas sobre un banco de preguntas.
-- `voight analyze similar`: Encuentra preguntas similares usando análisis TF-IDF.
+- `voight health validate`: Valida archivos o directorios GIFT, genera informes detallados y detecta duplicados.
+- `voight health stats`: Genera estadísticas completas sobre un banco de preguntas.
+- `voight health similar`: Encuentra preguntas similares usando análisis TF-IDF.
 
 ### 2. Formateo y Corrección
-- `voight format`: Estandariza el formato visual de archivos GIFT y ajusta bloques de código.
+- `voight fix format`: Estandariza el formato visual de archivos GIFT y ajusta bloques de código.
 - `voight fix code-indent`: Corrige la indentación dentro de bloques de código (```).
 - `voight fix code-chars`: Convierte caracteres especiales entre normal y fullwidth.
 - `voight fix slugify`: Normaliza nombres de archivos (minúsculas, sin acentos).
@@ -88,9 +88,9 @@ El CLI `voight` se organiza en subcomandos especializados:
 - `voight ui [dir]`: Abre un editor web local para navegar y editar preguntas organizadas en directorios, con soporte nativo de **Moodle XML y GIFT**. Requiere el extra opcional: `uv tool install "voight[ui] @ git+https://github.com/INGCOM-UNRN/voight"`.
 
 ### 6. Mantenimiento XML
-- `voight xml cdata`: Asegura que los bloques `<text>` usen secciones CDATA.
-- `voight xml clean-tags`: Elimina secciones de etiquetas (`<tags>`) redundantes.
-- `voight xml rename`: Renombra archivos XML basándose en el nombre interno de la pregunta.
+- `voight fix xml cdata`: Asegura que los bloques `<text>` usen secciones CDATA.
+- `voight fix xml clean-tags`: Elimina secciones de etiquetas (`<tags>`) redundantes.
+- `voight fix xml rename`: Renombra archivos XML basándose en el nombre interno de la pregunta.
 
 ### 7. Inteligencia Artificial (Gemini)
 - `voight ai`: Mejora la calidad pedagógica (`improve`) o crea variaciones (`multiply`) de preguntas usando modelos de Google Gemini.

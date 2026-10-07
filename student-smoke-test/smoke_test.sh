@@ -245,7 +245,7 @@ run_step 49 "Generación procedural de preguntas con tracing GCC en idkfa" "idkf
 
 # 50. VOIGHT, antes moodle-toolbox (Conversor y validador GIFT / Moodle XML)
 run_step 50 "Conversor de formatos, formateo GIFT y mantenimiento en voight" "voight" \
-    "voight --help > /dev/null && voight validate --help > /dev/null"
+    "voight --help > /dev/null && voight health validate --help > /dev/null"
 
 # 51. MYST-TOOLS (Gestor de material didáctico MyST Markdown)
 run_step 51 "Formateo, indexado y anclas de apuntes en myst-tools" "myst-tools" \
