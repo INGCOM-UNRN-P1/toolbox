@@ -221,9 +221,7 @@ run_step 42 "CLI y simulación de Google Meet en meet-tools" "meet-tools" \
 run_step 43 "CLI y simulación de presentaciones en slide-tools" "slide-tools" \
     "slide-tools --help > /dev/null && slide-tools mock-slides --help > /dev/null"
 
-# 44. KEYMAKER (Gestor criptográfico y sellado Time-Lock)
-run_step 44 "Diagnóstico y comandos criptográficos en keymaker" "keymaker" \
-    "keymaker --help > /dev/null && keymaker doctor"
+# 44. KEYMAKER: retirado (decisión 1 del 05/10/26); la liberación de consignas pasa a uatu.
 
 # 45. SCORM-TOOLS (Empaquetador y validador SCORM)
 run_step 45 "Validación y scaffolding de cursos interactivos en scorm-tools" "scorm-tools" \

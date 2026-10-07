@@ -1,5 +1,9 @@
 # keymaker
 
+> ⚠️ **Retirado (05/10/26).** Sin consumidores en el ecosistema y con un Time-Lock solo
+> disuasivo (N-KEYMAKER-01). La liberación de consignas a la hora de inicio pasa a
+> `uatu` (`docs/propuesta_liberacion_consignas.md` en ese repositorio).
+
 Gestor de cifrado e integridad de paquetes de examen para el ecosistema de cátedra.
 
 ## 🎯 Propósito y Alcance

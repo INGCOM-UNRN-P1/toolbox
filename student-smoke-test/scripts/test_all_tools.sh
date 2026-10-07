@@ -263,8 +263,7 @@ titulo "34. [SLIDE-TOOLS] CLI de Google Slides"
 ejecutar 0 slide-tools --help
 debe_contener "slide-tools [" "next" "goto"
 
-titulo "35. [KEYMAKER] Cifrado y time-lock"
-ejecutar 0 keymaker doctor
+# 35. KEYMAKER: retirado (decisión 1 del 05/10/26); la liberación de consignas pasa a uatu.
 
 titulo "36. [SCORM-TOOLS] Paquetes SCORM"
 ejecutar 0 scorm-tools doctor

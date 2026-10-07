@@ -72,7 +72,7 @@ Este catálogo documenta integralmente las 41 herramientas pedagógicas, linters
 * [**`myst-tools`**](myst-tools.md): Herramientas para la gestión, cross-referencing y compilación de libros didácticos en MyST Markdown.
 
 ### 10. Criptografía y Empaquetado de Evaluaciones
-* [**`keymaker`**](keymaker.md): Gestor criptográfico integral de confianza, firmas asimétricas Ed25519, sellado temporal Time-Lock y empaquetado seguro de exámenes.
+* [**`keymaker`**](keymaker.md): **retirado**; no tenía consumidores y la liberación de consignas a la hora de inicio pasa a `uatu`.
 * [**`scorm-tools`**](scorm-tools.md): Empaquetador y validador de cursos interactivos SCORM 1.2 / 2004 4th Edition para Moodle.
 * [**`uatu-tools`**](uatu-tools.md): Validador forense (`uatu-audit`) y herramientas de cátedra (`uatu-admin`) de uatu, la proctorización Git-native de exámenes prácticos en VS Code.
 
