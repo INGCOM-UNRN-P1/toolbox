@@ -276,8 +276,8 @@ ejecutar 0 idkfa --help
 ejecutar 0 idkfa --version
 debe_contener "idkfa "
 
-titulo "39. [MOODLE-TOOLBOX] Bancos de preguntas"
-ejecutar 0 moodle-toolbox --help
+titulo "39. [VOIGHT] Bancos de preguntas"
+ejecutar 0 voight --help
 
 titulo "40. [MYST-TOOLS] Apuntes MyST"
 ejecutar 0 myst-tools --help

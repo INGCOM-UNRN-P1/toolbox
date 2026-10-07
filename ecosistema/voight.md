@@ -1,17 +1,17 @@
-# voight (repositorio moodle-toolbox)
+# voight (antes moodle-toolbox)
 
 Herramientas para gestionar preguntas de Moodle (GIFT, XML)
 
 ## 🎯 Propósito y Alcance
 
-`moodle-toolbox` forma parte del ecosistema de herramientas de la cátedra de Programación 1. Provee mecanismos especializados para análisis, diagnóstico o evaluación pedagógica en C.
+`voight` forma parte del ecosistema de herramientas de la cátedra de Programación 1. Provee mecanismos especializados para análisis, diagnóstico o evaluación pedagógica en C.
 
 ## 💻 Instalación y Requisitos
 
 La herramienta se distribuye como un paquete estándar gestionado con `uv`:
 
 ```bash
-uv tool install "voight[ai,ui,languagetool] @ git+https://github.com/INGCOM-UNRN/moodle-toolbox"
+uv tool install "voight[ai,ui,languagetool] @ git+https://github.com/INGCOM-UNRN/voight"
 ```
 
 ## 🚀 Guía de Uso
@@ -19,23 +19,23 @@ uv tool install "voight[ai,ui,languagetool] @ git+https://github.com/INGCOM-UNRN
 ### Invocación básica
 
 ```bash
-moodle-toolbox --help
+voight --help
 ```
 
 ### Comandos
 
 La tabla de comandos y opciones está en la **Referencia rápida** del
-[README](https://github.com/INGCOM-UNRN/moodle-toolbox#referencia-rápida), generada desde `moodle-toolbox --help` y verificada en el CI
-para que no quede desactualizada. La ayuda de cada comando: `moodle-toolbox <comando> -h`.
+[README](https://github.com/INGCOM-UNRN/voight#referencia-rápida), generada desde `voight --help` y verificada en el CI
+para que no quede desactualizada. La ayuda de cada comando: `voight <comando> -h`.
 
 ## ⚙️ Configuración y Opciones
 
-`moodle-toolbox` puede configurarse mediante parámetros de línea de comandos, variables de entorno o archivos de configuración locales del proyecto.
+`voight` puede configurarse mediante parámetros de línea de comandos, variables de entorno o archivos de configuración locales del proyecto.
 
 ### Parámetros principales
 
 * `--help`: Muestra la ayuda interactiva y las opciones disponibles.
-* `--version`: Muestra la versión actual instalada de `moodle-toolbox`.
+* `--version`: Muestra la versión actual instalada de `voight`.
 
 ## 📖 Documentación y Detalles Técnicos
 
@@ -52,7 +52,7 @@ Este proyecto utiliza [uv](https://docs.astral.sh/uv/) para la gestión de depen
 ```bash
 # Clonar el repositorio
 git clone <repository-url>
-cd moodle-toolbox
+cd voight
 
 # Ejecutar la ayuda principal
 uv run voight --help
@@ -85,7 +85,7 @@ El CLI `voight` se organiza en subcomandos especializados:
 - `voight tree collect dir/ -o reconstruido.gift|xml`: Recolecta el árbol nuevamente a un archivo único, restaurando las categorías.
 
 ### 5. Editor Web (absorbe moodle-visor / mxviz)
-- `voight ui [dir]`: Abre un editor web local para navegar y editar preguntas organizadas en directorios, con soporte nativo de **Moodle XML y GIFT**. Requiere el extra opcional: `uv tool install "voight[ui] @ git+https://github.com/INGCOM-UNRN/moodle-toolbox"`.
+- `voight ui [dir]`: Abre un editor web local para navegar y editar preguntas organizadas en directorios, con soporte nativo de **Moodle XML y GIFT**. Requiere el extra opcional: `uv tool install "voight[ui] @ git+https://github.com/INGCOM-UNRN/voight"`.
 
 ### 6. Mantenimiento XML
 - `voight xml cdata`: Asegura que los bloques `<text>` usen secciones CDATA.
@@ -97,12 +97,12 @@ El CLI `voight` se organiza en subcomandos especializados:
 
 ## 📚 Documentación Detallada
 
-Para más información sobre funcionalidades específicas, consulta la carpeta [docs/](https://github.com/INGCOM-UNRN/moodle-toolbox/tree/main/docs):
+Para más información sobre funcionalidades específicas, consulta la carpeta [docs/](https://github.com/INGCOM-UNRN/voight/tree/main/docs):
 
-- **[Guía de Inicio Rápido](https://github.com/INGCOM-UNRN/moodle-toolbox/blob/main/docs/QUICK_START.md)**
-- **[Validación y Análisis](https://github.com/INGCOM-UNRN/moodle-toolbox/blob/main/docs/README_validate_questions.md)**
-- **[Mantenimiento XML](https://github.com/INGCOM-UNRN/moodle-toolbox/blob/main/docs/README_xml_maintenance.md)**
-- **[Referencia de Caracteres Especiales](https://github.com/INGCOM-UNRN/moodle-toolbox/blob/main/docs/caracteres_especiales.md)**
+- **[Guía de Inicio Rápido](https://github.com/INGCOM-UNRN/voight/blob/main/docs/QUICK_START.md)**
+- **[Validación y Análisis](https://github.com/INGCOM-UNRN/voight/blob/main/docs/README_validate_questions.md)**
+- **[Mantenimiento XML](https://github.com/INGCOM-UNRN/voight/blob/main/docs/README_xml_maintenance.md)**
+- **[Referencia de Caracteres Especiales](https://github.com/INGCOM-UNRN/voight/blob/main/docs/caracteres_especiales.md)**
 
 ## 📋 Requisitos
 
@@ -120,7 +120,7 @@ Para más información sobre funcionalidades específicas, consulta la carpeta [
 
 ## 📊 Formatos de Salida
 
-`moodle-toolbox` soporta diversos formatos de reporte:
+`voight` soporta diversos formatos de reporte:
 * **Terminal interactiva / Rich:** Salida con colores, tablas y diagnósticos en español rioplatense.
 * **Markdown / MyST:** Reportes legibles estructurados para integración en informes de corrección.
 * **JSON:** Salida estructurada serializable para integración en pipelines automáticos.

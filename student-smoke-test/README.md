@@ -26,7 +26,7 @@ Proyecto integral de demostración y suite de **Smoke Test** que ejercita todas 
 | 16 | **RIPLEY** | Orquestador del pipeline del cliente estudiante y diagnóstico del entorno de evaluación. | `ripley.yaml` |
 | 17 | **ALUCARD** | Sintetizador de exámenes impresos, plantillas Typst y validación OMR. | CLI `alucard` |
 | 18 | **IDKFA** | Generador procedural de preguntas Moodle XML y tracing con GCC. | CLI `idkfa` |
-| 19 | **MOODLE-TOOLBOX** | Conversión bidireccional GIFT ↔ Moodle XML y validación de bancos de preguntas. | CLI `moodle-toolbox` |
+| 19 | **VOIGHT** | Conversión bidireccional GIFT ↔ Moodle XML y validación de bancos de preguntas. | CLI `voight` |
 | 20 | **MYST-TOOLS** | Formateo, corrección de anclas e indexado de apuntes MyST Markdown. | CLI `myst-tools` |
 | 21 | **LIB_TEST** | Framework de testing pedagógico C: contadores de memoria sin fugas, mocks stdio, archivos temporales y reporte Markdown. | `src/test_lib_test.c`, `include/p1_test.h` |
 | 22 | **KITCHEN SINK** | Robustez de Daedalus/Gaff/Ripley ante clases y situaciones de archivo límite (vacíos, BOM, CRLF, encoding no-UTF8, byte nulo, binario, trigrafos/dígrafos, anidamiento profundo, permisos, symlinks) — no busca corrección, busca que nada crashee ni cuelgue. | `kitchen_sink/`, `scripts/test_kitchen_sink.sh` |

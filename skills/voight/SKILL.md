@@ -1,12 +1,12 @@
 ---
-name: moodle-toolbox
+name: voight
 description: Use when validating, converting (GIFT <-> XML), formatting, reorganizing category directory trees, or performing maintenance on Moodle question banks.
 ---
 
-# voight (repositorio moodle-toolbox) — Gestión Integral de Preguntas Moodle (GIFT & XML)
+# voight (antes moodle-toolbox) — Gestión Integral de Preguntas Moodle (GIFT & XML)
 
 ## Overview
-`moodle-toolbox` (comando `voight`; los nombres anteriores `questions` y `moodle-toolbox` son alias deprecados) es el conjunto unificado de herramientas CLI en Python para gestionar bancos de preguntas de Moodle en formatos XML y GIFT. Proporciona validación sintáctica basada en gramática PEG (TatSu), conversión bidireccional estable entre XML y GIFT, normalización de estilos/indentación de bloques de código, análisis de similitud TF-IDF, descomposición y reconstrucción de árboles de directorios por categorías, y operaciones de mantenimiento y enriquecimiento pedagógico con IA.
+`voight` (antes moodle-toolbox; los comandos anteriores `questions` y `moodle-toolbox` son alias deprecados) es el conjunto unificado de herramientas CLI en Python para gestionar bancos de preguntas de Moodle en formatos XML y GIFT. Proporciona validación sintáctica basada en gramática PEG (TatSu), conversión bidireccional estable entre XML y GIFT, normalización de estilos/indentación de bloques de código, análisis de similitud TF-IDF, descomposición y reconstrucción de árboles de directorios por categorías, y operaciones de mantenimiento y enriquecimiento pedagógico con IA.
 
 ## Cuándo Usar
 - Para validar la sintaxis de archivos o directorios GIFT y detectar duplicados (`voight validate`).

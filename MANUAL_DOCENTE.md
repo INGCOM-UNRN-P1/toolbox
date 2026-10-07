@@ -20,7 +20,7 @@ flowchart TD
     subgraph Examenes["2. Autoría de Evaluaciones"]
         IDKFA["idkfa<br/>(Variantes procedurales C/GCC anti-copia)"]
         ALUCARD["alucarD<br/>(Exámenes impresos Typst + OMR)"]
-        MT["moodle-toolbox<br/>(Bancos de preguntas GIFT / Moodle XML)"]
+        MT["voight<br/>(Bancos de preguntas GIFT / Moodle XML)"]
     end
 
     subgraph Ingesta["3. Ingesta y Recepción de Entregas"]
@@ -114,14 +114,14 @@ Para evaluaciones presenciales en papel, `alucarD` toma el banco de preguntas y 
 alucard -d parcial1.yaml -n 4 -f pdf --omr -o impresiones/
 ```
 
-### 3.3 Gestión de Bancos con `moodle-toolbox`
+### 3.3 Gestión de Bancos con `voight`
 Permite convertir preguntas escritas en formato GIFT a XML de Moodle y viceversa, además de auditar categorías vacías o preguntas con errores de puntuación:
 ```bash
 # Convertir archivo de preguntas GIFT a Moodle XML
-moodle-toolbox convert gift-to-xml banco.gift --output banco.xml
+voight convert gift-to-xml banco.gift --output banco.xml
 
 # Validar integridad sintáctica del XML de Moodle
-moodle-toolbox validate banco.xml
+voight validate banco.xml
 ```
 
 ---

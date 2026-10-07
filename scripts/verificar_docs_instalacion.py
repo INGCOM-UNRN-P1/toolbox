@@ -25,7 +25,7 @@ import tomllib
 from pathlib import Path
 
 # Nombres propios que no aparecen como carpeta con pyproject (alias de scripts).
-NOMBRES_EXTRA = {"alucard", "generador-examenes", "gift-linter", "questions", "moodle-toolbox",
+NOMBRES_EXTRA = {"alucard", "generador-examenes", "gift-linter", "voight", "questions", "moodle-toolbox",
                  "ripley-check", "uatu-audit", "uatu-admin", "mother", "yutani", "sulaco"}
 
 INSTALADORES = r"(?:uv\s+tool\s+install|uvx|pipx\s+install|pip3?\s+install|uv\s+pip\s+install|uv\s+add)"
