@@ -68,7 +68,7 @@ Este catálogo documenta integralmente las 41 herramientas pedagógicas, linters
 * [**`deckard`**](deckard.md): Autoría, composición y balance taxonómico (Bloom) de guías de trabajos prácticos. Calibra la carga horaria semanal (`deckard check-load`) y empaqueta en formato portable `.ripkg`.
 * [**`idkfa`**](idkfa.md): Generador procedural de exámenes de tracing en C con compilación y ejecución GCC embebida para producir variantes anti-copia en Moodle XML.
 * [**`alucarD`**](alucarD.md): Sintetizador de exámenes impresos de alta calidad tipográfica en Typst con integración de hojas OMR para corrección óptica.
-* [**`voight`**](voight.md) (antes moodle-toolbox): Validador, formateador y conversor bidireccional (GIFT ↔ Moodle XML) para bancos de preguntas.
+* [**`voight`**](voight.md): Validador, formateador y conversor bidireccional (GIFT ↔ Moodle XML) para bancos de preguntas.
 * [**`myst-tools`**](myst-tools.md): Herramientas para la gestión, cross-referencing y compilación de libros didácticos en MyST Markdown.
 
 ### 10. Criptografía y Empaquetado de Evaluaciones

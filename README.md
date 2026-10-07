@@ -100,7 +100,7 @@ Podés poner a punto toda la estación de trabajo y el ecosistema completo en cu
 * [**`deckard`**](ecosistema/deckard.md): Autoría y calibración horaria de guías de trabajos prácticos bajo Taxonomía de Bloom.
 * [**`idkfa`**](ecosistema/idkfa.md): Generador procedural de exámenes de tracing en C con GCC embebido para Moodle XML.
 * [**`alucarD`**](ecosistema/alucarD.md): Sintetizador tipográfico de exámenes impresos en Typst con hojas de respuesta OMR.
-* [**`voight`**](ecosistema/voight.md) (antes moodle-toolbox): Conversión bidireccional GIFT ↔ Moodle XML y mantenimiento de bancos de preguntas.
+* [**`voight`**](ecosistema/voight.md): Conversión bidireccional GIFT ↔ Moodle XML y mantenimiento de bancos de preguntas.
 * [**`myst-tools`**](ecosistema/myst-tools.md): Gestión y compilación de libros didácticos en MyST Markdown.
 
 ---

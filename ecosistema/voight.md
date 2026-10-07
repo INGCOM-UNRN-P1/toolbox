@@ -1,4 +1,4 @@
-# voight (antes moodle-toolbox)
+# voight
 
 Herramientas para gestionar preguntas de Moodle (GIFT, XML)
 
@@ -43,7 +43,7 @@ para que no quede desactualizada. La ayuda de cada comando: `voight <comando> -h
 
 Conjunto de herramientas unificadas en Python para gestionar preguntas de Moodle en formatos XML y GIFT. Facilita la conversión, análisis, limpieza, mantenimiento y generación de preguntas mediante IA.
 
-Todas las herramientas anteriores han sido consolidadas en un único comando raíz: `voight` (antes `questions`).
+Todas las herramientas anteriores han sido consolidadas en un único comando raíz: `voight`.
 
 ## 🚀 Instalación y Uso
 
