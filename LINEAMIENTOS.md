@@ -125,6 +125,18 @@ ecosistema y deja elegir el proveedor sin tocar la herramienta:
 * `doctor` suma `yutani.ia.diagnostico()`: proveedor elegido y de dónde salió, y si está
   disponible (clave, SDK, servidor que responde u OpenCode en el `PATH`), siempre como opcional.
 * Los tests no llaman a un modelo real: simulan el cliente (`generar`, `modelos`).
+* **Minimizar cada consulta** (es responsabilidad de la herramienta, que sabe qué usa cada tarea):
+  - enviar sólo lo que la tarea necesita: el enunciado para mejorar el enunciado, las opciones sin
+    su retroalimentación para mejorar las opciones, nunca el XML o el archivo entero si alcanza con
+    una parte; sin metadatos (IDs, categorías, comentarios, etiquetas MyST) que el modelo no usa;
+  - pedir de vuelta sólo lo que cambia (la sección nueva, las retroalimentaciones que faltan, los
+    distractores nuevos) y aplicarlo sobre una copia del original, que valida y escribe la
+    herramienta, nunca el modelo;
+  - el código va compacto (sin comentarios ni líneas en blanco) cuando es contexto, y tal cual
+    cuando es lo que se edita;
+  - la caché se indexa por lo que se envía, y `--dry-run` muestra la vista y estima los tokens.
+  Referencias: `voight ai` (`core/vistas.py`, `--parte enunciado|respuestas`) y `deckard improve`
+  (`core/contexto_ia.py`).
 
 ---
 
