@@ -38,3 +38,7 @@ La tabla completa de comandos está en la **Referencia rápida** del
 [README](https://github.com/INGCOM-UNRN-P1/hardboiled#referencia-rápida) (generada desde
 `hardboiled --help`); la guía detallada, en su
 [manual](https://github.com/INGCOM-UNRN-P1/hardboiled/blob/main/MANUAL.md).
+
+## Relacionadas
+
+- `bishop` (marcos de la pila en la PC) y `rachel` (cómo traduce gcc un `switch`): el README de hardboiled, sección «Con bishop y rachel», usa un mismo programa C para comparar la PC con la placa RV32I.

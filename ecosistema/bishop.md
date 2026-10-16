@@ -72,3 +72,7 @@ bishop trace main.c --json
 
 ---
 *Cátedra de Programación 1 · UNRN Sede Andina*
+
+## Relacionadas
+
+- `hardboiled`: los mismos marcos de la pila en una CPU RV32I, palabra por palabra y con dónde quedó `ra` (sección «Con bishop y rachel» de su README).

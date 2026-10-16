@@ -38,3 +38,7 @@ Ayuda de cada comando: `hardboiled <comando> -h`.
 
 Diagnóstico del entorno (JSON con `schema_version`): `hardboiled doctor --json`. Detalle y ejemplos: el `README.md` y el
 `MANUAL.md` del repositorio.
+
+## Relacionadas
+
+- `bishop` (marcos de la pila en la PC) y `rachel` (cómo traduce gcc un `switch`): el README de hardboiled, sección «Con bishop y rachel», usa un mismo programa C para comparar la PC con la placa RV32I.

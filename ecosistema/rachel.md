@@ -69,3 +69,7 @@ rachel switch parser.c --json
 
 ---
 *Cátedra de Programación 1 · UNRN Sede Andina*
+
+## Relacionadas
+
+- `hardboiled`: el mismo `switch`, paso a paso en instrucciones RV32I de una CPU bare-metal (sección «Con bishop y rachel» de su README).

@@ -27,3 +27,7 @@ rachel compare parser.c
 # 4. Salida estructurada JSON
 rachel switch parser.c --json
 ```
+
+## Relacionadas
+
+- `hardboiled`: el mismo `switch`, paso a paso en instrucciones RV32I de una CPU bare-metal (sección «Con bishop y rachel» de su README).
