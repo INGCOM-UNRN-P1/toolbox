@@ -43,7 +43,7 @@ RETIRADO = "retirado"
 NO_SE_CLONAN = {SIN_PUBLICAR, RETIRADO}
 # Carpetas de dev/tools que no son repositorios del ecosistema.
 NO_SON_REPOS = {"revision", "skills", "scripts", "generated", "guias", "node_modules", "htmlcov",
-                "__pycache__", "scratch", "uatu-test", "plantillas", "librerias"}
+                "__pycache__", "scratch", "plantillas", "librerias"}
 
 
 @dataclass
