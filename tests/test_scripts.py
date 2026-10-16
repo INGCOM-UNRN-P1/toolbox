@@ -136,6 +136,20 @@ def test_binarios_se_clonan_pero_no_se_instalan_con_uv(tmp_path, capsys):
     assert "jonesy" in clonar and "jonesy" not in requisitos
 
 
+@pytest.mark.parametrize("igual", [True, False])
+def test_verificar_compara_la_copia_del_manifiesto_de_mother(tmp_path, capsys, igual):
+    """N-ECO-25: la copia que mother incluye quedó con sulaco y corpus `sin-publicar`."""
+    ruta = _manifiesto(tmp_path)
+    raiz = tmp_path / "tools"
+    copia = raiz / "mother" / "src" / "mother" / "ecosistema.toml"
+    copia.parent.mkdir(parents=True)
+    copia.write_bytes(ruta.read_bytes() if igual else ruta.read_bytes() + b"# vieja\n")
+    codigo = ecosistema.main(["--manifiesto", str(ruta), "verificar", "--raiz", str(raiz)])
+    salida = capsys.readouterr().out
+    assert ("la copia incluida" in salida) is not igual
+    assert codigo == (0 if igual else 1)
+
+
 def test_repos_sin_publicar_no_se_clonan(tmp_path, capsys):
     manifiesto = MANIFIESTO + textwrap.dedent("""
         [[repo]]

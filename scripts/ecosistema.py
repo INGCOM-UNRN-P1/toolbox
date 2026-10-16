@@ -334,6 +334,13 @@ def cmd_verificar(args, repos: list[Repo]) -> int:
             if repo.estado == "activo":
                 problemas += [f"{repo.nombre}: {p}" for p in revisar_imports_hermanos(carpeta, datos)]
 
+    # 3. La copia del manifiesto que mother incluye (la usa con --sin-red y sin conexión) tiene
+    #    que ser esta: si quedó vieja, mother instala o salta repos con estados viejos (N-ECO-25).
+    copia_mother = raiz / "mother" / "src" / "mother" / "ecosistema.toml"
+    if copia_mother.exists() and copia_mother.read_bytes() != Path(args.manifiesto).read_bytes():
+        problemas.append(f"mother: la copia incluida ({copia_mother.relative_to(raiz)}) difiere de "
+                         f"{args.manifiesto}; actualizala copiando el manifiesto encima")
+
     for aviso in avisos:
         print(f"· {aviso}")
     for problema in problemas:
