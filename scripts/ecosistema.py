@@ -34,7 +34,7 @@ P1_TOOLS = Path(__file__).resolve().parents[1]
 MANIFIESTO = P1_TOOLS / "ecosistema.toml"
 TIPOS = {"cli", "biblioteca", "extension-vscode", "apps-script", "contenido", "plantilla",
          "libreria-c", "ejemplo", "entorno", "documentacion", "android", "especificacion",
-         "workflows", "datos"}
+         "workflows", "datos", "binario"}
 ESTADOS = {"activo", "deprecado", "retirado", "especificacion", "ajeno", "sin-publicar"}
 # Repos creados localmente que todavía no están en GitHub: no se clonan ni se instalan.
 SIN_PUBLICAR = "sin-publicar"

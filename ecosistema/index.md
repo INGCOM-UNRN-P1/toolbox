@@ -17,6 +17,7 @@ Este catálogo documenta integralmente las 41 herramientas pedagógicas, linters
 * [**`zhora`**](zhora.md): Linter y auditor de seguridad de macros del preprocesador (`#define`): efectos de lado por evaluación múltiple de parámetros, falta de paréntesis defensivos y puntos y coma espurios.
 
 ### 2. Compilación, Diagnóstico y Manejo de Errores
+* [**`jonesy`**](jonesy.md): IDE de terminal en Rust para el alumno: compila y explica en español los errores de gcc, corre, depura sobre GDB, revisa la memoria con valgrind/ASan y corre las pruebas de `p1_test`; usa ripley, gaff, kaneda y spunkmeyer como plugins. Se distribuye como binario en los releases (no con uv).
 * [**`daedalus`**](daedalus.md): Compilador pedagógico que ejecuta GCC/Clang bajo las banderas estrictas de cátedra y traduce diagnósticos crudos a explicaciones claras en español rioplatense.
 * [**`hal`**](hal.md): Diagnóstico pedagógico de fallos fatales (`SIGSEGV`, `SIGABRT`, `SIGFPE`, doble liberación) con decodificación de core dumps e indicación de la línea exacta del fallo.
 * [**`tetsuo`**](tetsuo.md): Compila y ejecuta programas bajo AddressSanitizer y UndefinedBehaviorSanitizer y traduce sus diagnósticos a explicaciones en español con sugerencias de corrección.

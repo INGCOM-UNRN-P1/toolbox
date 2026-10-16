@@ -117,6 +117,25 @@ def test_repos_retirados_no_se_clonan_ni_se_instalan(tmp_path, capsys):
     assert "ripley" in salida and "esper" not in salida
 
 
+def test_binarios_se_clonan_pero_no_se_instalan_con_uv(tmp_path, capsys):
+    """jonesy (Rust) se distribuye en los releases del repo: se clona, pero no es un requisito de uv."""
+    manifiesto = MANIFIESTO + textwrap.dedent("""
+        [[repo]]
+        nombre = "jonesy"
+        url = "https://github.com/INGCOM-UNRN-P1/jonesy"
+        tipo = "binario"
+        ejecutables = ["jonesy"]
+        perfiles = ["estudiante"]
+        estado = "activo"
+        """)
+    ruta = str(_manifiesto(tmp_path, manifiesto))
+    ecosistema.main(["--manifiesto", ruta, "listar", "--formato", "clonar"])
+    clonar = capsys.readouterr().out
+    ecosistema.main(["--manifiesto", ruta, "listar", "--formato", "requisito"])
+    requisitos = capsys.readouterr().out
+    assert "jonesy" in clonar and "jonesy" not in requisitos
+
+
 def test_repos_sin_publicar_no_se_clonan(tmp_path, capsys):
     manifiesto = MANIFIESTO + textwrap.dedent("""
         [[repo]]
