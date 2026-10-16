@@ -78,16 +78,16 @@ if [ "$USE_PIP" = true ]; then
         uv pip install -e "$ROOT_DIR/$item"
     done
 else
-    echo "==> Modo: uv tool install --editable..."
-    for item in "${HERRAMIENTAS[@]}"; do
-        carpeta="${item%%[*}"
-        if [ ! -f "$ROOT_DIR/$carpeta/pyproject.toml" ]; then
-            echo "  [AVISO] $carpeta no está clonada en $ROOT_DIR (corré scripts/clone_repos.sh). Se omite."
-            continue
-        fi
-        echo "  -> Instalando $carpeta..."
-        uv tool install "$ROOT_DIR/$item" --editable "$@" --force 2>/dev/null || uv tool install "$ROOT_DIR/$item" --editable "$@"
-    done
+    # La instalación como uv tool la hace mother (mismo manifiesto, mismos extras): en modo
+    # editable desde los clones de ROOT_DIR, como hacía este script.
+    # shellcheck source=_mother.sh
+    source "$SCRIPT_DIR/_mother.sh"
+    mother_cmd "$ROOT_DIR" "$SCRIPT_DIR/../ecosistema.toml" || exit 1
+    echo "==> Modo: mother instalar --todo --local $ROOT_DIR --editable"
+    # Una herramienta que no está clonada o no se instala no corta el resto (como antes):
+    # mother las lista al final.
+    "${MOTHER[@]}" instalar --todo --local "$ROOT_DIR" --editable --forzar \
+        || echo "  [AVISO] Algunas herramientas no se instalaron (ver arriba); corré scripts/clone_repos.sh si faltan clones."
 fi
 
 echo ""

@@ -80,12 +80,16 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Instalar todas las herramientas activas desde git
+      # Como lo instala un estudiante o un docente: mother desde git, con este manifiesto
+      # (y la matriz de versiones del cuatrimestre vigente, si la hay).
+      - name: Instalar todas las herramientas activas desde git (mother)
         run: |
-          python3 scripts/ecosistema.py instalar
+          uvx --from git+https://github.com/INGCOM-UNRN-P1/mother mother --manifiesto ecosistema.toml instalar --todo
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
-      - name: Doctor de cada herramienta (informativo)
+      # health_check.sh delega en `mother doctor`. Informativo: en el runner faltan a propósito
+      # componentes opcionales (libasan para tetsuo, zig para hardboiled…).
+      - name: Doctor agregado (mother doctor, informativo)
         continue-on-error: true
         run: bash scripts/health_check.sh
 
@@ -125,9 +129,9 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Instalar todas las herramientas activas desde git
+      - name: Instalar todas las herramientas activas desde git (mother)
         run: |
-          python3 scripts/ecosistema.py instalar
+          uvx --from git+https://github.com/INGCOM-UNRN-P1/mother mother --manifiesto ecosistema.toml instalar --todo
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Fuzz de subcomandos

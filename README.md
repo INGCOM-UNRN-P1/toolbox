@@ -27,7 +27,7 @@ Podés poner a punto toda la estación de trabajo y el ecosistema completo en cu
 ```bash
 ./scripts/install_tools.sh
 ```
-*Instala cada herramienta en modo editable mediante `uv tool install --editable` y registra el autocompletado en tu shell (bash/zsh).*
+*Delega en `mother instalar --todo --local <dev/tools> --editable`: instala cada herramienta en modo editable desde los clones (con `uv tool install --editable`) y registra el autocompletado en tu shell (bash/zsh). Sin clonar nada, `mother instalar --perfil <perfil>` instala desde git.*
 
 ### 3. Instalar las skills pedagógicas para agentes de IA
 ```bash
@@ -39,12 +39,7 @@ Podés poner a punto toda la estación de trabajo y el ecosistema completo en cu
 ```bash
 ./scripts/health_check.sh
 ```
-*Ejecuta el subcomando `doctor` en todas las herramientas para comprobar compiladores (`gcc`), depuradores (`gdb`), memoria (`valgrind`), linters (`clang-format`) y tipografía (`typst`).*
-
-> **Próximamente: `mother`.** Los pasos 2 y 4 pasan a ser `mother instalar --perfil <perfil>` y
-> `mother doctor` (instalador y diagnóstico agregado que lee este mismo `ecosistema.toml`, sin
-> dependencias y también como `mother.pyz`). El repositorio está creado pero todavía no se
-> publicó en GitHub (estado `sin-publicar` en el manifiesto); hasta entonces se usan estos scripts.
+*Delega en `mother doctor` (acepta `--perfil` y `--json`): el diagnóstico agregado de python, uv, git y el `doctor` de cada herramienta, que comprueba compiladores (`gcc`), depuradores (`gdb`), memoria (`valgrind`), linters (`clang-format`) y tipografía (`typst`), con cómo resolver lo que falta.*
 
 ---
 
