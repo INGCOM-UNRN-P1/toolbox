@@ -158,3 +158,14 @@ Para una guía paso a paso con todos los flujos pedagógicos, modelos de datos, 
 
 ---
 *Cátedra de Programación 1 · UNRN Sede Andina*
+
+## Mejora de consignas con IA (`deckard improve`)
+
+```bash
+deckard improve clarity banco/invertir-vector                   # OpenCode por defecto (previsualiza)
+deckard improve hints banco/invertir-vector --proveedor local --model qwen2.5-coder:7b --apply
+deckard improve all preguntas.gift --proveedor google --show-prompt
+deckard improve models --proveedor local --raw                  # modelos del proveedor
+```
+
+Los subcomandos (`clarity`, `edge-cases`, `examples`, `hints`, `bloom`, `testcases`, `starter`, `all`) aceptan `--proveedor` (`google`, `local`, `opencode` o `claude`) y `--model`; sin ellos rige la configuración común del ecosistema (`P1_IA_PROVEEDOR`, `~/.config/p1/ia.toml` con `[herramientas.deckard]`) y, al final, OpenCode. `deckard doctor` muestra el proveedor elegido y si está disponible.

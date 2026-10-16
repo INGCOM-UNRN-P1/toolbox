@@ -92,8 +92,8 @@ El CLI `voight` se organiza en subcomandos especializados:
 - `voight fix xml clean-tags`: Elimina secciones de etiquetas (`<tags>`) redundantes.
 - `voight fix xml rename`: Renombra archivos XML basándose en el nombre interno de la pregunta.
 
-### 7. Inteligencia Artificial (Gemini)
-- `voight ai`: Mejora la calidad pedagógica (`improve`) o crea variaciones (`multiply`) de preguntas usando modelos de Google Gemini.
+### 7. Inteligencia Artificial (Gemini, servidor local, OpenCode o Claude)
+- `voight ai`: Mejora la calidad pedagógica (`improve`), crea variaciones (`multiply`), completa la retroalimentación (`feedback`) o agrega distractores (`distractors`) con el proveedor de IA configurado para el ecosistema (LINEAMIENTOS §3.4): Gemini por defecto, un servidor local con la API de OpenAI (Ollama, llama.cpp…), OpenCode o Claude (`--proveedor`, `--model`).
 
 ## 📚 Documentación Detallada
 

@@ -105,6 +105,27 @@ gaff doctor
 dredd doctor
 ```
 
+### 3.4 Uso de modelos de lenguaje (IA)
+Una herramienta que consulte un modelo de lenguaje **no trae su propio cliente**: lo pide a
+`yutani.ia` (yutani ≥ `6f95ad9`), que da la misma interfaz y la misma configuración en todo el
+ecosistema y deja elegir el proveedor sin tocar la herramienta:
+
+| Proveedor | Para qué | Qué necesita |
+| :--- | :--- | :--- |
+| `google` (alias `gemini`) | API de Gemini | `google-genai` (extra `ai` de la herramienta) y `GEMINI_API_KEY` |
+| `local` (alias `ollama`) | servidor propio con la API de OpenAI: Ollama, llama.cpp, LM Studio, vLLM | el servidor corriendo (por defecto `http://localhost:11434/v1`) |
+| `opencode` | la CLI de OpenCode (o `opencode-sandboxed`) | OpenCode instalado |
+| `claude` (alias `anthropic`) | API de Anthropic | `anthropic` (extra `ai`) y `ANTHROPIC_API_KEY` |
+
+* Opciones de la CLI: `--proveedor` y `--model`/`--modelo`; sin ellas manda la configuración
+  común (`P1_IA_PROVEEDOR`, `P1_IA_MODELO`, `P1_IA_URL`, `P1_IA_CLAVE`, `P1_IA_TIMEOUT` o
+  `~/.config/p1/ia.toml`, con secciones `[herramientas.<nombre>]`) y, al final, el proveedor por
+  defecto de la herramienta (voight: `google`; deckard: `opencode`).
+* Los SDK de Gemini y Claude van en un extra `ai`, nunca como dependencia obligatoria.
+* `doctor` suma `yutani.ia.diagnostico()`: proveedor elegido y de dónde salió, y si está
+  disponible (clave, SDK, servidor que responde u OpenCode en el `PATH`), siempre como opcional.
+* Los tests no llaman a un modelo real: simulan el cliente (`generar`, `modelos`).
+
 ---
 
 ## 4. Estándares de Código y Pedagogía

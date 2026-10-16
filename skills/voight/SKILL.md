@@ -87,11 +87,16 @@ voight fix xml clean-tags cuestionario.xml
 voight fix xml rename preguntas_xml/
 ```
 
-### 6. IA y Variaciones con Gemini (`ai`)
+### 6. IA y Variaciones (`ai`): Gemini, servidor local, OpenCode o Claude
 ```bash
-# Mejorar calidad didáctica y enunciados con IA
-voight ai improve pregunta.gift -o pregunta_mejorada.gift
+# Mejorar calidad didáctica y enunciados con IA (Gemini por defecto)
+voight ai pregunta.gift --mode improve --output mejoradas/
 
-# Generar múltiples variantes pedagógicas de una pregunta
-voight ai multiply pregunta.gift -n 3 -o variantes/
+# Generar variantes pedagógicas con un modelo en un servidor local (Ollama)
+voight ai pregunta.gift --mode multiply --proveedor local --model qwen2.5-coder:7b --output variantes/
+
+# Ver qué se enviaría, sin llamar al modelo
+voight ai banco/ -r --mode feedback --dry-run
 ```
+
+El proveedor sale de `--proveedor`/`--model`, `VOIGHT_PROVEEDOR`, la configuración común del ecosistema (`P1_IA_PROVEEDOR`, `P1_IA_MODELO`, `P1_IA_URL` o `~/.config/p1/ia.toml`) o, sin nada, Gemini. `voight doctor` muestra cuál quedó y si está disponible.
