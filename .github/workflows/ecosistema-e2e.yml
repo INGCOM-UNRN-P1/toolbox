@@ -6,6 +6,7 @@
 #   - la coherencia del manifiesto ecosistema.toml con los repositorios;
 #   - los chequeos de documentación (instalación por nombre, comandos citados);
 #   - los dos smoke tests estudiantiles con oráculos;
+#   - las salidas --json de los analizadores contra la forma común de hallazgos;
 #   - el doctor de cada herramienta (informativo);
 #   - los enlaces de la documentación Markdown;
 #   - el fuzz de subcomandos: ninguna entrada inválida termina en traceback.
@@ -103,6 +104,13 @@ jobs:
       - name: Smoke test integral (smoke_test.sh)
         working-directory: student-smoke-test
         run: bash smoke_test.sh
+
+      # gaff, daedalus, tetsuo, ripley y hal: cada salida --json trae la lista plana «hallazgos»
+      # con la forma común (archivo relativo, claves, severidades y categorías), la que lee jonesy.
+      - name: Salidas JSON con la forma común de hallazgos (yutani.hallazgos)
+        run: |
+          uv run --no-project --with "yutani @ git+https://github.com/INGCOM-UNRN-P1/yutani" \
+            python3 scripts/verificar_salidas_json.py
 
       - name: Comandos citados en skills y manuales
         run: python3 scripts/verificar_comandos_docs.py

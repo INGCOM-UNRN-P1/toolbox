@@ -89,7 +89,7 @@ Toda herramienta debe implementarse como un paquete Python modular e independien
 ### 3.2 Banderas Universales Obligatorias
 1. `--version` / `-v`: Imprime la versión actual del paquete con `is_eager=True` y finaliza con código 0.
 2. `--help` / `-h`: Ofrece ayuda detallada con ejemplos concisos.
-3. `--json`: Emite el resultado estructurado en formato JSON estándar a `stdout`. Esto permite la composición por tuberías (`pipes`) y la ingesta desde `dredd`.
+3. `--json`: Emite el resultado estructurado en formato JSON estándar a `stdout`. Esto permite la composición por tuberías (`pipes`) y la ingesta desde `dredd`. Un analizador (lo que informa problemas en el código del alumno) incluye además la lista plana `hallazgos` con la forma común de `yutani.hallazgos`: `id`, `herramienta`, `codigo`, `categoria`, `severidad`, `mensaje`, `archivo` (relativo al directorio de trabajo, con `/` y sin `./`), `linea`, `columna`, `enlace` y, opcionales, `sugerencia` y `explicacion`. Es lo único que leen jonesy y los demás clientes; `python -m yutani.hallazgos` la valida y el CI de punta a punta lo verifica con `scripts/verificar_salidas_json.py`.
 4. `--output-md` / `-o` (opcional según el caso): Genera un fragmento Markdown estructurado apto para ser incrustado en el informe de evaluación docente de `dredd`.
 
 ### 3.3 Subcomando `doctor` Mandatorio

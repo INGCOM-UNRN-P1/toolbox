@@ -28,6 +28,7 @@ import verificar_comandos_docs  # noqa: E402
 import verificar_contrato_cli  # noqa: E402
 import verificar_docs_instalacion  # noqa: E402
 import verificar_enlaces_md  # noqa: E402
+import verificar_salidas_json  # noqa: E402
 
 MANIFIESTO = """
 [perfiles]
@@ -549,3 +550,51 @@ def test_readme_generado_opciones_de_la_raiz(tmp_path, monkeypatch):
         ("`--definicion`, `-d`", "Ruta al YAML"),
         ("`--spellcheck`, `--lt`", "Revisa la ortografía [default: False]"),
     ]
+
+
+# --- verificar_salidas_json.py -------------------------------------------------------------
+
+def _validar_falso(datos, base):
+    """Lo mínimo de yutani.hallazgos.validar_salida (que no está en el entorno de estos tests)."""
+    if not isinstance(datos.get("hallazgos"), list):
+        return ["la salida no tiene la lista «hallazgos»"]
+    return [f"«archivo» no está normalizada: «{h['archivo']}»" for h in datos["hallazgos"]
+            if str(h.get("archivo", "")).startswith(("./", "/"))]
+
+
+@pytest.mark.parametrize("cuerpo, problema", [
+    ('print(json.dumps({"hallazgos": [{"id": "x:1", "archivo": "tp/m.c"}]}))', None),
+    ('print("aviso\\n" + json.dumps({"hallazgos": [{"id": "x:1", "archivo": "./tp/m.c"}]}))', "normalizada"),
+    ('print(json.dumps({"hallazgos": [{"id": "x:1", "archivo": "m.c"}]}))', "esperaba el archivo"),
+    ('print(json.dumps({"hallazgos": [{"id": "x:1", "archivo": None}]}))', "sin «archivo»"),
+    ('print(json.dumps({"hallazgos": []}))', "ningún hallazgo"),
+    ('print(json.dumps({"violaciones": []}))', "«hallazgos»"),
+    ('print("Traceback"); sys.exit(1)', "no emitió JSON"),
+])
+def test_salidas_json(tmp_path, monkeypatch, cuerpo, problema):
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    _ejecutable(bin_dir, "analizador", "sys.stdin.read()\n" + cuerpo)
+    monkeypatch.setenv("PATH", f"{bin_dir}{os.pathsep}{os.environ['PATH']}")
+    monkeypatch.setattr(verificar_salidas_json, "ENTORNO", dict(os.environ))
+    caso = verificar_salidas_json.Caso("falso", ["analizador", "--json"], entrada=lambda d: "int x;\n",
+                                       archivos={"tp/m.c"})
+    problemas = verificar_salidas_json.verificar(caso, tmp_path, _validar_falso)["problemas"]
+    if problema is None:
+        assert problemas == []
+    else:
+        assert any(problema in p for p in problemas), problemas
+
+
+def test_salidas_json_sin_la_herramienta(tmp_path):
+    caso = verificar_salidas_json.Caso("ausente", ["no-existe-esta-herramienta", "--json"])
+    assert verificar_salidas_json.verificar(caso, tmp_path, _validar_falso)["problemas"] == [
+        "no-existe-esta-herramienta no está en el PATH"]
+
+
+def test_salidas_json_cubre_los_analizadores_de_la_ola_7():
+    herramientas = {c.comando[0] for c in verificar_salidas_json.CASOS}
+    assert {"gaff", "daedalus", "tetsuo", "ripley", "hal"} <= herramientas
+    for c in verificar_salidas_json.CASOS:
+        for archivo in c.archivos - {"src/main.c"}:
+            assert (verificar_salidas_json.SMOKE / archivo).is_file(), archivo
