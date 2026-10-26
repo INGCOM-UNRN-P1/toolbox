@@ -63,7 +63,12 @@ repositorio.
 
 1. Pegar el bloque `[cuatrimestres."2027-1"]` en `ecosistema.toml` y poner
    `cuatrimestre_vigente = "2027-1"`.
-2. `python3 scripts/ecosistema.py verificar` y `python3 -m pytest -q tests`.
+2. `python3 scripts/ecosistema.py verificar`, `python3 -m pytest -q tests` y
+   `mother --manifiesto ecosistema.toml auditar --remoto --exigir-vigente`: cada herramienta
+   activa tiene que quedar fijada a un tag `vX.Y.Z` publicado o a un commit completo. Una rama
+   (`main`) o un commit abreviado se mueven, y el E2E los rechaza (`ecosistema.py` al leer el
+   manifiesto y `mother auditar --remoto` en el paso «Matriz del cuatrimestre sin ramas
+   mutables»).
 3. Commit, tag y push de p1-tools:
 
    ```bash

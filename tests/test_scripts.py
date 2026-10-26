@@ -91,6 +91,30 @@ def test_manifiesto_invalido(tmp_path, entrada, mensaje):
         ecosistema.cargar(ruta)
 
 
+@pytest.mark.parametrize("matriz, mensaje", [
+    ('ripley = "main"', "«main» no es un tag"),
+    ('ripley = "4591509"', "«4591509» no es un tag"),
+    ('nadie = "v1.0.0"', "«nadie» no es un repo"),
+])
+def test_la_matriz_del_cuatrimestre_no_admite_refs_mutables(tmp_path, matriz, mensaje):
+    """Ola 11: el CI rechaza una matriz que fija una rama o un commit abreviado."""
+    ruta = _manifiesto(tmp_path, MANIFIESTO + f'\n[cuatrimestres."2027-1"]\n{matriz}\n')
+    with pytest.raises(SystemExit, match=mensaje):
+        ecosistema.cargar(ruta)
+
+
+def test_la_matriz_admite_tags_y_commits_completos(tmp_path):
+    ruta = _manifiesto(tmp_path, 'cuatrimestre_vigente = "2027-1"\n' + MANIFIESTO
+                       + '\n[cuatrimestres."2027-1"]\nripley = "v1.2.2"\n'
+                       + 'moodle-toolbox = "0123456789abcdef0123456789abcdef01234567"\n')
+    _, repos = ecosistema.cargar(ruta)
+    assert len(repos) == 2
+    with pytest.raises(SystemExit, match="cuatrimestre_vigente = 2030-1"):
+        ecosistema.cargar(_manifiesto(tmp_path, 'cuatrimestre_vigente = "2030-1"\n' + MANIFIESTO))
+    with pytest.raises(SystemExit, match="ref = «develop»"):
+        ecosistema.cargar(_manifiesto(tmp_path, MANIFIESTO + 'ref = "develop"\n'))
+
+
 def test_instalar_local_reconstruye_el_paquete(tmp_path, capsys):
     """Sin --reinstall-package, uv reutiliza la rueda cacheada y se prueba código viejo."""
     codigo = ecosistema.main(["--manifiesto", str(_manifiesto(tmp_path)), "instalar", "--local", "/raiz", "--simular"])

@@ -59,6 +59,7 @@ class Repo:
     perfiles: list[str] = field(default_factory=list)
     plugin_ripley: str = ""
     sistema: list[str] = field(default_factory=list)
+    ref: str = ""  # tag o commit fijo (mother lo instala así)
 
     @property
     def ruta(self) -> str:
@@ -103,10 +104,31 @@ def cargar(ruta: Path = MANIFIESTO) -> tuple[dict, list[Repo]]:
             errores.append(f"{repo.nombre}: falta `ejecutables`")
         if repo.instalable and not repo.url:
             errores.append(f"{repo.nombre}: una herramienta instalable necesita `url`")
+        if repo.ref and not RE_REF_FIJADA.match(repo.ref):
+            errores.append(f"{repo.nombre}: ref = «{repo.ref}» no es un tag vX.Y.Z ni un commit completo")
         repos.append(repo)
+    errores += revisar_cuatrimestres(datos, nombres)
     if errores:
         raise SystemExit("ecosistema.toml inválido:\n  " + "\n  ".join(errores))
     return perfiles, repos
+
+
+def revisar_cuatrimestres(datos: dict, nombres: set[str]) -> list[str]:
+    """La matriz de cada cuatrimestre sólo fija tags vX.Y.Z o commits completos (Ola 11): una rama
+    (`main`) o un commit abreviado se mueven, y el curso dejaría de instalar lo mismo."""
+    errores = []
+    cuatrimestres = datos.get("cuatrimestres", {})
+    for cuatrimestre, matriz in cuatrimestres.items():
+        for nombre, ref in matriz.items():
+            if nombre not in nombres:
+                errores.append(f"cuatrimestre {cuatrimestre}: «{nombre}» no es un repo del manifiesto")
+            elif not RE_REF_FIJADA.match(str(ref)):
+                errores.append(f"cuatrimestre {cuatrimestre}: {nombre} = «{ref}» no es un tag vX.Y.Z ni un commit "
+                               f"completo (una rama o un commit abreviado pueden moverse)")
+    vigente = datos.get("cuatrimestre_vigente")
+    if vigente and vigente not in cuatrimestres:
+        errores.append(f"cuatrimestre_vigente = {vigente}, pero no hay [cuatrimestres.\"{vigente}\"]")
+    return errores
 
 
 def filtrar(repos: list[Repo], perfiles=None, tipos=None, estados=None) -> list[Repo]:
