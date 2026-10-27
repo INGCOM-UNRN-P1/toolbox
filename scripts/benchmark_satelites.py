@@ -38,7 +38,7 @@ COMANDOS_SATELITES: dict[str, list[str]] = {
     "gaff": ["gaff", "check", "src/", "--json"],
     "spunkmeyer": ["spunkmeyer", "detect", "src/", "--json"],
     "kaneda": ["kaneda", "audit", "src/", "--json"],
-    "zhora": ["zhora", "lint", "src/", "--json"],
+    "zhora": ["zhora", "check", "src/", "--json"],
     "hal": ["hal", "analyze", "src/", "--json"],
     "daedalus": [
         "daedalus",
@@ -58,7 +58,7 @@ COMANDOS_ESCALAMIENTO: dict[str, list[str]] = {
     "gaff": ["gaff", "check", "{archivo}", "--json"],
     "spunkmeyer": ["spunkmeyer", "detect", "{archivo}", "--json"],
     "kaneda": ["kaneda", "audit", "{archivo}", "--json"],
-    "zhora": ["zhora", "lint", "{archivo}", "--json"],
+    "zhora": ["zhora", "check", "{archivo}", "--json"],
     "hal": ["hal", "analyze", "{archivo}", "--json"],
     "daedalus": ["daedalus", "compile", "{archivo}", "--output", "build/escala_bin", "--json"],
 }
