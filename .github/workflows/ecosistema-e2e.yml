@@ -158,3 +158,38 @@ jobs:
         with:
           name: fuzz-subcomandos
           path: fuzz.json
+
+  benchmark-satelites:
+    name: Benchmark de rendimiento y memoria RSS por satélite
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Dependencias del sistema
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc gdb valgrind bubblewrap make
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Instalar todas las herramientas activas desde git (mother)
+        run: |
+          uvx --from git+https://github.com/INGCOM-UNRN-P1/mother mother --manifiesto ecosistema.toml instalar --todo
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Benchmark de tiempos, memoria RSS y complejidad algorítmica (umbral 25%)
+        run: |
+          python3 scripts/benchmark_satelites.py \
+            --historico benchmarks/historico_satelites.json \
+            --salida benchmark_satelites.json \
+            --umbral 0.25
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: benchmark-satelites
+          path: |
+            benchmark_satelites.json
+            benchmarks/historico_satelites.json

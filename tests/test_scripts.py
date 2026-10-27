@@ -622,3 +622,35 @@ def test_salidas_json_cubre_los_analizadores_de_la_ola_7():
     for c in verificar_salidas_json.CASOS:
         for archivo in c.archivos - {"src/main.c"}:
             assert (verificar_salidas_json.SMOKE / archivo).is_file(), archivo
+
+
+def test_benchmark_satelites_historico_y_alerta_25_porciento(tmp_path):
+    import benchmark_satelites
+
+    mediciones_ok = [
+        {"satelite": "gaff", "tiempo_ms": 200.0, "max_rss_kb": 30000, "factor_complejidad": 0.40},
+        {"satelite": "kaneda", "tiempo_ms": 150.0, "max_rss_kb": 25000, "factor_complejidad": 0.30},
+    ]
+    base = {
+        "gaff": {"satelite": "gaff", "tiempo_ms": 180.0, "max_rss_kb": 29000, "factor_complejidad": 0.38},
+        "kaneda": {"satelite": "kaneda", "tiempo_ms": 140.0, "max_rss_kb": 25000, "factor_complejidad": 0.29},
+    }
+    assert benchmark_satelites.evaluar_alertas(mediciones_ok, base, umbral=0.25) == []
+
+    # Aumento de complejidad algorítmica > 25% dispara alerta
+    mediciones_degradadas = [
+        {"satelite": "gaff", "tiempo_ms": 200.0, "max_rss_kb": 30000, "factor_complejidad": 1.45},
+        {"satelite": "kaneda", "tiempo_ms": 200.0, "max_rss_kb": 25000, "factor_complejidad": 0.42},
+    ]
+    alertas = benchmark_satelites.evaluar_alertas(mediciones_degradadas, base, umbral=0.25)
+    tipos = {(a["satelite"], a["tipo"]) for a in alertas}
+    assert ("gaff", "complejidad_algoritmica") in tipos
+    assert ("gaff", "regresion_complejidad") in tipos
+    assert ("kaneda", "regresion_tiempo") in tipos
+    assert ("kaneda", "regresion_complejidad") in tipos
+
+    hist_file = tmp_path / "historico.json"
+    benchmark_satelites.actualizar_historico(hist_file, {"fecha_utc": "2026-10-27T00:00:00Z", "satelites": mediciones_ok})
+    datos = benchmark_satelites.actualizar_historico(hist_file, {"fecha_utc": "2026-11-03T00:00:00Z", "satelites": mediciones_degradadas})
+    assert len(datos["corridas"]) == 2
+    assert hist_file.is_file()

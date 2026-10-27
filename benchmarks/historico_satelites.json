@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "corridas": [
+    {
+      "schema_version": "1.0.0",
+      "fecha_utc": "2026-10-27T22:43:52Z",
+      "umbral_alerta_pct": 25.0,
+      "satelites": [
+        {
+          "satelite": "gaff",
+          "comando": [
+            "gaff",
+            "check",
+            "src/",
+            "--json"
+          ],
+          "rc": 1,
+          "tiempo_ms": 441.334,
+          "max_rss_kb": 29952,
+          "factor_complejidad": 0.351
+        },
+        {
+          "satelite": "spunkmeyer",
+          "comando": [
+            "spunkmeyer",
+            "detect",
+            "src/",
+            "--json"
+          ],
+          "rc": 1,
+          "tiempo_ms": 310.155,
+          "max_rss_kb": 29712,
+          "factor_complejidad": 0.278
+        },
+        {
+          "satelite": "kaneda",
+          "comando": [
+            "kaneda",
+            "audit",
+            "src/",
+            "--json"
+          ],
+          "rc": 1,
+          "tiempo_ms": 240.426,
+          "max_rss_kb": 27856,
+          "factor_complejidad": 0.255
+        },
+        {
+          "satelite": "zhora",
+          "comando": [
+            "zhora",
+            "lint",
+            "src/",
+            "--json"
+          ],
+          "rc": 2,
+          "tiempo_ms": 353.785,
+          "max_rss_kb": 39548,
+          "factor_complejidad": 0.224
+        },
+        {
+          "satelite": "hal",
+          "comando": [
+            "hal",
+            "analyze",
+            "src/",
+            "--json"
+          ],
+          "rc": 2,
+          "tiempo_ms": 279.773,
+          "max_rss_kb": 29156,
+          "factor_complejidad": 0.256
+        },
+        {
+          "satelite": "daedalus",
+          "comando": [
+            "daedalus",
+            "compile",
+            "src/data_structures.c",
+            "tests/test_runner.c",
+            "--flags",
+            "-I src",
+            "--output",
+            "build/bench_bin",
+            "--json"
+          ],
+          "rc": 2,
+          "tiempo_ms": 264.756,
+          "max_rss_kb": 27908,
+          "factor_complejidad": 0.267
+        }
+      ],
+      "alertas": []
+    }
+  ]
+}
