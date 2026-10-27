@@ -8,6 +8,7 @@ Este catálogo documenta integralmente las 41 herramientas pedagógicas, linters
 ## 🗺️ Mapa Taxonómico del Ecosistema
 
 ### 0. Instalación y Diagnóstico del Ecosistema
+* [**`construct`**](construct.md): IDE y máquina virtual del perfil estudiante: en Windows, macOS y Linux corre daedalus, ripley, nostromo, tetsuo, hal, bishop, treadstone y jonesy dentro de una VM Debian acelerada por hardware, con hallazgos, depuración, telemetría y artefactos `.bmp`/`.wav` en un IDE de terminal (`construct ui`).
 * [**`mother`**](mother.md): Instala, actualiza y diagnostica las herramientas por perfil (estudiante, análisis, docente, contenido, aula), siempre desde git y leyendo `ecosistema.toml`; también como `mother.pyz`.
 
 ### 1. Estilo, Buenas Prácticas y Antipatrones
