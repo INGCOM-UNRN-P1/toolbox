@@ -12,6 +12,7 @@ from __future__ import annotations
 import json
 import os
 import stat
+import subprocess
 import sys
 import textwrap
 from pathlib import Path
@@ -654,3 +655,78 @@ def test_benchmark_satelites_historico_y_alerta_25_porciento(tmp_path):
     datos = benchmark_satelites.actualizar_historico(hist_file, {"fecha_utc": "2026-11-03T00:00:00Z", "satelites": mediciones_degradadas})
     assert len(datos["corridas"]) == 2
     assert hist_file.is_file()
+
+
+# --- ecosistema.py: verificar --estricto y tablero (Ola 26) -------------------------------
+
+def _git_repo(carpeta: Path, pyproject: str = "") -> str:
+    carpeta.mkdir(parents=True)
+    git = ["git", "-C", str(carpeta), "-c", "user.name=t", "-c", "user.email=t@x"]
+    subprocess.run([*git[:3], "init", "-q"], check=True)
+    if pyproject:
+        (carpeta / "pyproject.toml").write_text(textwrap.dedent(pyproject), encoding="utf-8")
+    (carpeta / "README.md").write_text("x\n", encoding="utf-8")
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-q", "-m", "inicio"], check=True)
+    return subprocess.run([*git[:3], "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+
+
+MANIFIESTO_PINES = """
+[perfiles]
+estudiante = "e"
+
+[[repo]]
+nombre = "lib"
+tipo = "contenido"
+estado = "activo"
+url = "https://github.com/org/lib"
+
+[[repo]]
+nombre = "app"
+tipo = "contenido"
+estado = "activo"
+url = "https://github.com/org/app"
+"""
+
+
+def test_estricto_detecta_un_pin_a_un_commit_que_no_existe(tmp_path, capsys):
+    raiz = tmp_path / "raiz"
+    sha = _git_repo(raiz / "lib")
+    inexistente = "0" * 40
+    _git_repo(raiz / "app", f'[project]\nname = "app"\ndependencies = ["lib @ git+https://github.com/org/lib@{inexistente}"]\n')
+    _git_repo(raiz / "otra", "")  # no figura en el manifiesto: problema también sin --estricto
+    manifiesto = str(_manifiesto(tmp_path, MANIFIESTO_PINES))
+    assert ecosistema.main(["--manifiesto", manifiesto, "verificar", "--raiz", str(raiz), "--estricto"]) == 1
+    salida = capsys.readouterr().out
+    assert "app: fija lib a 000000000000, que no existe en https://github.com/org/lib" in salida
+
+    pines, divergencia = ecosistema.pines_entre_repos(raiz, ecosistema.cargar(Path(manifiesto))[1])
+    assert len(pines) == 1 and divergencia == {}
+    (raiz / "app" / "pyproject.toml").write_text(
+        f'[project]\nname = "app"\ndependencies = ["lib @ git+https://github.com/org/lib@{sha}"]\n', encoding="utf-8")
+    assert ecosistema.pines_entre_repos(raiz, ecosistema.cargar(Path(manifiesto))[1])[0] == []
+
+
+def test_estricto_un_repo_activo_sin_clonar_es_error(tmp_path, capsys):
+    raiz = tmp_path / "raiz"
+    _git_repo(raiz / "lib")
+    manifiesto = str(_manifiesto(tmp_path, MANIFIESTO_PINES))
+    assert ecosistema.main(["--manifiesto", manifiesto, "verificar", "--raiz", str(raiz)]) == 0
+    assert ecosistema.main(["--manifiesto", manifiesto, "verificar", "--raiz", str(raiz), "--estricto"]) == 1
+    assert "✗ app: no está clonado" in capsys.readouterr().out
+
+
+def test_tablero(tmp_path, capsys):
+    raiz = tmp_path / "raiz"
+    _git_repo(raiz / "lib", '[project]\nname = "lib"\nversion = "1.2.0"\n')
+    subprocess.run(["git", "-C", str(raiz / "lib"), "tag", "v1.1.0"], check=True)
+    _git_repo(raiz / "app")
+    manifiesto = str(_manifiesto(tmp_path, MANIFIESTO_PINES))
+    assert ecosistema.main(["--manifiesto", manifiesto, "tablero", "--raiz", str(raiz), "--json"]) == 0
+    filas = {f["repo"]: f for f in json.loads(capsys.readouterr().out)["repos"]}
+    assert filas["lib"]["version"] == "1.2.0" and filas["lib"]["tag"] == "v1.1.0" and not filas["lib"]["publicada"]
+    assert filas["lib"]["desde_tag"] == 0 and filas["lib"]["sin_push"] is None
+    assert len(filas["app"]["ultimo_commit"]["hash"]) >= 7
+    assert ecosistema.main(["--manifiesto", manifiesto, "tablero", "--raiz", str(raiz)]) == 0
+    texto = capsys.readouterr().out
+    assert "v1.1.0 ≠" in texto and "1 con versión sin tag" in texto

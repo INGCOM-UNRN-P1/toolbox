@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import shutil
 import subprocess
 import sys
 import tomllib
@@ -301,6 +302,48 @@ def revisar_urls(proyecto: dict, url: str) -> list[str]:
     return [f"[project.urls] no apunta al repositorio del manifiesto ({url}): {', '.join(ajenas)}"] if ajenas else []
 
 
+def _commit_existe(carpeta: Path, ref: str) -> bool:
+    return subprocess.run(["git", "-C", str(carpeta), "cat-file", "-e", f"{ref}^{{commit}}"],
+                          capture_output=True).returncode == 0
+
+
+def _normalizar_url(url: str) -> str:
+    return url.removesuffix(".git").rstrip("/").lower()
+
+
+def pines_entre_repos(raiz: Path, repos: list[Repo]) -> tuple[list[str], dict[str, dict[str, list[str]]]]:
+    """Referencias git a otras herramientas: las que apuntan a un commit que no existe en el clon de
+    esa herramienta (no se hizo el push, o se reescribió la historia) y la divergencia de pines.
+
+    En el CI los repos se clonan frescos desde GitHub: un commit que sólo existe en la máquina de
+    quien subió el pin aparece acá. Pasó con cast-tools-common en la Ola 24.
+    """
+    por_url = {_normalizar_url(r.url): r for r in repos if r.url}
+    problemas: list[str] = []
+    divergencia: dict[str, dict[str, list[str]]] = {}
+    for repo in repos:
+        pyproject = raiz / repo.ruta / "pyproject.toml"
+        if not pyproject.exists():
+            continue
+        proyecto = tomllib.loads(pyproject.read_text(encoding="utf-8")).get("project", {})
+        requisitos = list(proyecto.get("dependencies", []))
+        for lista in proyecto.get("optional-dependencies", {}).values():
+            requisitos += lista
+        for requisito in requisitos:
+            m = RE_REFERENCIA_GIT.search(requisito)
+            if not m or not m["ref"]:
+                continue
+            destino = por_url.get(_normalizar_url(m["url"]))
+            if destino is None:
+                continue
+            divergencia.setdefault(destino.nombre, {}).setdefault(m["ref"], []).append(repo.nombre)
+            clon = raiz / destino.ruta
+            if (clon / ".git").exists() and not _commit_existe(clon, m["ref"]):
+                problemas.append(f"{repo.nombre}: fija {destino.nombre} a {m['ref'][:12]}, que no existe en "
+                                 f"{destino.url} (¿falta el push?)")
+    return problemas, {k: v for k, v in divergencia.items() if len(v) > 1}
+
+
 def cmd_verificar(args, repos: list[Repo]) -> int:
     raiz = Path(args.raiz).resolve()
     problemas: list[str] = []
@@ -363,6 +406,19 @@ def cmd_verificar(args, repos: list[Repo]) -> int:
         problemas.append(f"mother: la copia incluida ({copia_mother.relative_to(raiz)}) difiere de "
                          f"{args.manifiesto}; actualizala copiando el manifiesto encima")
 
+    # 4. Modo estricto (CI programado): un repo activo que no se clonó es un error, y los pines a
+    #    otras herramientas tienen que existir en su repositorio.
+    if getattr(args, "estricto", False):
+        problemas += avisos
+        avisos = []
+        pines, divergencia = pines_entre_repos(raiz, repos)
+        problemas += pines
+        if divergencia:
+            print("Pines distintos de una misma herramienta (informativo: cada una sube el suyo cuando lo necesita):")
+            for nombre, refs in sorted(divergencia.items()):
+                detalle = "; ".join(f"{ref[:8]} ← {', '.join(sorted(quienes))}" for ref, quienes in refs.items())
+                print(f"  · {nombre}: {detalle}")
+
     for aviso in avisos:
         print(f"· {aviso}")
     for problema in problemas:
@@ -371,6 +427,105 @@ def cmd_verificar(args, repos: list[Repo]) -> int:
         print(f"\n{len(problemas)} inconsistencia(s) entre ecosistema.toml y {raiz}.", file=sys.stderr)
         return 1
     print(f"✓ ecosistema.toml coherente con {raiz} ({len(repos)} repositorios).")
+    return 0
+
+
+def _git(carpeta: Path, *args: str) -> str:
+    salida = subprocess.run(["git", "-C", str(carpeta), *args], capture_output=True, text=True)
+    return salida.stdout.strip() if salida.returncode == 0 else ""
+
+
+def estado_local(carpeta: Path) -> dict:
+    """Versión, último tag, commits desde el tag, sin push y sin commitear, y último commit."""
+    version = ""
+    if (carpeta / "pyproject.toml").exists():
+        version = tomllib.loads((carpeta / "pyproject.toml").read_text(encoding="utf-8")).get("project", {}).get("version", "")
+    tag = _git(carpeta, "describe", "--tags", "--abbrev=0")
+    ultimo = _git(carpeta, "log", "-1", "--format=%h%x09%cs%x09%s")
+    hash_, fecha, mensaje = (ultimo.split("\t", 2) + ["", "", ""])[:3]
+    sin_push = _git(carpeta, "rev-list", "--count", "@{upstream}..HEAD")
+    return {
+        "version": version,
+        "tag": tag,
+        "publicada": bool(version) and tag in (f"v{version}", version),
+        "desde_tag": int(_git(carpeta, "rev-list", "--count", f"{tag}..HEAD") or 0) if tag else None,
+        "sin_push": int(sin_push) if sin_push else None,
+        "sin_commitear": len([ln for ln in _git(carpeta, "status", "--porcelain").splitlines() if ln.strip()]),
+        "ultimo_commit": {"hash": hash_, "fecha": fecha, "mensaje": mensaje},
+    }
+
+
+def estado_ci(url: str) -> dict:
+    """Último CI de main con gh: resultado general y por sistema (jobs con windows/ubuntu/linux/macos)."""
+    repo = url.removeprefix("https://github.com/").removesuffix(".git")
+    corrida = subprocess.run(["gh", "run", "list", "-R", repo, "-b", "main", "-L", "1",
+                              "--json", "databaseId,conclusion,status,workflowName"], capture_output=True, text=True)
+    if corrida.returncode != 0:
+        return {"error": (corrida.stderr.strip().splitlines() or ["gh falló"])[-1]}
+    lista = json.loads(corrida.stdout or "[]")
+    if not lista:
+        return {"resultado": "sin CI"}
+    ultima = lista[0]
+    resultado = {"resultado": ultima.get("conclusion") or ultima.get("status"), "workflow": ultima.get("workflowName")}
+    # El sistema sale de las etiquetas de `runs-on` (ubuntu-24.04, windows-latest…): el nombre del
+    # job no siempre lo dice.
+    trabajos = subprocess.run(["gh", "api", f"repos/{repo}/actions/runs/{ultima['databaseId']}/jobs?per_page=100"],
+                              capture_output=True, text=True)
+    if trabajos.returncode == 0:
+        for job in json.loads(trabajos.stdout).get("jobs", []):
+            etiquetas = " ".join([job.get("name", ""), *job.get("labels", [])]).lower()
+            for sistema, claves in (("windows", ("windows",)), ("linux", ("ubuntu", "linux")), ("macos", ("macos",))):
+                if any(c in etiquetas for c in claves):
+                    previo = resultado.get(sistema)
+                    # Con varios jobs del mismo sistema, uno que falla manda.
+                    if previo in (None, "success", "skipped"):
+                        resultado[sistema] = job.get("conclusion") or job.get("status")
+    return resultado
+
+
+_ICONOS = {"success": "✓", "failure": "✗", "cancelled": "∅", "skipped": "–", None: "·"}
+
+
+def cmd_tablero(args, repos: list[Repo]) -> int:
+    from concurrent.futures import ThreadPoolExecutor
+
+    raiz = Path(args.raiz).resolve()
+    elegidos = [r for r in filtrar(repos, args.perfil, None, ["activo"]) if (raiz / r.ruta / ".git").exists()]
+    filas = [{"repo": r.nombre, **estado_local(raiz / r.ruta)} for r in elegidos]
+    if args.ci:
+        if not shutil.which("gh"):
+            print("Falta gh (GitHub CLI) para --ci.", file=sys.stderr)
+            return 2
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            for fila, ci in zip(filas, pool.map(lambda r: estado_ci(r.url), elegidos), strict=True):
+                fila["ci"] = ci
+    if args.json:
+        print(json.dumps({"schema_version": "1.0.0", "repos": filas}, ensure_ascii=False, indent=2))
+        return 0
+
+    columnas = ["repo", "versión", "tag", "+tag", "sin push", "local", "último commit"] + (["CI", "Linux", "Win"] if args.ci else [])
+    tabla = []
+    for f in filas:
+        fila = [f["repo"], f["version"] or "—", (f["tag"] or "—") + ("" if f["publicada"] or not f["version"] else " ≠"),
+                "—" if f["desde_tag"] is None else str(f["desde_tag"]),
+                "—" if f["sin_push"] is None else str(f["sin_push"]),
+                str(f["sin_commitear"]) if f["sin_commitear"] else "",
+                f"{f['ultimo_commit']['hash']} {f['ultimo_commit']['fecha']}"]
+        if args.ci:
+            ci = f.get("ci", {})
+            fila += [ci.get("error", "")[:18] or _ICONOS.get(ci.get("resultado"), str(ci.get("resultado"))),
+                     _ICONOS.get(ci.get("linux"), str(ci.get("linux"))),
+                     _ICONOS.get(ci.get("windows"), str(ci.get("windows")))]
+        tabla.append(fila)
+    anchos = [max(len(str(x)) for x in col) for col in zip(columnas, *tabla, strict=False)]
+    print("  ".join(c.ljust(a) for c, a in zip(columnas, anchos, strict=True)))
+    print("  ".join("─" * a for a in anchos))
+    for fila in tabla:
+        print("  ".join(str(x).ljust(a) for x, a in zip(fila, anchos, strict=True)))
+    sin_push = [f["repo"] for f in filas if f["sin_push"]]
+    sin_publicar = [f["repo"] for f in filas if f["version"] and not f["publicada"]]
+    print(f"\n{len(filas)} repos · {len(sin_push)} con commits sin push · {len(sin_publicar)} con versión sin tag"
+          " (≠: el último tag no es la versión del pyproject)")
     return 0
 
 
@@ -399,11 +554,19 @@ def main(argv: list[str]) -> int:
 
     p_verificar = sub.add_parser("verificar")
     p_verificar.add_argument("--raiz", default=str(P1_TOOLS.parent))
+    p_verificar.add_argument("--estricto", action="store_true",
+                             help="un repo activo sin clonar es error y los pines a otras herramientas tienen que existir")
+
+    p_tablero = sub.add_parser("tablero", help="estado de cada repositorio: versión, tag, commits sin push, CI")
+    p_tablero.add_argument("--raiz", default=str(P1_TOOLS.parent))
+    p_tablero.add_argument("--perfil", action="append")
+    p_tablero.add_argument("--ci", action="store_true", help="consultar con gh el último CI de main (Linux y Windows)")
+    p_tablero.add_argument("--json", action="store_true")
 
     args = parser.parse_args(argv)
     _, repos = cargar(Path(args.manifiesto))
     return {"listar": cmd_listar, "instalar": cmd_instalar, "sistema": cmd_sistema,
-            "verificar": cmd_verificar}[args.comando](args, repos)
+            "verificar": cmd_verificar, "tablero": cmd_tablero}[args.comando](args, repos)
 
 
 if __name__ == "__main__":

@@ -105,4 +105,13 @@ Podés poner a punto toda la estación de trabajo y el ecosistema completo en cu
 Para agregar una nueva herramienta al ecosistema, consultá la guía paso a paso en [**`LINEAMIENTOS.md`**](LINEAMIENTOS.md).
 El procedimiento incluye la creación del paquete con `typer` + `rich`, la implementación obligatoria de `<herramienta> doctor`, la redacción del manual en `ecosistema/<herramienta>.md`, la creación de la skill en `skills/<herramienta>/SKILL.md` y su registro en [`ecosistema.toml`](ecosistema.toml) (de ahí lo toman los scripts de clonado, instalación y salud, y el CI; `python3 scripts/ecosistema.py verificar` controla que el manifiesto coincida con los repos).
 
+Estado del ecosistema de un vistazo:
+
+```bash
+python3 scripts/ecosistema.py tablero              # versión, último tag (≠ si no es la del pyproject), commits desde el tag, sin push, sin commitear, último commit
+python3 scripts/ecosistema.py tablero --ci         # + último CI de main, en Linux y Windows (con gh)
+python3 scripts/ecosistema.py tablero --perfil aula --json
+python3 scripts/ecosistema.py verificar --estricto # lo que corre el CI de los lunes: además, repos sin clonar y pines a commits que no existen
+```
+
 Y por otro lado, ¡se aceptan contribuciones!

@@ -56,8 +56,11 @@ jobs:
       - name: Clonar los repositorios del manifiesto
         run: bash scripts/clone_repos.sh --target "$RUNNER_TEMP/ecosistema"
 
+      # --estricto (Ola 26): con clones frescos, un repo activo que no se pudo clonar es error y
+      # cada pin a otra herramienta tiene que existir en su repositorio (un commit sin push sólo
+      # existe en la máquina de quien subió el pin).
       - name: Coherencia del manifiesto con los repositorios
-        run: python3 scripts/ecosistema.py verificar --raiz "$RUNNER_TEMP/ecosistema"
+        run: python3 scripts/ecosistema.py verificar --estricto --raiz "$RUNNER_TEMP/ecosistema"
 
       # Ola 11: la matriz del cuatrimestre sólo fija tags vX.Y.Z publicados o commits completos,
       # nunca una rama. `ecosistema.py listar` ya rechaza los valores mutables; mother además
