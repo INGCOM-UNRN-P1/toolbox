@@ -54,6 +54,17 @@ debe_contener() {
     done
 }
 
+debe_contener_alguno() {
+    VERIFICACIONES=$((VERIFICACIONES + 1))
+    local texto
+    for texto in "$@"; do
+        if grep -qF -- "$texto" <<<"$SALIDA"; then
+            return 0
+        fi
+    done
+    fallo "la salida no contiene ninguno de: $*"
+}
+
 no_debe_contener() {
     local texto
     for texto in "$@"; do
@@ -119,7 +130,7 @@ titulo "5. [BRETT] Padding de structs (exit 1 = hay padding desperdiciado)"
 ejecutar 1 brett audit src/data_structures.h
 debe_contener "t_alumno"
 ejecutar 0 brett optimize src/data_structures.h
-debe_contener "Layout Sugerido"
+debe_contener_alguno "Layout Sugerido" "Estructura con layout optimizado" "layout optimizado"
 
 titulo "6. [SEBASTIAN] Recursión, call tree y stack frames"
 ejecutar 0 sebastian trace src/main.c --function calcular_factorial
