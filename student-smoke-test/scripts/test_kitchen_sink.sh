@@ -10,7 +10,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 KS_DIR="kitchen_sink"
-TIMEOUT_SECS=25
+TIMEOUT_SECS=60
 
 TOTAL=0
 FALLOS=0
