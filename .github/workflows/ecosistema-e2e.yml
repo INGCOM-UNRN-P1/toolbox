@@ -73,9 +73,8 @@ jobs:
       - name: Instrucciones de instalación solo desde git
         run: python3 scripts/verificar_docs_instalacion.py --raiz "$RUNNER_TEMP/ecosistema"
 
-      # apunte se excluye hasta corregir sus enlaces rotos (N-APUNTE-02).
       - name: Enlaces de la documentación
-        run: python3 scripts/verificar_enlaces_md.py --raiz "$RUNNER_TEMP/ecosistema" --excluir apunte
+        run: python3 scripts/verificar_enlaces_md.py --raiz "$RUNNER_TEMP/ecosistema"
 
   smoke-desde-git:
     name: Instalación desde git y smoke tests
