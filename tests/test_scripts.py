@@ -730,3 +730,58 @@ def test_tablero(tmp_path, capsys):
     assert ecosistema.main(["--manifiesto", manifiesto, "tablero", "--raiz", str(raiz)]) == 0
     texto = capsys.readouterr().out
     assert "v1.1.0 ≠" in texto and "1 con versión sin tag" in texto
+
+
+MANIFIESTO_CATEDRA = """
+[perfiles]
+estudiante = "e"
+
+[[repo]]
+nombre = "treadstone"
+tipo = "contenido"
+estado = "activo"
+url = "https://github.com/org/treadstone"
+
+[[repo]]
+nombre = "plantilla"
+tipo = "contenido"
+estado = "activo"
+url = "https://github.com/org/plantilla"
+"""
+
+
+def test_copias_de_catedra(tmp_path):
+    """Ola 30: libs/<x>/.catedra tiene que ser idéntica al commit declarado del repo de origen."""
+    raiz = tmp_path / "raiz"
+    origen = raiz / "treadstone"
+    origen.mkdir(parents=True)
+    git = ["git", "-C", str(origen), "-c", "user.name=t", "-c", "user.email=t@x"]
+    subprocess.run([*git[:3], "init", "-q"], check=True)
+    (origen / "include").mkdir()
+    (origen / "include" / "p1_test.h").write_text("#define V 1\n", encoding="utf-8")
+    subprocess.run([*git, "add", "-A"], check=True)
+    subprocess.run([*git, "commit", "-q", "-m", "v1"], check=True)
+    commit = subprocess.run([*git[:3], "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+
+    copia = raiz / "plantilla" / "libs" / "p1_test"
+    (copia / "include").mkdir(parents=True)
+    (copia / "include" / "p1_test.h").write_text("#define V 1\n", encoding="utf-8")
+    (copia / "build").mkdir()
+    (copia / "build" / "libp1_test.a").write_bytes(b"binario")  # lo compilado no se compara
+    marca = copia / ".catedra"
+    marca.write_text(f'repositorio = "https://github.com/org/treadstone"\ncommit = "{commit}"\n', encoding="utf-8")
+    _, repos = ecosistema.cargar(_manifiesto(tmp_path, MANIFIESTO_CATEDRA))
+    assert ecosistema.copias_de_catedra(raiz, repos) == ([], [])
+
+    (origen / "include" / "p1_test.h").write_text("#define V 2\n", encoding="utf-8")
+    subprocess.run([*git, "commit", "-qam", "v2"], check=True)
+    problemas, avisos = ecosistema.copias_de_catedra(raiz, repos)
+    assert problemas == [] and "treadstone cambió después de" in avisos[0]
+
+    (copia / "include" / "p1_test.h").write_text("#define V 9\n", encoding="utf-8")
+    problemas, _ = ecosistema.copias_de_catedra(raiz, repos)
+    assert problemas == [f"plantilla/libs/p1_test: include/p1_test.h difiere de treadstone@{commit[:12]} (la copia no se edita)"]
+
+    marca.write_text('repositorio = "https://github.com/org/treadstone"\ncommit = "' + "0" * 40 + '"\n', encoding="utf-8")
+    problemas, _ = ecosistema.copias_de_catedra(raiz, repos)
+    assert problemas == ["plantilla/libs/p1_test: el commit 000000000000 no existe en https://github.com/org/treadstone"]

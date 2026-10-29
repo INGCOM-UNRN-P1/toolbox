@@ -344,6 +344,49 @@ def pines_entre_repos(raiz: Path, repos: list[Repo]) -> tuple[list[str], dict[st
     return problemas, {k: v for k, v in divergencia.items() if len(v) > 1}
 
 
+def copias_de_catedra(raiz: Path, repos: list[Repo]) -> tuple[list[str], list[str]]:
+    """Librerías de la cátedra copiadas en otro repo (`libs/<nombre>/.catedra`, como p1_test en
+    plantilla-TP): cada archivo tiene que ser el del commit declarado (problema si no) y se avisa
+    si el repo de origen cambió `include/` o `src/` después de ese commit (Ola 30)."""
+    por_url = {_normalizar_url(r.url): r for r in repos if r.url}
+    problemas: list[str] = []
+    avisos: list[str] = []
+    for repo in repos:
+        carpeta = raiz / repo.ruta
+        for marca in sorted(carpeta.glob("libs/*/.catedra")) if carpeta.is_dir() else []:
+            copia = marca.parent
+            nombre = f"{repo.nombre}/{copia.relative_to(carpeta)}"
+            try:
+                datos = tomllib.loads(marca.read_text(encoding="utf-8"))
+                url, commit = str(datos["repositorio"]), str(datos["commit"])
+            except (tomllib.TOMLDecodeError, KeyError) as exc:
+                problemas.append(f"{nombre}: .catedra inválido ({exc}); se espera repositorio = \"…\" y commit = \"…\"")
+                continue
+            origen = por_url.get(_normalizar_url(url))
+            clon = raiz / origen.ruta if origen else None
+            if clon is None or not (clon / ".git").exists():
+                avisos.append(f"{nombre}: no se puede comparar con {url} (no está clonado)")
+                continue
+            if not _commit_existe(clon, commit):
+                problemas.append(f"{nombre}: el commit {commit[:12]} no existe en {url}")
+                continue
+            for archivo in sorted(copia.rglob("*")):
+                rel = archivo.relative_to(copia)
+                if not archivo.is_file() or rel.name == ".catedra" or rel.parts[0] == "build":
+                    continue
+                original = subprocess.run(["git", "-C", str(clon), "show", f"{commit}:{rel.as_posix()}"],
+                                          capture_output=True)
+                if original.returncode != 0:
+                    problemas.append(f"{nombre}: {rel} no está en {origen.nombre}@{commit[:12]}")
+                elif original.stdout != archivo.read_bytes():
+                    problemas.append(f"{nombre}: {rel} difiere de {origen.nombre}@{commit[:12]} (la copia no se edita)")
+            cambios = _git(clon, "diff", "--name-only", commit, "HEAD", "--", "include", "src")
+            if cambios:
+                avisos.append(f"{nombre}: {origen.nombre} cambió después de {commit[:12]} "
+                              f"({len(cambios.splitlines())} archivos en include/ o src/): conviene actualizar la copia")
+    return problemas, avisos
+
+
 def cmd_verificar(args, repos: list[Repo]) -> int:
     raiz = Path(args.raiz).resolve()
     problemas: list[str] = []
@@ -413,6 +456,10 @@ def cmd_verificar(args, repos: list[Repo]) -> int:
         avisos = []
         pines, divergencia = pines_entre_repos(raiz, repos)
         problemas += pines
+        copias, avisos_copias = copias_de_catedra(raiz, repos)
+        problemas += copias
+        for aviso in avisos_copias:
+            print(f"· {aviso}")
         if divergencia:
             print("Pines distintos de una misma herramienta (informativo: cada una sube el suyo cuando lo necesita):")
             for nombre, refs in sorted(divergencia.items()):
