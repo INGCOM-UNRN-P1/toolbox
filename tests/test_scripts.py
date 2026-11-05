@@ -716,6 +716,23 @@ def test_estricto_un_repo_activo_sin_clonar_es_error(tmp_path, capsys):
     assert "✗ app: no está clonado" in capsys.readouterr().out
 
 
+def test_estricto_no_exige_clonar_lo_que_no_tiene_url(tmp_path, capsys):
+    raiz = tmp_path / "raiz"
+    raiz.mkdir()
+    manifiesto = _manifiesto(tmp_path, """
+[perfiles]
+docente = "x"
+
+[[repo]]
+nombre = "ejemplo-local"
+tipo = "ejemplo"
+perfiles = ["docente"]
+estado = "activo"
+""")
+    assert ecosistema.main(["--manifiesto", str(manifiesto), "verificar", "--raiz", str(raiz), "--estricto"]) == 0
+    assert "no está clonado" not in capsys.readouterr().out
+
+
 def test_tablero(tmp_path, capsys):
     raiz = tmp_path / "raiz"
     _git_repo(raiz / "lib", '[project]\nname = "lib"\nversion = "1.2.0"\n')

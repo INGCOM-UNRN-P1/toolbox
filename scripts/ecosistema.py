@@ -409,7 +409,9 @@ def cmd_verificar(args, repos: list[Repo]) -> int:
     for repo in repos:
         carpeta = raiz / repo.ruta
         if not carpeta.is_dir():
-            if repo.estado not in NO_SE_CLONAN:  # esos no se clonan: que falten es lo esperado
+            # Sin url o con esos estados no se clonan: que falten es lo esperado (y --estricto
+            # no puede exigirlos).
+            if repo.url and repo.estado not in NO_SE_CLONAN:
                 avisos.append(f"{repo.nombre}: no está clonado en {carpeta}")
             continue
         if repo.url:
