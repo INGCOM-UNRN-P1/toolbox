@@ -62,9 +62,9 @@ jobs:
       - name: Coherencia del manifiesto con los repositorios
         run: python3 scripts/ecosistema.py verificar --estricto --raiz "$RUNNER_TEMP/ecosistema"
 
-      # Ola 43: lo que ve un estudiante respeta LINEAMIENTOS §4.2 (voseo, lazo, glosario del apunte).
-      - name: Tono de los mensajes de las herramientas del estudiante
-        run: python3 scripts/verificar_tono.py --raiz "$RUNNER_TEMP/ecosistema" --perfil estudiante --perfil analisis
+      # Ola 43: lo que muestran las CLI respeta LINEAMIENTOS §4.2 (voseo, lazo, glosario del apunte).
+      - name: Tono de los mensajes de las herramientas
+        run: python3 scripts/verificar_tono.py --raiz "$RUNNER_TEMP/ecosistema"
 
       # Ola 11: la matriz del cuatrimestre sólo fija tags vX.Y.Z publicados o commits completos,
       # nunca una rama. `ecosistema.py listar` ya rechaza los valores mutables; mother además
