@@ -30,6 +30,7 @@ import verificar_contrato_cli  # noqa: E402
 import verificar_docs_instalacion  # noqa: E402
 import verificar_enlaces_md  # noqa: E402
 import verificar_salidas_json  # noqa: E402
+import verificar_tono  # noqa: E402
 
 MANIFIESTO = """
 [perfiles]
@@ -802,3 +803,51 @@ def test_copias_de_catedra(tmp_path):
     marca.write_text('repositorio = "https://github.com/org/treadstone"\ncommit = "' + "0" * 40 + '"\n', encoding="utf-8")
     problemas, _ = ecosistema.copias_de_catedra(raiz, repos)
     assert problemas == ["plantilla/libs/p1_test: el commit 000000000000 no existe en https://github.com/org/treadstone"]
+
+
+# --- verificar_tono.py (Ola 43) --------------------------------------------------------------
+
+@pytest.mark.parametrize("texto, esperado", [
+    ("Debés revisar el lazo: tienes que cortarlo.", [("tuteo", "tienes")]),
+    ("Posible bucle infinito en la función.", [("lazo", "bucle")]),
+    ("Timeout durante la compilación.", [("anglicismo", "Timeout")]),
+    ("Se cayó con un crash en la línea 3.", [("anglicismo", "crash")]),
+])
+def test_tono_detecta(texto, esperado):
+    assert verificar_tono.revisar_texto(texto) == esperado
+
+
+@pytest.mark.parametrize("texto", [
+    "Asegurate de liberar la memoria y revisá tu programa.",  # voseo
+    "Desbordamiento de pila (Stack Overflow) por recursión.",  # glosa
+    "Agregá un `loop variant` que decrezca en cada vuelta.",  # palabra clave de ACSL
+    "> [!WARNING]\n> Se superó el tiempo límite de la prueba.",  # marca de Markdown
+    r"(?P<file>[^:]+):\d+: warning: en la línea",  # patrón para leer la salida de gcc
+    "loop:\n    // ...\n    goto loop; // salto hacia atrás",  # código C
+    "Target not found",  # no es una frase en español
+])
+def test_tono_acepta(texto):
+    assert verificar_tono.revisar_texto(texto) == []
+
+
+def test_tono_lee_el_docstring_de_un_comando_y_no_el_de_una_funcion_interna(tmp_path):
+    fuente = tmp_path / "cli.py"
+    fuente.write_text('''
+@app.command("check")
+def check():
+    """Diagnostica el crash del programa."""
+
+def interna():
+    """Recorre el bucle de la lista."""
+''', encoding="utf-8")
+    assert [(h.tipo, h.termino) for h in verificar_tono.revisar_archivo(fuente)] == [("anglicismo", "crash")]
+
+
+def test_tono_sale_con_1_si_encuentra_algo(tmp_path, capsys):
+    carpeta = tmp_path / "ripley" / "src"
+    carpeta.mkdir(parents=True)
+    (carpeta / "m.py").write_text('MENSAJE = "Revisá el bucle de la función."\n', encoding="utf-8")
+    assert verificar_tono.main(["--raiz", str(tmp_path), "ripley"]) == 1
+    assert "lazo «bucle»" in capsys.readouterr().out
+    (carpeta / "m.py").write_text('MENSAJE = "Revisá el lazo de la función."\n', encoding="utf-8")
+    assert verificar_tono.main(["--raiz", str(tmp_path), "ripley"]) == 0

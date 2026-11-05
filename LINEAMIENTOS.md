@@ -150,7 +150,7 @@ ecosistema y deja elegir el proveedor sin tocar la herramienta:
 
 ### 4.2 Idioma y Tono Pedagógico
 * **Español Rioplatense con Voseo**: Todos los mensajes por terminal, descripciones de ayuda, diagnósticos de error y documentación deben redactarse en español rioplatense directo con voseo (`revisá`, `ejecutá`, `hacé`, `verificá`, `configurá`).
-* **Terminología**: Los bucles se denominan formalmente **lazos** (lazo `for`, lazo `while`).
+* **Terminología**: Los bucles se denominan formalmente **lazos** (lazo `for`, lazo `while`). Los términos en inglés que tienen equivalente en el apunte se escriben en español (tiempo límite, caso de prueba, advertencia, falla, violación de segmento); el nombre en inglés se admite entre paréntesis, para enseñarlo: «desborde de pila (Stack Overflow)». `scripts/verificar_tono.py` lo controla en el CI para los perfiles `estudiante` y `analisis`.
 * **Explicación Causal**: Cada diagnóstico pedagógico debe explicar la **causa raíz conceptual** del error y guiar al estudiante hacia la solución autónoma, evitando volcados técnicos incomprensibles.
 
 ---
