@@ -133,7 +133,7 @@ ejecutar 0 brett optimize src/data_structures.h
 debe_contener_alguno "Layout Sugerido" "Estructura con layout optimizado" "layout optimizado"
 
 titulo "6. [SEBASTIAN] Recursión, call tree y stack frames"
-ejecutar 0 sebastian trace src/main.c --function calcular_factorial
+ejecutar 0 sebastian trace src/data_structures.c --function calcular_factorial -s src/main.c -s src/parser.c -I include
 debe_contener "calcular_factorial"
 ejecutar 0 sebastian analyze src/data_structures.c
 debe_contener "Recursivas detectadas: 1"
@@ -207,7 +207,7 @@ debe_contener "MOT001"
 
 titulo "21. [TYRELL] Datasets sintéticos"
 ejecutar 0 tyrell generate -n 3 -o build/tyrell_tests
-debe_contener "3 testcases guardados"
+debe_contener "3 casos de prueba guardados"
 
 titulo "22. [VASSILI] Mutation testing"
 ejecutar 0 vassili mutate src/fuzz_target.c --tests-dir testcases_fuzz --min-score 0
