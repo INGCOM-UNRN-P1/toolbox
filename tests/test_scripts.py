@@ -106,13 +106,13 @@ def test_la_matriz_del_cuatrimestre_no_admite_refs_mutables(tmp_path, matriz, me
 
 
 def test_la_matriz_admite_tags_y_commits_completos(tmp_path):
-    ruta = _manifiesto(tmp_path, 'cuatrimestre_vigente = "2027-1"\n' + MANIFIESTO
-                       + '\n[cuatrimestres."2027-1"]\nripley = "v1.2.2"\n'
+    ruta = _manifiesto(tmp_path, 'cuatrimestre_vigente = "2027-A.0"\n' + MANIFIESTO
+                       + '\n[cuatrimestres."2027-A.0"]\nripley = "2027-A.0"\n'
                        + 'moodle-toolbox = "0123456789abcdef0123456789abcdef01234567"\n')
     _, repos = ecosistema.cargar(ruta)
     assert len(repos) == 2
-    with pytest.raises(SystemExit, match="cuatrimestre_vigente = 2030-1"):
-        ecosistema.cargar(_manifiesto(tmp_path, 'cuatrimestre_vigente = "2030-1"\n' + MANIFIESTO))
+    with pytest.raises(SystemExit, match="cuatrimestre_vigente = 2030-A.0"):
+        ecosistema.cargar(_manifiesto(tmp_path, 'cuatrimestre_vigente = "2030-A.0"\n' + MANIFIESTO))
     with pytest.raises(SystemExit, match="ref = «develop»"):
         ecosistema.cargar(_manifiesto(tmp_path, MANIFIESTO + 'ref = "develop"\n'))
 
@@ -379,7 +379,8 @@ def test_revisar_dependencias_exige_referencias_fijadas():
     proyecto = {
         "dependencies": ["typer>=0.12", f"daedalus @ git+https://github.com/INGCOM-UNRN-P1/daedalus@{sha}"],
         "optional-dependencies": {
-            "ecosistema": ["nostromo @ git+https://github.com/INGCOM-UNRN-P1/nostromo@v0.2.0"],
+            "ecosistema": ["nostromo @ git+https://github.com/INGCOM-UNRN-P1/nostromo@2027-A.0",
+                           "yutani @ git+https://github.com/INGCOM-UNRN-P1/yutani@v0.2.0"],
             "flojo": ["gaff @ git+https://github.com/INGCOM-UNRN-P1/gaff",
                       "kaneda @ git+https://github.com/INGCOM-UNRN-P1/kaneda@main"],
         },
@@ -427,13 +428,14 @@ def test_revisar_versionado(tmp_path):
     assert any("__version__ = '0.1.0'" in p for p in problemas)
 
     (repo / "LICENSE").write_text("GPL")
-    (repo / "CHANGELOG.md").write_text("# Changelog\n\n## [0.2.0] - 2026-09-28\n\n## [0.1.0] - 2026-01-01\n")
-    (repo / "src" / "demo" / "__init__.py").write_text('__version__ = "0.2.0"\n')
+    (repo / "CHANGELOG.md").write_text("# Changelog\n\n## [2026-A.0] - 2026-09-28\n\n## [0.1.0] - 2026-01-01\n")
+    (repo / "src" / "demo" / "__init__.py").write_text('__version__ = "2026-A.0"\n')
+    proyecto["version"] = "2026-A.0"
     assert ecosistema.revisar_versionado(repo, proyecto) == []
 
     (repo / "CHANGELOG.md").write_text("# Changelog\n\n## [5.10.1] - 2025-11-06\n")
     assert ecosistema.revisar_versionado(repo, proyecto) == [
-        "la última versión del CHANGELOG es 5.10.1 y pyproject dice 0.2.0"]
+        "la última versión del CHANGELOG es 5.10.1 y pyproject dice 2026-A.0"]
 
 
 def test_revisar_versionado_plugin_con_version_fija(tmp_path):

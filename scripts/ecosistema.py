@@ -106,7 +106,7 @@ def cargar(ruta: Path = MANIFIESTO) -> tuple[dict, list[Repo]]:
         if repo.instalable and not repo.url:
             errores.append(f"{repo.nombre}: una herramienta instalable necesita `url`")
         if repo.ref and not RE_REF_FIJADA.match(repo.ref):
-            errores.append(f"{repo.nombre}: ref = «{repo.ref}» no es un tag vX.Y.Z ni un commit completo")
+            errores.append(f"{repo.nombre}: ref = «{repo.ref}» no es un tag <año-release.minor> ni un commit completo")
         repos.append(repo)
     errores += revisar_cuatrimestres(datos, nombres)
     if errores:
@@ -115,8 +115,8 @@ def cargar(ruta: Path = MANIFIESTO) -> tuple[dict, list[Repo]]:
 
 
 def revisar_cuatrimestres(datos: dict, nombres: set[str]) -> list[str]:
-    """La matriz de cada cuatrimestre sólo fija tags vX.Y.Z o commits completos (Ola 11): una rama
-    (`main`) o un commit abreviado se mueven, y el curso dejaría de instalar lo mismo."""
+    """La matriz de cada cuatrimestre sólo fija tags <año-release.minor> (o SemVer heredado) o commits
+    completos (Ola 11): una rama (`main`) o un commit abreviado se mueven, y el curso dejaría de instalar lo mismo."""
     errores = []
     cuatrimestres = datos.get("cuatrimestres", {})
     for cuatrimestre, matriz in cuatrimestres.items():
@@ -124,7 +124,7 @@ def revisar_cuatrimestres(datos: dict, nombres: set[str]) -> list[str]:
             if nombre not in nombres:
                 errores.append(f"cuatrimestre {cuatrimestre}: «{nombre}» no es un repo del manifiesto")
             elif not RE_REF_FIJADA.match(str(ref)):
-                errores.append(f"cuatrimestre {cuatrimestre}: {nombre} = «{ref}» no es un tag vX.Y.Z ni un commit "
+                errores.append(f"cuatrimestre {cuatrimestre}: {nombre} = «{ref}» no es un tag <año-release.minor> ni un commit "
                                f"completo (una rama o un commit abreviado pueden moverse)")
     vigente = datos.get("cuatrimestre_vigente")
     if vigente and vigente not in cuatrimestres:
@@ -212,8 +212,8 @@ def _remoto(carpeta: Path) -> str:
 
 
 RE_VERSION_LITERAL = re.compile(r'(?m)^__version__ = "([^"]+)"')
-RE_SECCION_CHANGELOG = re.compile(r"(?m)^## \[(\d+\.\d+\.\d+)\]")
-RE_VERSION_PLUGIN = re.compile(r'(?m)^\s+version\s*=\s*"(\d+\.\d+\.\d+)"')
+RE_SECCION_CHANGELOG = re.compile(r"(?m)^## \[(\d{4}-[A-C]\.\d+|\d+\.\d+\.\d+)\]")
+RE_VERSION_PLUGIN = re.compile(r'(?m)^\s+version\s*=\s*"(\d{4}-[A-C]\.\d+|\d+\.\d+\.\d+)"')
 
 
 def revisar_versionado(carpeta: Path, proyecto: dict) -> list[str]:
@@ -246,7 +246,7 @@ def revisar_versionado(carpeta: Path, proyecto: dict) -> list[str]:
 
 
 RE_REFERENCIA_GIT = re.compile(r"@\s*git\+(?P<url>[^@\s;]+)(?:@(?P<ref>[^\s;]+))?")
-RE_REF_FIJADA = re.compile(r"^(?:[0-9a-f]{40}|v\d+\.\d+\.\d+)$")
+RE_REF_FIJADA = re.compile(r"^(?:[0-9a-f]{40}|\d{4}-[A-C]\.\d+|v\d+\.\d+\.\d+)$")
 
 
 CARPETAS_QUE_NO_SE_INSTALAN = {"tests", "test", "scripts", "docs", "examples", "ejemplos", "build", "dist"}
@@ -287,7 +287,7 @@ def revisar_dependencias(proyecto: dict) -> list[str]:
     for requisito in requisitos:
         m = RE_REFERENCIA_GIT.search(requisito)
         if m and not (m["ref"] and RE_REF_FIJADA.match(m["ref"])):
-            problemas.append(f"la referencia git no está fijada a un commit completo ni a un tag vX.Y.Z: {requisito}")
+            problemas.append(f"la referencia git no está fijada a un commit completo ni a un tag <año-release.minor>: {requisito}")
     return problemas
 
 

@@ -1,4 +1,4 @@
-"""Tests de scripts/version.py (SemVer, CHANGELOG y tags) sobre repos git temporales."""
+"""Tests de scripts/version.py (esquema <año-release.minor>, CHANGELOG y tags) sobre repos git temporales."""
 
 from __future__ import annotations
 
@@ -43,9 +43,9 @@ def _commit(repo: Path, mensaje: str) -> None:
 def repo(tmp_path: Path) -> Path:
     raiz = tmp_path / "demo"
     (raiz / "src" / "demo").mkdir(parents=True)
-    (raiz / "pyproject.toml").write_text('[project]\nname = "demo"\nversion = "0.1.0"\n', encoding="utf-8")
-    (raiz / "src" / "demo" / "__init__.py").write_text('"""Demo."""\n\n__version__ = "0.1.0"\n', encoding="utf-8")
-    (raiz / "uv.lock").write_text(LOCK.format(v="0.1.0"), encoding="utf-8")
+    (raiz / "pyproject.toml").write_text('[project]\nname = "demo"\nversion = "2026-A.0"\n', encoding="utf-8")
+    (raiz / "src" / "demo" / "__init__.py").write_text('"""Demo."""\n\n__version__ = "2026-A.0"\n', encoding="utf-8")
+    (raiz / "uv.lock").write_text(LOCK.format(v="2026-A.0"), encoding="utf-8")
     _git(raiz, "init", "-q", "-b", "main")
     _git(raiz, "config", "user.email", "prueba@example.com")
     _git(raiz, "config", "user.name", "Prueba")
@@ -55,12 +55,16 @@ def repo(tmp_path: Path) -> Path:
 
 def test_siguiente_segun_los_commits(repo):
     _commit(repo, "fix(cli): corregir algo")
-    assert version.siguiente("0.1.0", version.commits(repo, None)) == "0.1.1"
+    assert version.siguiente("2026-A.0", version.commits(repo, None), "2026-09-28") == "2026-A.1"
     _commit(repo, "feat(cli): agregar algo")
-    assert version.siguiente("0.1.0", version.commits(repo, None)) == "0.2.0"
+    assert version.siguiente("2026-A.0", version.commits(repo, None), "2026-09-28") == "2026-A.1"
+    # Migra desde SemVer heredado al primer release del año de lanzamiento
+    assert version.siguiente("0.1.0", version.commits(repo, None), "2026-09-28") == "2026-A.0"
     _commit(repo, "feat(api)!: cambiar la firma")
-    assert version.siguiente("0.1.0", version.commits(repo, None)) == "0.2.0"
-    assert version.siguiente("1.4.2", version.commits(repo, None)) == "2.0.0"
+    assert version.siguiente("2026-A.0", version.commits(repo, None), "2026-09-28") == "2026-B.0"
+    assert version.siguiente("2026-B.3", version.commits(repo, None), "2026-09-28") == "2026-C.0"
+    # Un año nuevo reinicia en <año>-A.0
+    assert version.siguiente("2026-B.3", version.commits(repo, None), "2027-03-01") == "2027-A.0"
 
 
 def test_publicar(repo, capsys):
@@ -70,18 +74,18 @@ def test_publicar(repo, capsys):
     _commit(repo, "un commit sin formato")
     assert version.main(["publicar", str(repo), "--fecha", "2026-09-28"]) == 0
 
-    assert 'version = "0.2.0"' in (repo / "pyproject.toml").read_text()
-    assert '__version__ = "0.2.0"' in (repo / "src/demo/__init__.py").read_text()
+    assert 'version = "2026-A.1"' in (repo / "pyproject.toml").read_text()
+    assert '__version__ = "2026-A.1"' in (repo / "src/demo/__init__.py").read_text()
     lock = (repo / "uv.lock").read_text()
-    assert 'name = "demo"\nversion = "0.2.0"' in lock and 'name = "otra"\nversion = "0.1.0"' in lock
+    assert 'name = "demo"\nversion = "2026-A.1"' in lock and 'name = "otra"\nversion = "2026-A.0"' in lock
     changelog = (repo / "CHANGELOG.md").read_text()
-    assert "## [0.2.0] - 2026-09-28" in changelog
+    assert "## [2026-A.1] - 2026-09-28" in changelog
     assert "### Agregado\n\n- **cli**: opción --json" in changelog
     assert "### Corregido\n\n- mensaje en español" in changelog
     assert "### Documentación" in changelog and "### Otros" in changelog
     assert "Primera versión con registro de cambios" in changelog
-    assert _git(repo, "tag", "-l", "-n1").split() == ["v0.2.0", "demo", "0.2.0"]
-    assert _git(repo, "log", "-1", "--format=%s").strip() == "chore(release): 0.2.0"
+    assert _git(repo, "tag", "-l", "-n1").split() == ["2026-A.1", "demo", "2026-A.1"]
+    assert _git(repo, "log", "-1", "--format=%s").strip() == "chore(release): 2026-A.1"
 
 
 def test_la_segunda_version_solo_lista_lo_nuevo(repo):
@@ -90,10 +94,10 @@ def test_la_segunda_version_solo_lista_lo_nuevo(repo):
     _commit(repo, "fix: segunda")
     version.main(["publicar", str(repo), "--fecha", "2026-10-01"])
     changelog = (repo / "CHANGELOG.md").read_text()
-    nueva, anterior = changelog.split("## [0.2.1] - 2026-10-01")[1].split("## [0.2.0]")
+    nueva, anterior = changelog.split("## [2026-A.2] - 2026-10-01")[1].split("## [2026-A.1]")
     assert "segunda" in nueva and "primera" not in nueva
     assert "Primera versión con registro" not in nueva
-    assert changelog.index("[0.2.1]") < changelog.index("[0.2.0]")
+    assert changelog.index("[2026-A.2]") < changelog.index("[2026-A.1]")
 
 
 def test_changelog_existente_conserva_su_historia(repo):
@@ -105,14 +109,15 @@ def test_changelog_existente_conserva_su_historia(repo):
         - viejo
         """), encoding="utf-8")
     _commit(repo, "feat: nuevo")
-    version.main(["publicar", str(repo), "--version", "5.11.0", "--fecha", "2026-09-28"])
+    version.main(["publicar", str(repo), "--version", "2026-B.0", "--fecha", "2026-09-28"])
     texto = (repo / "CHANGELOG.md").read_text()
     assert texto.startswith("# Changelog")
-    assert texto.index("[5.11.0]") < texto.index("[5.10.1]") and "- viejo" in texto
+    assert texto.index("[2026-B.0]") < texto.index("[5.10.1]") and "- viejo" in texto
+    assert _git(repo, "tag").split() == ["2026-B.0"]
 
 
 def test_no_publica_con_cambios_sin_commitear(repo):
-    (repo / "pyproject.toml").write_text('[project]\nname = "demo"\nversion = "0.1.0"\n# tocado\n')
+    (repo / "pyproject.toml").write_text('[project]\nname = "demo"\nversion = "2026-A.0"\n# tocado\n')
     with pytest.raises(SystemExit, match="sin commitear"):
         version.main(["publicar", str(repo)])
 
@@ -121,25 +126,25 @@ def test_probar_con_la_version_nueva_y_deshacer_si_falla(repo):
     (repo / "prueba.py").write_text(
         "import tomllib, sys\n"
         "v = tomllib.load(open('pyproject.toml', 'rb'))['project']['version']\n"
-        "sys.exit(0 if v == '0.1.0' else 1)  # un test que fija la versión vieja\n")
+        "sys.exit(0 if v == '2026-A.0' else 1)  # un test que fija la versión vieja\n")
     _commit(repo, "feat: algo")
     with pytest.raises(SystemExit, match="no se publicó nada"):
-        version.main(["publicar", str(repo), "--probar", f"{sys.executable} prueba.py"])
-    assert 'version = "0.1.0"' in (repo / "pyproject.toml").read_text()
-    assert '__version__ = "0.1.0"' in (repo / "src/demo/__init__.py").read_text()
+        version.main(["publicar", str(repo), "--fecha", "2026-09-28", "--probar", f"{sys.executable} prueba.py"])
+    assert 'version = "2026-A.0"' in (repo / "pyproject.toml").read_text()
+    assert '__version__ = "2026-A.0"' in (repo / "src/demo/__init__.py").read_text()
     assert not (repo / "CHANGELOG.md").exists()
     assert _git(repo, "tag") == "" and _git(repo, "status", "--porcelain", "--untracked-files=no") == ""
 
     (repo / "prueba.py").write_text("import sys\nsys.exit(0)\n")
     _commit(repo, "test: la prueba no fija la versión")
-    assert version.main(["publicar", str(repo), "--probar", f"{sys.executable} prueba.py"]) == 0
-    assert _git(repo, "tag").split() == ["v0.2.0"]
+    assert version.main(["publicar", str(repo), "--fecha", "2026-09-28", "--probar", f"{sys.executable} prueba.py"]) == 0
+    assert _git(repo, "tag").split() == ["2026-A.1"]
 
 
 def test_simular_no_modifica_nada(repo, capsys):
     _commit(repo, "feat: algo")
-    version.main(["publicar", str(repo), "--simular"])
-    assert "0.1.0 → 0.2.0" in capsys.readouterr().out
+    version.main(["publicar", str(repo), "--fecha", "2026-09-28", "--simular"])
+    assert "2026-A.0 → 2026-A.1; tag 2026-A.1" in capsys.readouterr().out
     assert not (repo / "CHANGELOG.md").exists() and _git(repo, "tag") == ""
 
 
@@ -148,5 +153,5 @@ def test_no_publica_si_el_changelog_esta_ignorado(repo):
     _commit(repo, "chore: ignorar los md de la raíz")
     _commit(repo, "feat: algo")
     with pytest.raises(SystemExit, match="!CHANGELOG.md"):
-        version.main(["publicar", str(repo)])
-    assert 'version = "0.1.0"' in (repo / "pyproject.toml").read_text()
+        version.main(["publicar", str(repo), "--fecha", "2026-09-28"])
+    assert 'version = "2026-A.0"' in (repo / "pyproject.toml").read_text()

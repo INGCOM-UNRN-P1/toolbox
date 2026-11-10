@@ -194,27 +194,32 @@ Para incorporar una nueva herramienta (`mi-herramienta`) al ecosistema P1:
 
 ## 7. Versiones, CHANGELOG y releases
 
-1. **SemVer**: `MAYOR.MENOR.PARCHE`. Mientras la versión sea `0.y.z`, un cambio
-   incompatible sube la menor.
+1. **Esquema uniforme `<año-release.minor>`**: tanto las herramientas individuales como el congelamiento del ecosistema usan el formato `AAAA-L.M` (sin prefijo `v`), donde:
+   - `AAAA` es el año de lanzamiento (`2026`, `2027`, …);
+   - `L` es la letra del release dentro del año (`A`, `B`, `C`);
+   - `M` es el número de parche para cambios menores comenzando en `0` (`2027-A.0`, `2027-A.1`, `2027-B.0`).
 2. **Fuente única**: la versión vive en `pyproject.toml`; si el paquete define
-   `__version__` como literal, tiene que coincidir (lo controla
-   `python3 scripts/ecosistema.py verificar`).
-3. **Versión siguiente desde los commits**: `feat` sube la menor; `fix` y el resto,
-   el parche; `tipo!:` o `BREAKING CHANGE` en el cuerpo, la mayor.
+   `__version__` como literal o un plugin de `ripley` declara `version`, tiene que coincidir
+   (lo controla `python3 scripts/ecosistema.py verificar`).
+3. **Versión siguiente desde los commits**: dentro del mismo año, `feat`, `fix` y el resto de
+   cambios menores suben `minor` (`2027-A.0` → `2027-A.1`); un cambio incompatible (`tipo!:` o
+   `BREAKING CHANGE` en el cuerpo) o la apertura de un nuevo release del año sube la letra y
+   reinicia `minor` a `0` (`2027-A.1` → `2027-B.0`); un cambio de año inicia en `AAAA-A.0`.
 4. **CHANGELOG.md** en formato [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/),
-   generado desde los Conventional Commits, con una sección por versión.
-5. **Tag anotado `vX.Y.Z`** sobre el commit `chore(release): X.Y.Z`.
+   generado desde los Conventional Commits, con una sección `## [AAAA-L.M] - AAAA-MM-DD` por versión.
+5. **Tag anotado `<año-release.minor>`** (por ejemplo `git tag -a 2027-A.0 -m "<paquete> 2027-A.0"`)
+   sobre el commit `chore(release): 2027-A.0`. No se usan tags livianos.
 6. **LICENSE**: el texto de la licencia que declara `pyproject.toml`.
-7. **Matriz del cuatrimestre**: al empezar cada cuatrimestre se fija en
-   `ecosistema.toml` el bloque `[cuatrimestres."AAAA-N"]` con el tag de cada
-   herramienta (`mother fijar AAAA-N --tags`), se marca `cuatrimestre_vigente` y se
-   etiqueta p1-tools con `cuatrimestre-AAAA-N`. El procedimiento completo, en orden,
+7. **Matriz del release del ecosistema**: al congelar una cursada se fija en
+   `ecosistema.toml` el bloque `[cuatrimestres."AAAA-L.M"]` con el tag de cada
+   herramienta (`mother fijar AAAA-L.M --tags`), se marca `cuatrimestre_vigente = "AAAA-L.M"` y se
+   etiqueta `p1-tools` con el tag anotado `AAAA-L.M`. El procedimiento completo, en orden,
    está en [RELEASES.md](RELEASES.md).
 
 Todo el procedimiento de los puntos 3 a 5 lo hace `scripts/version.py`:
 
 ```bash
-python3 scripts/version.py siguiente ../mi-herramienta     # qué versión corresponde
+python3 scripts/version.py siguiente ../mi-herramienta     # qué versión <año-release.minor> corresponde
 python3 scripts/version.py publicar ../mi-herramienta --simular
 python3 scripts/version.py publicar ../mi-herramienta --probar "uv run pytest -q"   # tests con la versión nueva
 git -C ../mi-herramienta push --follow-tags
