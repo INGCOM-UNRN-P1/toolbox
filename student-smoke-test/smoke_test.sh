@@ -65,7 +65,7 @@ run_step 5 "Auditoría de padding y optimización de structs" "brett" \
 
 # 6. SEBASTIAN
 run_step 6 "Trazado dinámico y análisis de recursión" "sebastian" \
-    "sebastian trace src/main.c --function calcular_factorial && sebastian analyze src/data_structures.c"
+    "sebastian trace src/data_structures.c --function calcular_factorial -s src/main.c -s src/parser.c -I include && sebastian analyze src/data_structures.c"
 
 # 7. RACHEL
 run_step 7 "Desensamblado de switch y comparación Jump Table O(1)" "rachel" \
