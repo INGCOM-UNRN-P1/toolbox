@@ -115,3 +115,7 @@ python3 scripts/ecosistema.py verificar --estricto # lo que corre el CI de los l
 ```
 
 Y por otro lado, ¡se aceptan contribuciones!
+
+## Contacto
+
+Martín René Vilugrón - mrvilugron@unrn.edu.ar - Ingeniería en Computación UNRN Andina
